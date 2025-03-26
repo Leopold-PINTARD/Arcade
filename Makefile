@@ -7,22 +7,36 @@
 
 .PHONY: all clean fclean re tests_run vg cs
 
+CC				=	g++
+
 %.o: %.cpp
 	@echo "Compiling $<"
-	g++ $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) -c $< -o $@
 	@echo "Generated $@ successfully"
 
+%.so : %.cpp
+	$(CC) $(CPPFLAGS) -shared -o $@ -fPIC $<
+
 NAME			=	arcade
+
+LIB_SRC			=
 
 MAIN_SRC		=	src/Main.cpp
 
 SRC				=
 
-TESTS_SRC		=	tests/defaulttests.cpp	\
+TESTS_SRC		=	tests/dlloadingtests.cpp	\
+
+TEST_LIBS_SRC	=	tests/bar.cpp				\
+					tests/nocreate.cpp			\
 
 OBJ				=	$(SRC:.cpp=.o)
 
 MAIN_OBJ		=	$(MAIN_SRC:.cpp=.o)
+
+LIB_OBJ			=	$(LIB_SRC:.cpp=.so)
+
+TEST_LIBS_OBJ	=	$(TEST_LIBS_SRC:.cpp=.so)
 
 INCLUDES		=	-I ./src -I ./
 
@@ -45,9 +59,9 @@ CPPLINTFLAGS	=															\
 
 all: $(NAME)
 
-$(NAME):	$(OBJ) $(MAIN_OBJ)
+$(NAME):	$(LIB_OBJ) $(OBJ) $(MAIN_OBJ)
 	@echo "Building $(NAME)..."
-	g++ -o $(NAME) $(OBJ) $(MAIN_OBJ)
+	$(CC) -o $(NAME) $(OBJ) $(MAIN_OBJ)
 
 run: re
 	@echo "Running $(NAME)..."
@@ -59,16 +73,16 @@ vg: $(NAME)
 	valgrind $(VALGRIND_FLAGS) ./$(NAME) 4242 tests
 	cat $(VALGRIND_LOG)
 
-tests_run:
+tests_run:	$(TEST_LIBS_OBJ)
 	@echo "Running tests..."
-	g++ -o unit_tests $(SRC) $(TESTS_SRC) $(CPPTESTFLAGS)
+	$(CC) -o unit_tests $(SRC) $(TESTS_SRC) $(CPPTESTFLAGS)
 	./unit_tests
 	@gcovr --exclude tests/
 	@gcovr -e tests --branch
 
 clean:
 	@echo "Cleaning up..."
-	rm -f $(OBJ) $(MAIN_OBJ)
+	rm -f $(OBJ) $(MAIN_OBJ) $(LIB_OBJ) $(TEST_LIBS_OBJ)
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*
