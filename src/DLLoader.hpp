@@ -18,9 +18,9 @@ class DLLoader {
  public:
     DLLoader() = delete;
     explicit DLLoader(std::string path) noexcept(false) {
-      _libHandle = dlopen(path.c_str(), RTLD_LAZY);
-      if (!_libHandle)
-          throw DLLoaderException(dlerror());
+        _libHandle = dlopen(path.c_str(), RTLD_LAZY);
+        if (!_libHandle)
+            throw DLLoaderException(dlerror());
     }
     std::unique_ptr<T> &getInstance(void) noexcept(false) {
         std::unique_ptr<T> (*create)(void) = reinterpret_cast<std::unique_ptr<T>
@@ -28,14 +28,16 @@ class DLLoader {
 
         if (!create)
             throw DLLoaderException(dlerror());
-        _instances.push_back(create());
-        return _instances.back();
+        if (_instance == nullptr)
+            _instance = create();
+        return _instance;
     }
     ~DLLoader() noexcept(false) {
-        for (size_t i = 0; i < _instances.size(); i++)
-            _instances[i].reset(nullptr);
-        if (dlclose(_libHandle) != 0)
+        _instance.reset(nullptr);
+        if (dlclose(_libHandle) != 0) {
+            _libHandle = NULL;
             throw DLLoaderException(dlerror());
+        }
     }
     class DLLoaderException : public std::exception {
      public:
@@ -51,6 +53,6 @@ class DLLoader {
 
  private:
     void *_libHandle;
-    std::vector<std::unique_ptr<T>> _instances;
+    std::unique_ptr<T> _instance;
 };
 #endif  // SRC_DLLOADER_HPP_
