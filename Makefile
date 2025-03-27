@@ -105,4 +105,4 @@ cs:	clean
 	rm -f coding-style-reports.log
 
 linter: clean
-	cpplint $(CPPLINTFLAGS) ./src
+	cpplint $(CPPLINTFLAGS) ./src ./include
