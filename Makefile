@@ -7,8 +7,6 @@
 
 .PHONY: all clean fclean re tests_run vg cs
 
-CC				=	g++
-
 %.o: %.cpp
 	@echo "Compiling $<"
 	$(CC) $(CPPFLAGS) -c $< -o $@
@@ -16,6 +14,8 @@ CC				=	g++
 
 %.so : %.cpp
 	$(CC) $(CPPFLAGS) -shared -o $@ -fPIC $<
+
+CC				=	g++
 
 NAME			=	arcade
 
@@ -40,7 +40,8 @@ TEST_LIBS_OBJ	=	$(TEST_LIBS_SRC:.cpp=.so)
 
 INCLUDES		=	-I ./src -I ./
 
-CPPFLAGS		+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -O2 -g
+CPPFLAGS		+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -O2 -g \
+-fno-gnu-unique
 
 CPPTESTFLAGS	=	--coverage -lcriterion $(CPPFLAGS)
 
