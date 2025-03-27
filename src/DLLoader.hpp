@@ -17,21 +17,28 @@ template <typename T>
 class DLLoader {
  public:
     DLLoader() = delete;
+    // Opens a shared library
+    // Throws a DLLoaderException if the library cannot be opened
     explicit DLLoader(std::string path) noexcept(false) {
         _libHandle = dlopen(path.c_str(), RTLD_LAZY);
         if (!_libHandle)
             throw DLLoaderException(dlerror());
     }
+    // Returns an instance of the class defined in the shared library
+    // Throws a DLLoaderException if the function creating the instance
+    // is not found
     std::unique_ptr<T> &getInstance(void) noexcept(false) {
         std::unique_ptr<T> (*create)(void) = reinterpret_cast<std::unique_ptr<T>
             (*)(void)>(dlsym(_libHandle, "create"));
 
-        if (!create)
+        if (create == NULL)
             throw DLLoaderException(dlerror());
         if (_instance == nullptr)
             _instance = create();
         return _instance;
     }
+    // Closes the shared library
+    // Throws a DLLoaderException if the library cannot be closed
     ~DLLoader() noexcept(false) {
         _instance.reset(nullptr);
         if (dlclose(_libHandle) != 0) {
