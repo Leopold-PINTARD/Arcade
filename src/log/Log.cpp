@@ -6,6 +6,7 @@
 */
 
 #include "src/log/Log.hpp"
+#include <string>
 #include <ctime>
 #include <iomanip>
 #include <iostream>
