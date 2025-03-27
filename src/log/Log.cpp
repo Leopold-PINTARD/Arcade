@@ -5,8 +5,7 @@
 ** Log
 */
 
-#include "Log.hpp"
-#include <chrono>
+#include "src/log/Log.hpp"
 #include <ctime>
 #include <iomanip>
 #include <iostream>
@@ -14,11 +13,10 @@
 #include <algorithm>
 #include <vector>
 
-std::string Log::filePath = "";
 bool Log::debug = false;
 
-Log::Log(const std::string& level) : level(level)
-{
+Log::Log(const std::string& level) : level(level) {
+    filePath = "arcade.log";
 }
 
 Log::~Log() {
@@ -58,16 +56,6 @@ Log& Log::operator<<(std::ostream& (*manip)(std::ostream&)) {
     return *this;
 }
 
-void Log::setFilePath(const std::string& path) {
-    std::ofstream outFile(path, std::ios::trunc);
-
-    filePath = path;
-    if (!outFile.is_open()) {
-        std::cerr << "Failed to open log file: " << path << std::endl;
-    }
-    outFile.close();
-}
-
 void Log::setDebug(bool value) {
     debug = value;
 }
@@ -92,8 +80,7 @@ std::string Log::specialCase() {
 }
 
 void Log::flush() {
-    auto now = std::chrono::system_clock::now();
-    auto time_t_now = std::chrono::system_clock::to_time_t(now);
+    std::time_t time_t_now = std::time(nullptr);
     std::tm tm_now;
     std::ostringstream logMessage;
     std::vector<std::string> special = {"LINE"};
@@ -101,7 +88,13 @@ void Log::flush() {
     if (!debug)
         return;
     localtime_r(&time_t_now, &tm_now);
-    if (buffer.str().empty())
+    std::tm* tm_ptr = std::localtime(&time_t_now);
+    if (tm_ptr != nullptr) {
+        tm_now = *tm_ptr;
+    } else {
+        std::cerr << "Failed to get local time." << std::endl;
+        return;
+    }
         return;
     if (std::find(special.begin(), special.end(), level) == special.end())
         logMessage << "[" << level << "]\t(" <<std::put_time
@@ -110,8 +103,9 @@ void Log::flush() {
         logMessage << specialCase();
     if (!filePath.empty()) {
         flushInFile(logMessage.str(), filePath);
-    } else
+    } else {
         std::cout << logMessage.str();
+    }
     buffer.str("");
     buffer.clear();
 }

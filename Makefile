@@ -23,7 +23,7 @@ LIB_SRC			=
 
 MAIN_SRC		=	src/Main.cpp
 
-SRC				=
+SRC				=	src/log/Log.cpp
 
 TESTS_SRC		=	tests/dlloadingtests.cpp	\
 
