@@ -16,7 +16,7 @@
 
 bool Log::debug = false;
 
-Log::Log(const std::string& level) : level(level) {
+Log::Log(const std::string &level) : level(level) {
     filePath = "arcade.log";
 }
 
@@ -24,19 +24,19 @@ Log::~Log() {
     flush();
 }
 
-Log& Log::info() {
+Log &Log::info() {
     static Log instance("INFO");
 
     return instance;
 }
 
-Log& Log::warn() {
+Log &Log::warn() {
     static Log instance("WARN");
 
     return instance;
 }
 
-Log& Log::error() {
+Log &Log::error() {
     static Log instance("ERROR");
 
     return instance;
@@ -49,9 +49,9 @@ Log &Log::line() {
     return instance;
 }
 
-Log& Log::operator<<(std::ostream& (*manip)(std::ostream&)) {
+Log &Log::operator<<(std::ostream &(*manip)(std::ostream &)) {
     buffer << manip;
-    if (manip == static_cast<std::ostream& (*)(std::ostream&)>(std::endl)) {
+    if (manip == static_cast<std::ostream &(*)(std::ostream &)>(std::endl)) {
         flush();
     }
     return *this;
@@ -61,8 +61,8 @@ void Log::setDebug(bool value) {
     debug = value;
 }
 
-void Log::flushInFile(const std::string& logMessage,
-    const std::string& filePath) {
+void Log::flushInFile(const std::string &logMessage,
+    const std::string &filePath) {
     std::ofstream outFile(filePath, std::ios::app);
 
     if (outFile.is_open()) {
