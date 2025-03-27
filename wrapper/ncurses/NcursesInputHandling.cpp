@@ -5,8 +5,7 @@
 ** NcursesInputHandling
 */
 
-#include "wrapper/ncurses/Ncurses.hpp"
-#include "src/log/Log.hpp"
+#include "./Ncurses.hpp"
 
 Ncurses::Key Ncurses::getInput() {
     int ch = wgetch(_window);
