@@ -5,26 +5,22 @@
 ** Ncurses
 */
 
-#include "Ncurses.hpp"
+#include "wrapper/ncurses/Ncurses.hpp"
 
-Ncurses::Ncurses()
-{
+Ncurses::Ncurses() {
     initialize();
 }
 
-Ncurses::Ncurses(int width, int height)
-{
+Ncurses::Ncurses(int width, int height) {
     initialize();
     resize(width, height);
 }
 
-Ncurses::~Ncurses()
-{
+Ncurses::~Ncurses() {
     cleanup();
 }
 
-void Ncurses::initialize()
-{
+void Ncurses::initialize() {
     if (!_initialized) {
         _window = initscr();
         _initialized = true;
@@ -39,8 +35,7 @@ void Ncurses::initialize()
     }
 }
 
-void Ncurses::cleanup()
-{
+void Ncurses::cleanup() {
     if (_initialized) {
         if (_window != nullptr && _window != stdscr) {
             delwin(_window);
@@ -51,8 +46,7 @@ void Ncurses::cleanup()
     }
 }
 
-void Ncurses::initColors()
-{
+void Ncurses::initColors() {
     init_pair(0, COLOR_BLACK, COLOR_BLACK);
     init_pair(1, COLOR_RED, COLOR_BLACK);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
@@ -63,12 +57,10 @@ void Ncurses::initColors()
     init_pair(7, COLOR_WHITE, COLOR_BLACK);
 }
 
-short Ncurses::getPairNumber(Color fg, Color bg) const
-{
-    return static_cast<short>(fg) + (static_cast<short>(bg) * 8);
+std::int16_t Ncurses::getPairNumber(Color fg, Color bg) const {
+    return static_cast<std::int16_t>(fg) + (static_cast<std::int16_t>(bg) * 8);
 }
 
-void Ncurses::setTimeout(int milliseconds)
-{
+void Ncurses::setTimeout(int milliseconds) {
     timeout(milliseconds);
 }

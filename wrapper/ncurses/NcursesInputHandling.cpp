@@ -5,11 +5,10 @@
 ** NcursesInputHandling
 */
 
-#include "Ncurses.hpp"
-#include "../../src/log/Log.hpp"
+#include "wrapper/ncurses/Ncurses.hpp"
+#include "src/log/Log.hpp"
 
-Ncurses::Key Ncurses::getInput()
-{
+Ncurses::Key Ncurses::getInput() {
     int ch = wgetch(_window);
 
     if (ch == ERR)
@@ -20,8 +19,7 @@ Ncurses::Key Ncurses::getInput()
     return Key::NONE;
 }
 
-bool Ncurses::isKeyPressed()
-{
+bool Ncurses::isKeyPressed() {
     int ch = wgetch(_window);
 
     if (ch != ERR) {
@@ -31,8 +29,7 @@ bool Ncurses::isKeyPressed()
     return false;
 }
 
-void Ncurses::initKeyMap()
-{
+void Ncurses::initKeyMap() {
     _keyMap[KEY_UP] = Key::UP;
     _keyMap[KEY_DOWN] = Key::DOWN;
     _keyMap[KEY_LEFT] = Key::LEFT;

@@ -5,10 +5,9 @@
 ** NcursesMouseHandling
 */
 
-#include "Ncurses.hpp"
+#include "wrapper/ncurses/Ncurses.hpp"
 
-void Ncurses::enableMouse(bool enable)
-{
+void Ncurses::enableMouse(bool enable) {
     if (enable) {
         mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
         printf("\033[?1003h\n");
@@ -20,8 +19,7 @@ void Ncurses::enableMouse(bool enable)
     }
 }
 
-void determineButton(Ncurses::MouseEvent& event, MEVENT& mevent)
-{
+void determineButton(Ncurses::MouseEvent& event, MEVENT& mevent) {
     if (mevent.bstate & BUTTON1_PRESSED)
         event.button = Ncurses::Button::LEFT;
     else if (mevent.bstate & BUTTON2_PRESSED)
@@ -34,8 +32,7 @@ void determineButton(Ncurses::MouseEvent& event, MEVENT& mevent)
         event.button = Ncurses::Button::SCROLL_DOWN;
 }
 
-void determineEventTypes(Ncurses::MouseEvent& event, MEVENT& mevent)
-{
+void determineEventTypes(Ncurses::MouseEvent& event, MEVENT& mevent) {
     if (mevent.bstate & BUTTON1_PRESSED)
         event.type = Ncurses::EventType::BUTTON_PRESS;
     else if (mevent.bstate & BUTTON1_RELEASED)
@@ -50,8 +47,7 @@ void determineEventTypes(Ncurses::MouseEvent& event, MEVENT& mevent)
         event.type = Ncurses::EventType::BUTTON_MOTION;
 }
 
-void determineModifiers(Ncurses::MouseEvent& event, MEVENT& mevent)
-{
+void determineModifiers(Ncurses::MouseEvent& event, MEVENT& mevent) {
     if (mevent.bstate & BUTTON_SHIFT)
         event.shift = true;
     if (mevent.bstate & BUTTON_CTRL)
@@ -60,8 +56,7 @@ void determineModifiers(Ncurses::MouseEvent& event, MEVENT& mevent)
         event.alt = true;
 }
 
-Ncurses::MouseEvent Ncurses::getMouseEvent()
-{
+Ncurses::MouseEvent Ncurses::getMouseEvent() {
     MouseEvent event;
     event.type = EventType::NONE;
     event.button = Button::NONE;

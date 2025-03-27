@@ -5,32 +5,27 @@
 ** NcursesWindowManagement
 */
 
-#include "Ncurses.hpp"
+#include "wrapper/ncurses/Ncurses.hpp"
 
-void Ncurses::resize(int width, int height)
-{
+void Ncurses::resize(int width, int height) {
     wresize(_window, height, width);
     wclear(_window);
     wrefresh(_window);
 }
 
-void Ncurses::clear()
-{
+void Ncurses::clear() {
     wclear(_window);
 }
 
-void Ncurses::erase()
-{
+void Ncurses::erase() {
     werase(_window);
 }
 
-void Ncurses::refresh()
-{
+void Ncurses::refresh() {
     wrefresh(_window);
 }
 
-Ncurses::Coordinate Ncurses::getScreenSize() const
-{
+Ncurses::Coordinate Ncurses::getScreenSize() const {
     int x;
     int y;
 
@@ -38,14 +33,13 @@ Ncurses::Coordinate Ncurses::getScreenSize() const
     return {x, y};
 }
 
-void Ncurses::defineColor(short colorIndex, short r, short g, short b)
-{
+void Ncurses::defineColor(std::int16_t colorIndex, std::int16_t r,
+    std::int16_t g, std::int16_t b) {
     init_color(colorIndex, r, g, b);
 }
 
 std::unique_ptr<Ncurses> Ncurses::createSubWindow(int x, int y, int width,
-    int height)
-{
+    int height) {
     WINDOW* subWindow = subwin(_window, height, width, y, x);
     std::unique_ptr<Ncurses> newWindow = std::make_unique<Ncurses>();
 

@@ -52,10 +52,10 @@ VALGRIND_FLAGS	=	--leak-check=full					\
 					--errors-for-leak-kinds=definite	\
 					--log-file="$(VALGRIND_LOG)"		\
 
-CPPLINTFLAGS	=															\
-	--repository=. 															\
-	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references	\
-	--recursive																\
+CPPLINTFLAGS	=	\
+    --repository=. \
+    --filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references	\
+    --recursive
 
 all: $(NAME)
 
@@ -101,4 +101,4 @@ cs:	clean
 	rm -f coding-style-reports.log
 
 linter: clean
-	cpplint $(CPPLINTFLAGS) ./src
+	cpplint $(CPPLINTFLAGS) ./src ./wrapper
