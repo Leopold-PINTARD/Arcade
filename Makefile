@@ -19,6 +19,7 @@ CC				=	g++
 
 NAME			=	arcade
 
+# Sources
 LIB_SRC			=
 
 MAIN_SRC		=	src/Main.cpp
@@ -30,6 +31,7 @@ TESTS_SRC		=	tests/dlloadingtests.cpp	\
 TEST_LIBS_SRC	=	tests/bar.cpp				\
 					tests/nocreate.cpp			\
 
+# Object files
 OBJ				=	$(SRC:.cpp=.o)
 
 MAIN_OBJ		=	$(MAIN_SRC:.cpp=.o)
@@ -38,6 +40,7 @@ LIB_OBJ			=	$(LIB_SRC:.cpp=.so)
 
 TEST_LIBS_OBJ	=	$(TEST_LIBS_SRC:.cpp=.so)
 
+# Flags
 INCLUDES		=	-I ./src -I ./
 
 CPPFLAGS		+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -O2 -g \
