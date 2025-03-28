@@ -22,7 +22,7 @@ static void redirect_all_stdout(void) {
 Test(init_and_use_lib, init_and_use_lib, .init = redirect_all_stdout) {
     {
         DLLoader<ILib> loader("./tests/bar.so");
-        std::unique_ptr<ILib> &bar = loader.getInstance();
+        std::unique_ptr<ILib> &bar = loader.getInstance("create");
         bar->init();
         std::cout << bar->getName() << std::endl;
         bar->stop();
@@ -38,7 +38,7 @@ Test(init_and_use_lib, init_and_use_lib, .init = redirect_all_stdout) {
 Test(open_inexistant_lib, open_inexistant_lib, .init = redirect_all_stdout) {
     try {
         DLLoader<ILib> loader("./tests/doesnotexist.so");
-        std::unique_ptr<ILib> &bar = loader.getInstance();
+        std::unique_ptr<ILib> &bar = loader.getInstance("create");
         bar->init();
         std::cout << bar->getName() << std::endl;
         bar->stop();
@@ -53,7 +53,7 @@ Test(use_inexistant_function, use_inexistant_function,
     .init = redirect_all_stdout) {
     try {
         DLLoader<ILib> loader("./tests/nocreate.so");
-        std::unique_ptr<ILib> &bar = loader.getInstance();
+        std::unique_ptr<ILib> &bar = loader.getInstance("create");
         (void)bar;
     } catch (DLLoader<ILib>::DLLoaderException &e) {
         std::cout << e.what() << std::endl;
@@ -79,8 +79,8 @@ Test(close_lib, close_lib, .init = redirect_all_stdout) {
 Test(get_instance_twice, get_instance_twice, .init = redirect_all_stdout) {
     {
         DLLoader<ILib> loader("./tests/bar.so");
-        std::unique_ptr<ILib> &bar = loader.getInstance();
-        std::unique_ptr<ILib> &foo = loader.getInstance();
+        std::unique_ptr<ILib> &bar = loader.getInstance("create");
+        std::unique_ptr<ILib> &foo = loader.getInstance("create");
         bar->init();
         std::cout << bar->getName() << std::endl;
         bar->stop();
