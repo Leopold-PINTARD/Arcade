@@ -27,9 +27,9 @@ class DLLoader {
     // Returns an instance of the class defined in the shared library
     // Throws a DLLoaderException if the function creating the instance
     // is not found
-    std::unique_ptr<T> &getInstance(void) noexcept(false) {
+    std::unique_ptr<T> &getInstance(std::string entrypoint) noexcept(false) {
         std::unique_ptr<T> (*create)(void) = reinterpret_cast<std::unique_ptr<T>
-            (*)(void)>(dlsym(_libHandle, "create"));
+            (*)(void)>(dlsym(_libHandle, entrypoint.c_str()));
 
         if (create == NULL)
             throw DLLoaderException(dlerror());

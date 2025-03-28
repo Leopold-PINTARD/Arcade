@@ -17,9 +17,11 @@ class Sprite : public IDrawable {
     std::vector<std::string> getGUI_Textures(void) const;
     std::vector<char[2]> getCLI_Textures(void) const;
     float getAnimationTime(void) const;
+    unsigned int getCurrentTexture(void) const;
     void setGUI_Textures(std::vector<std::string> GUI_Textures);
     void setCLI_Textures(std::vector<char[2]> CLI_Textures);
     void setAnimationTime(float animationTime);
+    void setCurrentTexture(unsigned int currentTexture);
     std::pair<float, float> getScale(void) const override;
     float getRotation(void) const override;
     std::pair<CLI_Color, CLI_Color> getCLI_Color(void) const override;
