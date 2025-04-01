@@ -5,7 +5,7 @@
 ** Ncurses
 */
 
-#include "Ncurses.hpp"
+#include "wrapper/ncurses/Ncurses.hpp"
 
 Ncurses::Ncurses() {
     initialize();
