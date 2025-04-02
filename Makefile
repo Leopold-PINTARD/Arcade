@@ -14,13 +14,14 @@
 
 %.so : %.cpp
 	$(CC) $(CPPFLAGS) -shared -o $@ -fPIC $<
+	cp $@ ./lib/
 
 CC				=	g++
 
 NAME			=	arcade
 
 # Sources
-LIB_SRC			=
+LIB_SRC			=	src/graphic_libs/SFML.cpp	\
 
 MAIN_SRC		=	src/Main.cpp
 
@@ -41,7 +42,7 @@ LIB_OBJ			=	$(LIB_SRC:.cpp=.so)
 TEST_LIBS_OBJ	=	$(TEST_LIBS_SRC:.cpp=.so)
 
 # Flags
-INCLUDES		=	-I ./src -I ./
+INCLUDES		=	-I ./src -I ./ -I ./include
 
 CPPFLAGS		+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -O2 -g \
 -fno-gnu-unique

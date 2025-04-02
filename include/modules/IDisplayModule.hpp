@@ -22,4 +22,4 @@ class IDisplayModule {
     virtual void handleSound(const Sound &sound) = 0;
 };
 
-std::unique_ptr<IDisplayModule> getDisplayModule();
+//std::unique_ptr<IDisplayModule> getDisplayModule();

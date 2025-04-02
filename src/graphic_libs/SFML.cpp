@@ -28,7 +28,7 @@ __attribute__((destructor)) void unload(void) {
     Log::info() << "Unloading SFML lib..." << std::endl;
 }
 
-extern "C" std::unique_ptr<IDisplayModule>getDisplayModule(void) {
+extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
     Log::info() << "Entrypoint for SFML lib" << std::endl;
     return std::make_unique<libs::graphic::SFML>();
 }
@@ -80,7 +80,7 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         text_sfml.setScale(text.getScale().first, text.getScale().second);
         text_sfml.setPosition(text.getPosition().first * 100,
             text.getPosition().second * 100);
-        text_sfml.setColor(sf::Color(std::get<0>(color), std::get<1>(color),
+        text_sfml.setFillColor(sf::Color(std::get<0>(color), std::get<1>(color),
             std::get<2>(color), std::get<3>(color)));
         text_sfml.setRotation(text.getRotation());
         text_sfml.setFont(font);
