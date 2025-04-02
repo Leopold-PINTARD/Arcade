@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2025
-** SDL2.cpp
+** SDL2_draw.cpp
 ** File description:
-** SDL2.cpp
+** SDL2_draw.cpp
 */
 
 #include <SDL2/SDL_ttf.h>

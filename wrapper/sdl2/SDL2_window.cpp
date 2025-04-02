@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2025
-** SDL2.cpp
+** SDL2_window.cpp
 ** File description:
-** SDL2.cpp
+** SDL2_window.cpp
 */
 
 #include <SDL2/SDL_image.h>
