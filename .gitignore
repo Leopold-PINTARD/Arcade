@@ -31,3 +31,14 @@
 *.out
 *.app
 arcade
+
+# Unit tests
+unit_tests
+*.gcda
+*.gcno
+*.gcov
+
+# Others
+.vscode/
+vgcore*
+*.log

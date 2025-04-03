@@ -19,6 +19,7 @@ class Text : public IDrawable {
     std::string getStr(void) const;
     void setFontPath(std::string fontPath);
     void setStr(std::string str);
+
     std::pair<float, float> getScale(void) const override;
     float getRotation(void) const override;
     std::pair<CLI_Color, CLI_Color> getCLI_Color(void) const override;
@@ -33,6 +34,7 @@ class Text : public IDrawable {
  private:
     std::string fontPath;
     std::string str;
+
     std::pair<float, float> scale;
     float rotation;
     std::pair<CLI_Color, CLI_Color> CLI_color;
