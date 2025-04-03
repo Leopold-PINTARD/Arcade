@@ -36,7 +36,7 @@ void SDL2::resumeMusic(void) {
         Mix_ResumeMusic();
 }
 
-void SDL2::playSound(const std::string &file) {
+Mix_Chunk *SDL2::playSound(const std::string &file) {
     Mix_Chunk *sound = Mix_LoadWAV(file.c_str());
 
     if (sound == nullptr) {
@@ -44,4 +44,5 @@ void SDL2::playSound(const std::string &file) {
         exit(84);
     }
     Mix_PlayChannel(-1, sound, 0);
+    return sound;
 }

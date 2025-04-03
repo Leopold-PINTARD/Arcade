@@ -51,7 +51,7 @@ class SDL2 {
     void stopMusic(void);
     void pauseMusic(void);
     void resumeMusic(void);
-    void playSound(const std::string &file);
+    Mix_Chunk *playSound(const std::string &file);
 
     void getSDLError(void);
     void getTTFError(void);
