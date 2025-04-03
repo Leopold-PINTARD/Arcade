@@ -32,4 +32,13 @@
 *.app
 arcade
 
-.vscode
+# Unit tests
+unit_tests
+*.gcda
+*.gcno
+*.gcov
+
+# Others
+.vscode/
+vgcore*
+*.log
