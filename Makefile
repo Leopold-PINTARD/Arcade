@@ -59,7 +59,8 @@ VALGRIND_FLAGS	=	--leak-check=full					\
 
 CPPLINTFLAGS	=															\
     --repository=. 															\
-    --filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references	\
+	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references,$\
+-build/include_subdir,-build/c++11											\
     --recursive
 
 all: $(NAME)
@@ -107,3 +108,7 @@ cs:	clean
 
 linter: clean
 	cpplint $(CPPLINTFLAGS) ./src ./include
+
+format: clean
+	find . -type f \( -name "*.cpp" -o -name "*.hpp" \) ! -path "./tests/*"	\
+	-exec clang-format -i {} +
