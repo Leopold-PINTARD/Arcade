@@ -9,7 +9,8 @@
 
 #include "./SDL2.hpp"
 
-SDL2::SDL2() : window(nullptr), renderer(nullptr), running(true) {
+SDL2::SDL2() : window(nullptr), renderer(nullptr), running(true),
+    mouseEvent({0, 0, false, false, false}), keyEvents({}) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         getSDLError();
         exit(84);
@@ -29,13 +30,6 @@ SDL2::~SDL2() {
 
 bool SDL2::isRunning() {
     return running;
-}
-
-void SDL2::pollEvent() {
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT)
-            running = false;
-    }
 }
 
 void SDL2::getSDLError() {

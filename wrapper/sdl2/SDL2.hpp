@@ -11,6 +11,7 @@
     #include <SDL2/SDL.h>
     #include <SDL2/SDL_ttf.h>
     #include <SDL2/SDL_image.h>
+    #include <vector>
     #include <string>
 
 class SDL2 {
@@ -25,7 +26,20 @@ class SDL2 {
 
     bool isRunning(void);
 
+    struct MouseEvent {
+        int x;
+        int y;
+        bool leftButton;
+        bool rightButton;
+        bool middleButton;
+    };
+    struct KeyEvent {
+        SDL_Keycode key;
+        bool isPressed;
+    };
     void pollEvent(void);
+    MouseEvent getMouseEvent(void);
+    KeyEvent getKeyEvent(void);
 
     TTF_Font *loadFont(const std::string &file, int size);
     void drawText(TTF_Font *font, const std::string text,
@@ -40,6 +54,8 @@ class SDL2 {
     SDL_Renderer *renderer;
     SDL_Event event;
     bool running;
+    MouseEvent mouseEvent;
+    std::vector<KeyEvent> keyEvents;
 };
 
 #endif  // WRAPPER_SDL2_SDL2_HPP_
