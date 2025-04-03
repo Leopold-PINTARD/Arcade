@@ -12,7 +12,7 @@
 
 class Event {
  public:
-    Event(enum Key::KeyCode key, std::any value): key(key), value(value) {}
+    Event(enum Key::KeyCode key, std::any value) : key(key), value(value) {}
 
     const enum Key::KeyCode key;
     const std::any value;

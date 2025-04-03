@@ -9,8 +9,13 @@
 
 #include "./SDL2.hpp"
 
-SDL2::SDL2() : window(nullptr), renderer(nullptr), running(true),
-    mouseEvent({0, 0, false, false, false}), keyEvents({}), music(nullptr) {
+SDL2::SDL2()
+    : window(nullptr),
+      renderer(nullptr),
+      running(true),
+      mouseEvent({0, 0, false, false, false}),
+      keyEvents({}),
+      music(nullptr) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         getSDLError();
         exit(84);
@@ -30,18 +35,12 @@ SDL2::~SDL2() {
     SDL_Quit();
 }
 
-bool SDL2::isRunning() {
-    return running;
-}
+bool SDL2::isRunning() { return running; }
 
 void SDL2::getSDLError() {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-        "%s\n",
-        SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s\n", SDL_GetError());
 }
 
 void SDL2::getTTFError() {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-        "%s\n",
-        TTF_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s\n", TTF_GetError());
 }

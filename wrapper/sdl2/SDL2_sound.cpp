@@ -6,13 +6,13 @@
 */
 
 #include <SDL2/SDL_mixer.h>
+
 #include <string>
 
 #include "./SDL2.hpp"
 
 void SDL2::playMusic(const std::string &file) {
-    if (music != nullptr)
-        Mix_FreeMusic(music);
+    if (music != nullptr) Mix_FreeMusic(music);
     music = Mix_LoadMUS(file.c_str());
     if (music == nullptr) {
         getSDLError();
@@ -22,18 +22,15 @@ void SDL2::playMusic(const std::string &file) {
 }
 
 void SDL2::stopMusic(void) {
-    if (music != nullptr)
-        Mix_HaltMusic();
+    if (music != nullptr) Mix_HaltMusic();
 }
 
 void SDL2::pauseMusic(void) {
-    if (music != nullptr)
-        Mix_PauseMusic();
+    if (music != nullptr) Mix_PauseMusic();
 }
 
 void SDL2::resumeMusic(void) {
-    if (music != nullptr)
-        Mix_ResumeMusic();
+    if (music != nullptr) Mix_ResumeMusic();
 }
 
 Mix_Chunk *SDL2::playSound(const std::string &file) {

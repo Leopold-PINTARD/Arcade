@@ -7,9 +7,9 @@
 
 #pragma once
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
-#include <string>
 
 #include <DataStructures/Event.hpp>
 #include <DataStructures/IDrawable.hpp>
