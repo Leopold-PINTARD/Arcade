@@ -6,12 +6,13 @@
 */
 
 #ifndef SRC_DLLOADER_HPP_
-    #define SRC_DLLOADER_HPP_
+#define SRC_DLLOADER_HPP_
 
-    #include <dlfcn.h>
-    #include <memory>
-    #include <string>
-    #include <vector>
+#include <dlfcn.h>
+
+#include <memory>
+#include <string>
+#include <vector>
 
 template <typename T>
 class DLLoader {
@@ -21,20 +22,18 @@ class DLLoader {
     // Throws a DLLoaderException if the library cannot be opened
     explicit DLLoader(std::string path) noexcept(false) {
         _libHandle = dlopen(path.c_str(), RTLD_LAZY);
-        if (!_libHandle)
-            throw DLLoaderException(dlerror());
+        if (!_libHandle) throw DLLoaderException(dlerror());
     }
     // Returns an instance of the class defined in the shared library
     // Throws a DLLoaderException if the function creating the instance
     // is not found
     std::unique_ptr<T> &getInstance(std::string entrypoint) noexcept(false) {
-        std::unique_ptr<T> (*create)(void) = reinterpret_cast<std::unique_ptr<T>
-            (*)(void)>(dlsym(_libHandle, entrypoint.c_str()));
+        std::unique_ptr<T> (*create)(void) =
+            reinterpret_cast<std::unique_ptr<T> (*)(void)>(
+                dlsym(_libHandle, entrypoint.c_str()));
 
-        if (create == NULL)
-            throw DLLoaderException(dlerror());
-        if (_instance == nullptr)
-            _instance = create();
+        if (create == NULL) throw DLLoaderException(dlerror());
+        if (_instance == nullptr) _instance = create();
         return _instance;
     }
     // Closes the shared library
@@ -49,11 +48,10 @@ class DLLoader {
     class DLLoaderException : public std::exception {
      public:
         explicit DLLoaderException(std::string message) noexcept
-        : _message(message) {}
+            : _message(message) {}
         ~DLLoaderException() noexcept {}
-        const char *what() const noexcept override {
-            return _message.c_str();
-        }
+        const char *what() const noexcept override { return _message.c_str(); }
+
      private:
         std::string _message;
     };

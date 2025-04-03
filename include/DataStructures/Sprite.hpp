@@ -6,10 +6,11 @@
 */
 
 #pragma once
-#include <vector>
 #include <string>
 #include <tuple>
 #include <utility>
+#include <vector>
+
 #include <DataStructures/IDrawable.hpp>
 
 class Sprite : public IDrawable {
@@ -35,7 +36,7 @@ class Sprite : public IDrawable {
 
  private:
     std::vector<std::string> GUI_Textures;
-    std::vector<char[2]>  CLI_Textures;
+    std::vector<char[2]> CLI_Textures;
     float animationTime;
     std::pair<float, float> scale;
     float rotation;

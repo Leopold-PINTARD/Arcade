@@ -24,10 +24,11 @@ class Log {
     Log &operator<<(std::ostream &(*manip)(std::ostream &));
     static void setFilePath(const std::string &path);
     static void setDebug(bool value);
+
  private:
     void flush();
     void flushInFile(const std::string &logMessage,
-        const std::string &filePath);
+                     const std::string &filePath);
     std::string filePath;
     std::string specialCase();
     std::string level;

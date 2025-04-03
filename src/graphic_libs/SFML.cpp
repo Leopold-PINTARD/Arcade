@@ -5,20 +5,23 @@
 ** SFML
 */
 
-#include <string>
+#include "./src/graphic_libs/SFML.hpp"
+
 #include <cstdio>
-#include <memory>
 #include <iostream>
-#include <tuple>
 #include <map>
+#include <memory>
+#include <string>
+#include <tuple>
 #include <utility>
-#include <SFML/Graphics.hpp>
+
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+
+#include "./src/log/Log.hpp"
 #include "DataStructures/Sprite.hpp"
 #include "DataStructures/Text.hpp"
-#include "./src/graphic_libs/SFML.hpp"
-#include "./src/log/Log.hpp"
 
 __attribute__((constructor)) void load(void) {
     Log::info() << "Loading SFML lib..." << std::endl;
@@ -33,11 +36,9 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
     return std::make_unique<libs::graphic::SFML>();
 }
 
-libs::graphic::SFML::SFML() {
-}
+libs::graphic::SFML::SFML() {}
 
-libs::graphic::SFML::~SFML() {
-}
+libs::graphic::SFML::~SFML() {}
 
 void libs::graphic::SFML::createWindow(const Window &window) {
     if (this->_window == nullptr) {
@@ -49,26 +50,26 @@ void libs::graphic::SFML::createWindow(const Window &window) {
 void libs::graphic::SFML::draw(const IDrawable &to_draw) {
     sf::Texture texture;
 
-    if (this->_window == nullptr)
-        return;
+    if (this->_window == nullptr) return;
     try {
         const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
         sf::Texture texture;
         sf::Sprite sprite_sfml;
         std::tuple<int, int, int, int> color = sprite.getGUI_Color();
 
-        texture.loadFromFile(sprite.getGUI_Textures()
-            [sprite.getCurrentTexture()]);
+        texture.loadFromFile(
+            sprite.getGUI_Textures()[sprite.getCurrentTexture()]);
         sprite_sfml.setTexture(texture);
         sprite_sfml.setColor(sf::Color(std::get<0>(color), std::get<1>(color),
-            std::get<2>(color), std::get<3>(color)));
+                                       std::get<2>(color), std::get<3>(color)));
         sprite_sfml.setPosition(sprite.getPosition().first * 100,
-            sprite.getPosition().second * 100);
+                                sprite.getPosition().second * 100);
         sprite_sfml.setScale(sprite.getScale().first, sprite.getScale().second);
         sprite_sfml.setRotation(sprite.getRotation());
         this->_window->draw(sprite_sfml);
         return;
-    } catch(const std::bad_cast &e) {}
+    } catch (const std::bad_cast &e) {
+    }
     try {
         const Text &text = dynamic_cast<const Text &>(to_draw);
         sf::Text text_sfml;
@@ -79,63 +80,61 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         text_sfml.setString(text.getStr());
         text_sfml.setScale(text.getScale().first, text.getScale().second);
         text_sfml.setPosition(text.getPosition().first * 100,
-            text.getPosition().second * 100);
+                              text.getPosition().second * 100);
         text_sfml.setFillColor(sf::Color(std::get<0>(color), std::get<1>(color),
-            std::get<2>(color), std::get<3>(color)));
+                                         std::get<2>(color),
+                                         std::get<3>(color)));
         text_sfml.setRotation(text.getRotation());
         text_sfml.setFont(font);
         this->_window->draw(text_sfml);
         return;
-    } catch(const std::bad_cast &e) {
+    } catch (const std::bad_cast &e) {
         std::cerr << e.what() << '\n';
     }
 }
 
 void libs::graphic::SFML::display(void) {
-    if (this->_window == nullptr)
-        return;
+    if (this->_window == nullptr) return;
     this->_window->display();
 }
 
 void libs::graphic::SFML::clear(void) {
-    if (this->_window == nullptr)
-        return;
+    if (this->_window == nullptr) return;
     this->_window->clear();
 }
 
 Event libs::graphic::SFML::getEvent(void) {
     sf::Event event;
 
-    if (this->_window == nullptr)
-        return Event(Key::NONE, 0);
-    if (this->_window->pollEvent(event) == false)
-        return Event(Key::NONE, 0);
+    if (this->_window == nullptr) return Event(Key::NONE, 0);
+    if (this->_window->pollEvent(event) == false) return Event(Key::NONE, 0);
     if (event.type == sf::Event::Closed)
         return Event(Key::KeyCode::SUPPR, Key::KeyStatus::KEY_PRESSED);
     if (event.type == sf::Event::KeyPressed)
-        return Event(this->keys[event.key.code],
-            Key::KeyStatus::KEY_PRESSED);
+        return Event(this->keys[event.key.code], Key::KeyStatus::KEY_PRESSED);
     if (event.type == sf::Event::KeyReleased)
-        return Event(this->keys[event.key.code],
-            Key::KeyStatus::KEY_RELEASED);
+        return Event(this->keys[event.key.code], Key::KeyStatus::KEY_RELEASED);
     if (event.type == sf::Event::MouseMoved)
         return Event(Key::KeyCode::MOUSE_MOVE,
-            Key::MousePos{event.mouseMove.x, event.mouseMove.y});
+                     Key::MousePos{event.mouseMove.x, event.mouseMove.y});
     if (event.type == sf::Event::MouseButtonPressed)
-        return Event(mouse_buttons[event.mouseButton.button],
-            std::pair<Key::MousePos, Key::KeyStatus>{Key::MousePos{
-            event.mouseButton.x, event.mouseButton.y},
-            Key::KeyStatus::KEY_PRESSED});
+        return Event(
+            mouse_buttons[event.mouseButton.button],
+            std::pair<Key::MousePos, Key::KeyStatus>{
+                Key::MousePos{event.mouseButton.x, event.mouseButton.y},
+                Key::KeyStatus::KEY_PRESSED});
     if (event.type == sf::Event::MouseButtonReleased)
-        return Event(mouse_buttons[event.mouseButton.button],
-            std::pair<Key::MousePos, Key::KeyStatus>{Key::MousePos{
-            event.mouseButton.x, event.mouseButton.y},
-            Key::KeyStatus::KEY_RELEASED});
+        return Event(
+            mouse_buttons[event.mouseButton.button],
+            std::pair<Key::MousePos, Key::KeyStatus>{
+                Key::MousePos{event.mouseButton.x, event.mouseButton.y},
+                Key::KeyStatus::KEY_RELEASED});
     if (event.type == sf::Event::MouseWheelScrolled)
         return Event(Key::KeyCode::MOUSE_SCROLL,
-            std::pair<Key::MousePos, float>{Key::MousePos{
-            event.mouseWheelScroll.x, event.mouseWheelScroll.y},
-            event.mouseWheelScroll.delta});
+                     std::pair<Key::MousePos, float>{
+                         Key::MousePos{event.mouseWheelScroll.x,
+                                       event.mouseWheelScroll.y},
+                         event.mouseWheelScroll.delta});
     return Event(Key::NONE, 0);
 }
 
@@ -144,8 +143,7 @@ void libs::graphic::SFML::handleSound(const Sound &sound) {
         sf::SoundBuffer buffer;
         sf::Sound sound_sfml;
 
-        if (buffer.loadFromFile(sound.filePath) == false)
-            return;
+        if (buffer.loadFromFile(sound.filePath) == false) return;
         sound_sfml.setBuffer(buffer);
         this->_sounds[sound.id] = sound_sfml;
     }
@@ -153,8 +151,7 @@ void libs::graphic::SFML::handleSound(const Sound &sound) {
         this->_sounds[sound.id].setLoop(false);
         this->_sounds[sound.id].stop();
     }
-    if (sound.state == Sound::State::PLAY)
-        this->_sounds[sound.id].play();
+    if (sound.state == Sound::State::PLAY) this->_sounds[sound.id].play();
     if (sound.state == Sound::State::LOOP) {
         this->_sounds[sound.id].setLoop(true);
         this->_sounds[sound.id].play();
@@ -218,16 +215,14 @@ std::map<sf::Keyboard::Key, Key::KeyCode> libs::graphic::SFML::keys = {
     {sf::Keyboard::F9, Key::KeyCode::FUNCTION_9},
     {sf::Keyboard::F10, Key::KeyCode::FUNCTION_10},
     {sf::Keyboard::F11, Key::KeyCode::FUNCTION_11},
-    {sf::Keyboard::F12, Key::KeyCode::FUNCTION_12}
-};
+    {sf::Keyboard::F12, Key::KeyCode::FUNCTION_12}};
 
 std::map<sf::Mouse::Button, Key::KeyCode> libs::graphic::SFML::mouse_buttons = {
     {sf::Mouse::Left, Key::KeyCode::MOUSE_LEFT},
     {sf::Mouse::Middle, Key::KeyCode::MOUSE_MIDDLE},
     {sf::Mouse::Right, Key::KeyCode::MOUSE_RIGHT},
     {sf::Mouse::XButton1, Key::KeyCode::MOUSE_BUTTON_4},
-    {sf::Mouse::XButton2, Key::KeyCode::MOUSE_BUTTON_5}
-};
+    {sf::Mouse::XButton2, Key::KeyCode::MOUSE_BUTTON_5}};
 
 //    {Key::KeyCode::MOUSE_LEFT, sf::Mouse::Left},
 //    {Key::KeyCode::MOUSE_MIDDLE, sf::Mouse::Middle},

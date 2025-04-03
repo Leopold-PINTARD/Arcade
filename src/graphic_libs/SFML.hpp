@@ -6,12 +6,13 @@
 */
 
 #ifndef SRC_GRAPHIC_LIBS_SFML_HPP_
-    #define SRC_GRAPHIC_LIBS_SFML_HPP_
+#define SRC_GRAPHIC_LIBS_SFML_HPP_
 
-    #include <string>
-    #include <memory>
-    #include <map>
-    #include "modules/IDisplayModule.hpp"
+#include <map>
+#include <memory>
+#include <string>
+
+#include "modules/IDisplayModule.hpp"
 
 namespace libs {
 namespace graphic {
@@ -27,6 +28,7 @@ class SFML : public IDisplayModule {
     Event getEvent(void) override;
     void handleSound(const Sound &sound) override;
     ~SFML();
+
  private:
     std::unique_ptr<sf::RenderWindow> _window;
     std::map<std::string, sf::Sound> _sounds;

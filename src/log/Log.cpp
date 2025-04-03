@@ -6,23 +6,20 @@
 */
 
 #include "src/log/Log.hpp"
-#include <string>
+
+#include <algorithm>
 #include <ctime>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <fstream>
-#include <algorithm>
+#include <string>
 #include <vector>
 
 bool Log::debug = false;
 
-Log::Log(const std::string &level) : level(level) {
-    filePath = "arcade.log";
-}
+Log::Log(const std::string &level) : level(level) { filePath = "arcade.log"; }
 
-Log::~Log() {
-    flush();
-}
+Log::~Log() { flush(); }
 
 Log &Log::info() {
     static Log instance("INFO");
@@ -57,12 +54,10 @@ Log &Log::operator<<(std::ostream &(*manip)(std::ostream &)) {
     return *this;
 }
 
-void Log::setDebug(bool value) {
-    debug = value;
-}
+void Log::setDebug(bool value) { debug = value; }
 
 void Log::flushInFile(const std::string &logMessage,
-    const std::string &filePath) {
+                      const std::string &filePath) {
     std::ofstream outFile(filePath, std::ios::app);
 
     if (outFile.is_open()) {
@@ -76,7 +71,7 @@ void Log::flushInFile(const std::string &logMessage,
 std::string Log::specialCase() {
     if (level == "LINE")
         return "[==========================================================="
-            "===================]\n";
+               "===================]\n";
     return "";
 }
 
@@ -86,20 +81,20 @@ void Log::flush() {
     std::ostringstream logMessage;
     std::vector<std::string> special = {"LINE"};
 
-    if (!debug)
-        return;
+    if (!debug) return;
     localtime_r(&time_t_now, &tm_now);
-    std::tm* tm_ptr = std::localtime(&time_t_now);
+    std::tm *tm_ptr = std::localtime(&time_t_now);
     if (tm_ptr != nullptr) {
         tm_now = *tm_ptr;
     } else {
         std::cerr << "Failed to get local time." << std::endl;
         return;
     }
-        return;
+    return;
     if (std::find(special.begin(), special.end(), level) == special.end())
-        logMessage << "[" << level << "]\t(" <<std::put_time
-            (&tm_now, "%H:%M:%S") << ") → " << buffer.str();
+        logMessage << "[" << level << "]\t("
+                   << std::put_time(&tm_now, "%H:%M:%S") << ") → "
+                   << buffer.str();
     else
         logMessage << specialCase();
     if (!filePath.empty()) {

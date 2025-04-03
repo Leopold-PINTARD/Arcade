@@ -6,10 +6,11 @@
 */
 
 #pragma once
-#include <vector>
 #include <string>
-#include <utility>
 #include <tuple>
+#include <utility>
+#include <vector>
+
 #include <DataStructures/IDrawable.hpp>
 
 class Text : public IDrawable {
@@ -28,6 +29,7 @@ class Text : public IDrawable {
     void setCLI_Color(std::pair<CLI_Color, CLI_Color> CLI_Color) override;
     void setGUI_Color(std::tuple<int, int, int, int> GUI_Color) override;
     void setPosition(std::pair<int, int> position) override;
+
  private:
     std::string fontPath;
     std::string str;
