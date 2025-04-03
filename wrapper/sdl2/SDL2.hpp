@@ -11,6 +11,7 @@
     #include <SDL2/SDL.h>
     #include <SDL2/SDL_ttf.h>
     #include <SDL2/SDL_image.h>
+    #include <SDL2/SDL_mixer.h>
     #include <vector>
     #include <string>
 
@@ -46,6 +47,12 @@ class SDL2 {
         SDL_Color color, int x, int y);
     void drawSprite(const std::string &file, int x, int y);
 
+    void playMusic(const std::string &file);
+    void stopMusic(void);
+    void pauseMusic(void);
+    void resumeMusic(void);
+    void playSound(const std::string &file);
+
     void getSDLError(void);
     void getTTFError(void);
 
@@ -56,6 +63,7 @@ class SDL2 {
     bool running;
     MouseEvent mouseEvent;
     std::vector<KeyEvent> keyEvents;
+    Mix_Music *music;
 };
 
 #endif  // WRAPPER_SDL2_SDL2_HPP_
