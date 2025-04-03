@@ -8,12 +8,13 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <string>
 #include <utility>
-#include <DataStructures/Window.hpp>
-#include <DataStructures/IDrawable.hpp>
-#include <DataStructures/Sound.hpp>
-#include <DataStructures/Event.hpp>
+#include <string>
+
+#include "../DataStructures/Window.hpp"
+#include "../DataStructures/IDrawable.hpp"
+#include "../DataStructures/Sound.hpp"
+#include "../DataStructures/Event.hpp"
 
 class IGameModule {
  public:
@@ -26,4 +27,4 @@ class IGameModule {
     virtual std::vector<std::pair<std::string, int>> getScores(void) = 0;
 };
 
-std::unique_ptr<IGameModule> getGameModule();
+// extern "C" std::unique_ptr<IGameModule> getGameModule();

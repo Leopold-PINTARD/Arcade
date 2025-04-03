@@ -16,8 +16,9 @@ class Sound {
         LOOP
     };
     Sound(std::string filePath, Sound::State state, std::string id,
-        bool unique = true): filePath(filePath), state(state), id(id),
+        bool unique = true) : filePath(filePath), state(state), id(id),
         unique(unique) {}
+
     const std::string filePath;
     const Sound::State state;
     const std::string id;
