@@ -6,12 +6,12 @@
 */
 
 #pragma once
-
-#include <vector>
 #include <string>
 #include <tuple>
 #include <utility>
-#include "include/DataStructures/IDrawable.hpp"
+#include <vector>
+
+#include <DataStructures/IDrawable.hpp>
 
 class Text : public IDrawable {
  public:

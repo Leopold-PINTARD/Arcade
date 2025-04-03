@@ -13,17 +13,11 @@ void Ncurses::resize(int width, int height) {
     wrefresh(_window);
 }
 
-void Ncurses::clear() {
-    wclear(_window);
-}
+void Ncurses::clear() { wclear(_window); }
 
-void Ncurses::erase() {
-    werase(_window);
-}
+void Ncurses::erase() { werase(_window); }
 
-void Ncurses::refresh() {
-    wrefresh(_window);
-}
+void Ncurses::refresh() { wrefresh(_window); }
 
 Ncurses::Coordinate Ncurses::getScreenSize() const {
     int x;
@@ -34,12 +28,12 @@ Ncurses::Coordinate Ncurses::getScreenSize() const {
 }
 
 void Ncurses::defineColor(std::int16_t colorIndex, std::int16_t r,
-    std::int16_t g, std::int16_t b) {
+                          std::int16_t g, std::int16_t b) {
     init_color(colorIndex, r, g, b);
 }
 
 std::unique_ptr<Ncurses> Ncurses::createSubWindow(int x, int y, int width,
-    int height) {
+                                                  int height) {
     WINDOW* subWindow = subwin(_window, height, width, y, x);
     std::unique_ptr<Ncurses> newWindow = std::make_unique<Ncurses>();
 

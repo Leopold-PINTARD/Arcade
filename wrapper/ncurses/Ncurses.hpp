@@ -8,12 +8,13 @@
 #pragma once
 
 #include <ncurses.h>
-#include <string>
-#include <memory>
-#include <vector>
-#include <map>
+
 #include <cstdint>
+#include <map>
+#include <memory>
+#include <string>
 #include <utility>
+#include <vector>
 
 /**
  * @brief Wrapper class for the NCurses library
@@ -129,14 +130,7 @@ class Ncurses {
     /**
      * @brief Button enumeration for mouse events
      */
-    enum class Button {
-        NONE,
-        LEFT,
-        MIDDLE,
-        RIGHT,
-        SCROLL_UP,
-        SCROLL_DOWN
-    };
+    enum class Button { NONE, LEFT, MIDDLE, RIGHT, SCROLL_UP, SCROLL_DOWN };
 
     /**
      * @brief Mouse event structure
@@ -232,8 +226,8 @@ class Ncurses {
      * @param fg Foreground color
      * @param bg Background color
      */
-    void drawPixel(Coordinate xy, char c, Color fg = Color::WHITE, Color
-        bg = Color::BLACK);
+    void drawPixel(Coordinate xy, char c, Color fg = Color::WHITE,
+                   Color bg = Color::BLACK);
 
     /**
      * @brief Draw text at the specified position
@@ -244,7 +238,7 @@ class Ncurses {
      * @param bg Background color
      */
     void drawText(Coordinate xy, const std::string& text,
-        Color fg = Color::WHITE, Color bg = Color::BLACK);
+                  Color fg = Color::WHITE, Color bg = Color::BLACK);
 
     /**
      * @brief Draw a filled rectangle
@@ -256,8 +250,8 @@ class Ncurses {
      * @param fg Foreground color
      * @param bg Background color
      */
-    void drawRect(Coordinate xy, int width, int height, char c, Color
-        fg = Color::WHITE, Color bg = Color::BLACK);
+    void drawRect(Coordinate xy, int width, int height, char c,
+                  Color fg = Color::WHITE, Color bg = Color::BLACK);
 
     /**
      * @brief Draw a box outline
@@ -268,20 +262,20 @@ class Ncurses {
      * @param fg Foreground color
      * @param bg Background color
      */
-    void drawBox(Coordinate xy, int width, int height, Color fg =
-        Color::WHITE, Color bg = Color::BLACK);
+    void drawBox(Coordinate xy, int width, int height, Color fg = Color::WHITE,
+                 Color bg = Color::BLACK);
 
     /**
      * @brief Draw a line between two points
-     * 
+     *
      * @param xy1 First point
      * @param xy2 Second point
      * @param c Character to draw line with
      * @param fg Foreground color
      * @param bg Background color
      */
-    void drawLine(Coordinate xy1, Coordinate xy2, char c, Color fg =
-        Color::WHITE, Color bg = Color::BLACK);
+    void drawLine(Coordinate xy1, Coordinate xy2, char c,
+                  Color fg = Color::WHITE, Color bg = Color::BLACK);
 
     /**
      * @brief Initialize color support
@@ -299,7 +293,8 @@ class Ncurses {
 
     /**
      * @brief Set the input timeout (in milliseconds)
-     * @param milliseconds The timeout in milliseconds (-1 for blocking, 0 for non-blocking)
+     * @param milliseconds The timeout in milliseconds (-1 for blocking, 0 for
+     * non-blocking)
      */
     void setTimeout(int milliseconds);
 
@@ -311,7 +306,7 @@ class Ncurses {
      * @param b Blue component (0-1000)
      */
     void defineColor(std::int16_t colorIndex, std::int16_t r, std::int16_t g,
-        std::int16_t b);
+                     std::int16_t b);
 
     /**
      * @brief Create a new sub-window
@@ -321,8 +316,8 @@ class Ncurses {
      * @param height Height of the window
      * @return A new Ncurses window instance
      */
-    std::unique_ptr<Ncurses> createSubWindow(int x, int y, int width, int
-        height);
+    std::unique_ptr<Ncurses> createSubWindow(int x, int y, int width,
+                                             int height);
 
     /**
      * @brief Enable/disable mouse events

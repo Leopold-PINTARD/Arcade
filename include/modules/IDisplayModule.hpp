@@ -8,10 +8,10 @@
 #pragma once
 #include <memory>
 
-#include "../DataStructures/IDrawable.hpp"
-#include "../DataStructures/Event.hpp"
-#include "../DataStructures/Sound.hpp"
-#include "../DataStructures/Window.hpp"
+#include <DataStructures/Event.hpp>
+#include <DataStructures/IDrawable.hpp>
+#include <DataStructures/Sound.hpp>
+#include <DataStructures/Window.hpp>
 
 class IDisplayModule {
  public:

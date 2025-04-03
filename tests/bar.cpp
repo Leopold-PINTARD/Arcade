@@ -6,10 +6,11 @@
 */
 
 #include "bar.hpp"
-#include <string>
+
 #include <cstdio>
-#include <memory>
 #include <iostream>
+#include <memory>
+#include <string>
 
 __attribute__((constructor)) void load(void) {
     std::cout << "[Start] Loading bar..." << std::endl;
@@ -19,25 +20,17 @@ __attribute__((destructor)) void unload(void) {
     std::cout << "[End] Unloading bar..." << std::endl;
 }
 
-extern "C" std::unique_ptr<ILib>create(void) {
+extern "C" std::unique_ptr<ILib> create(void) {
     std::cout << "Entrypoint for bar!" << std::endl;
     return std::make_unique<Bar>();
 }
 
-Bar::Bar() : _name("Bar") {
-}
+Bar::Bar() : _name("Bar") {}
 
-void Bar::init() {
-    std::cout << "Bar init" << std::endl;
-}
+void Bar::init() { std::cout << "Bar init" << std::endl; }
 
-void Bar::stop() {
-    std::cout << "Bar stop" << std::endl;
-}
+void Bar::stop() { std::cout << "Bar stop" << std::endl; }
 
-const std::string &Bar::getName() const {
-    return _name;
-}
+const std::string &Bar::getName() const { return _name; }
 
-Bar::~Bar() {
-}
+Bar::~Bar() {}

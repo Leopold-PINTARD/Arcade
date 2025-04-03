@@ -5,8 +5,9 @@
 ** SDL2_draw.cpp
 */
 
-#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+
 #include <string>
 
 #include "./SDL2.hpp"
@@ -21,10 +22,10 @@ TTF_Font *SDL2::loadFont(const std::string &file, int size) {
     return font;
 }
 
-void SDL2::drawText(TTF_Font *font, const std::string text,
-    SDL_Color color, int x, int y) {
-    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+void SDL2::drawText(TTF_Font *font, const std::string text, SDL_Color color,
+                    int x, int y) {
+    SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_Rect rect = {x, y, surface->w, surface->h};
 
     SDL_FreeSurface(surface);

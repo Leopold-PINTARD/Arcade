@@ -48,12 +48,9 @@ void determineEventTypes(Ncurses::MouseEvent& event, MEVENT& mevent) {
 }
 
 void determineModifiers(Ncurses::MouseEvent& event, MEVENT& mevent) {
-    if (mevent.bstate & BUTTON_SHIFT)
-        event.shift = true;
-    if (mevent.bstate & BUTTON_CTRL)
-        event.ctrl = true;
-    if (mevent.bstate & BUTTON_ALT)
-        event.alt = true;
+    if (mevent.bstate & BUTTON_SHIFT) event.shift = true;
+    if (mevent.bstate & BUTTON_CTRL) event.ctrl = true;
+    if (mevent.bstate & BUTTON_ALT) event.alt = true;
 }
 
 Ncurses::MouseEvent Ncurses::getMouseEvent() {
@@ -67,8 +64,7 @@ Ncurses::MouseEvent Ncurses::getMouseEvent() {
     MEVENT mevent;
     int result = getmouse(&mevent);
 
-    if (result == ERR)
-        return event;
+    if (result == ERR) return event;
     event.position.x = mevent.x;
     event.position.y = mevent.y;
     determineButton(event, mevent);

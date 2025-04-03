@@ -6,11 +6,11 @@
 */
 
 #pragma once
+#include <string>
 #include <tuple>
 #include <utility>
-#include <string>
 
-#include "include/DataStructures/CLI_Colors.hpp"
+#include <DataStructures/CLI_Colors.hpp>
 
 class IDrawable {
  public:
