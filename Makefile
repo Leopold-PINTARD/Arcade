@@ -52,8 +52,8 @@ VALGRIND_FLAGS	=	--leak-check=full					\
 					--errors-for-leak-kinds=definite	\
 					--log-file="$(VALGRIND_LOG)"		\
 
-CPPLINTFLAGS	=	\
-    --repository=. \
+CPPLINTFLAGS	=															\
+    --repository=. 															\
     --filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references	\
     --recursive
 
