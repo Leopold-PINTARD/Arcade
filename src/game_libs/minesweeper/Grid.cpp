@@ -7,10 +7,8 @@
 
 #include <random>
 #include <stdexcept>
-#include <queue>
-#include <utility>
 
-#include "Grid.hpp"
+#include "minesweeper/Grid.hpp"
 
 Grid::Grid(int width, int height, int mines)
     : width(width), height(height), mines(mines), generated(false) {
@@ -56,28 +54,18 @@ void Grid::revealAllCells() {
 }
 
 void Grid::revealAdjacentCells(int x, int y) {
-    if (x < 0 || x >= width || y < 0 || y >= height ||
-        cells[y][x].isRevealed || cells[y][x].isFlagged) {
-        return;
-    }
-    std::queue<std::pair<int, int>> cellQueue;
-    cellQueue.push({x, y});
-    while (!cellQueue.empty()) {
-        auto [cx, cy] = cellQueue.front();
-        cellQueue.pop();
-        if (cx < 0 || cx >= width || cy < 0 || cy >= height ||
-            cells[cy][cx].isRevealed || cells[cy][cx].isFlagged ||
-            cells[cy][cx].type == MINE) {
-            continue;
-        }
-        cells[cy][cx].isRevealed = true;
-        if (cells[cy][cx].adjacentMines > 0) {
-            continue;
-        }
-        for (int dy = -1; dy <= 1; ++dy) {
-            for (int dx = -1; dx <= 1; ++dx) {
-                if (dx == 0 && dy == 0) continue;
-                cellQueue.push({cx + dx, cy + dy});
+    if (x < 0 || x >= width || y < 0 || y >= height) { return; }
+    if (cells[y][x].isRevealed || cells[y][x].type == MINE) { return; }
+    if (cells[y][x].adjacentMines > 0) { return; }
+
+    cells[y][x].isRevealed = true;
+    for (int dy = -1; dy <= 1; ++dy) {
+        for (int dx = -1; dx <= 1; ++dx) {
+            if (dx == 0 && dy == 0) { continue; }
+            int newX = x + dx;
+            int newY = y + dy;
+            if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                revealAdjacentCells(newX, newY);
             }
         }
     }
