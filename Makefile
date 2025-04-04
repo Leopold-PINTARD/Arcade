@@ -13,6 +13,9 @@
 	$(CC) $(CPPFLAGS) -c $< -o $@ -fPIC
 	@echo "Generated $@ successfully"
 
+%.so : %.cpp
+	$(CC) $(CPPFLAGS) -shared -o $@ -fPIC $<
+
 CC					=	g++
 
 # Sources
