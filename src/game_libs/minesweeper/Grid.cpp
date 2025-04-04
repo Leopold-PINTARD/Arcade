@@ -7,6 +7,8 @@
 
 #include <random>
 #include <stdexcept>
+#include <queue>
+#include <utility>
 
 #include "Grid.hpp"
 
@@ -36,10 +38,49 @@ Grid::CellType Grid::revealCell(int x, int y) {
     if (x < 0 || x >= width || y < 0 || y >= height) {
         throw std::out_of_range("Invalid cell coordinates");
     }
+    if (cells[y][x].isFlagged) { return FLAGGED; }
     cells[y][x].isRevealed = true;
     if (!generated)
         generateMines(x, y);
+    if (cells[y][x].type == EMPTY)
+        revealAdjacentCells(x, y);
     return cells[y][x].type;
+}
+
+void Grid::revealAllCells() {
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            cells[y][x].isRevealed = true;
+        }
+    }
+}
+
+void Grid::revealAdjacentCells(int x, int y) {
+    if (x < 0 || x >= width || y < 0 || y >= height ||
+        cells[y][x].isRevealed || cells[y][x].isFlagged) {
+        return;
+    }
+    std::queue<std::pair<int, int>> cellQueue;
+    cellQueue.push({x, y});
+    while (!cellQueue.empty()) {
+        auto [cx, cy] = cellQueue.front();
+        cellQueue.pop();
+        if (cx < 0 || cx >= width || cy < 0 || cy >= height ||
+            cells[cy][cx].isRevealed || cells[cy][cx].isFlagged ||
+            cells[cy][cx].type == MINE) {
+            continue;
+        }
+        cells[cy][cx].isRevealed = true;
+        if (cells[cy][cx].adjacentMines > 0) {
+            continue;
+        }
+        for (int dy = -1; dy <= 1; ++dy) {
+            for (int dx = -1; dx <= 1; ++dx) {
+                if (dx == 0 && dy == 0) continue;
+                cellQueue.push({cx + dx, cy + dy});
+            }
+        }
+    }
 }
 
 void Grid::flagCell(int x, int y) {

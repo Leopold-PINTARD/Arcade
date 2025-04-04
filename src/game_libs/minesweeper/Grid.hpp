@@ -33,7 +33,14 @@ class Grid {
 
     Cell getCell(int x, int y) const;
     void setCell(int x, int y, CellType cell);
+    GridCells getCells() const { return cells; }
+    int getWidth() const { return width; }
+    int getHeight() const { return height; }
+    int getMines() const { return mines; }
+    bool isGenerated() const { return generated; }
     CellType revealCell(int x, int y);
+    void revealAllCells();
+    void revealAdjacentCells(int x, int y);
     void flagCell(int x, int y);
     void unflagCell(int x, int y);
 
