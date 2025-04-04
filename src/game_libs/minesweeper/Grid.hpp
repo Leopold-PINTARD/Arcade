@@ -43,6 +43,7 @@ class Grid {
     void revealAdjacentCells(int x, int y);
     void flagCell(int x, int y);
     void unflagCell(int x, int y);
+    bool checkWin(void);
 
  private:
     GridCells cells;

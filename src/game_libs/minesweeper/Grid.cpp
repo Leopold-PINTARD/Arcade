@@ -85,6 +85,17 @@ void Grid::unflagCell(int x, int y) {
     cells[y][x].isFlagged = false;
 }
 
+bool Grid::checkWin(void) {
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            if (cells[y][x].type != MINE && !cells[y][x].isRevealed) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void Grid::generateGrid() {
     cells.resize(height, std::vector<Cell>(width, {EMPTY, 0, false, false}));
 }
