@@ -35,6 +35,7 @@ class SFML : public IDisplayModule {
  private:
     std::unique_ptr<sf::RenderWindow> _window;
     std::map<std::string, sf::Sound> _sounds;
+    std::map<std::string, sf::SoundBuffer> _soundBuffers;
 };
 }  // namespace graphic
 }  // namespace libs
