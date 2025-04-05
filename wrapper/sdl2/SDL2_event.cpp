@@ -9,62 +9,60 @@
 
 #include "./SDL2.hpp"
 
-static void handleMouseButtonEvent(SDL2::MouseEvent &mouseEvent,
-    Uint8 button, bool isDown) {
-    if (button == SDL_BUTTON_LEFT)
-        mouseEvent.leftButton = isDown;
-    if (button == SDL_BUTTON_RIGHT)
-        mouseEvent.rightButton = isDown;
-    if (button == SDL_BUTTON_MIDDLE)
-        mouseEvent.middleButton = isDown;
-}
+static void handleMouseButtonEvent(std::vector<SDL2::KeyEvent> &keyEvents,
+    Uint32 type, SDL_MouseButtonEvent button) {
+    SDL2::KeyEvent KeyEvent = {button.button, true, button.x, button.y, 0};
 
-static void handleMouseEvent(SDL2::MouseEvent &mouseEvent,
-    Uint32 type, Uint8 button, int x, int y) {
     if (type == SDL_MOUSEBUTTONDOWN)
-        handleMouseButtonEvent(mouseEvent, button, true);
-    if (type == SDL_MOUSEBUTTONUP)
-        handleMouseButtonEvent(mouseEvent, button, false);
-    if (type == SDL_MOUSEMOTION) {
-        mouseEvent.x = x;
-        mouseEvent.y = y;
+        keyEvents.push_back(KeyEvent);
+    if (type == SDL_MOUSEBUTTONUP) {
+        KeyEvent.isPressed = false;
+        keyEvents.push_back(KeyEvent);
     }
 }
 
-static void handleKeyEvent(std::vector<SDL2::KeyEvent> &keyEvents,
-    Uint32 type, SDL_Keycode key) {
-    SDL2::KeyEvent keyEvent;
+static void handleMouseMotionEvent(std::vector<SDL2::KeyEvent> &keyEvents,
+    Uint32 type, SDL_MouseMotionEvent motion) {
+    SDL2::KeyEvent KeyEvent = {motion.type, true, motion.x, motion.y, 0};
 
-    if (type == SDL_KEYDOWN) {
-        keyEvent = {key, true};
+    if (type == SDL_MOUSEMOTION)
+        keyEvents.push_back(KeyEvent);
+}
+
+static void handleMouseWheelEvent(std::vector<SDL2::KeyEvent> &keyEvents,
+    Uint32 type, SDL_MouseWheelEvent wheel) {
+    SDL2::KeyEvent KeyEvent = {wheel.type, true, wheel.x, wheel.y,
+        wheel.preciseY};
+
+    if (type == SDL_MOUSEWHEEL)
+        keyEvents.push_back(KeyEvent);
+}
+
+static void handleKeyEvent(std::vector<SDL2::KeyEvent> &keyEvents, Uint32 type,
+                           SDL_Keycode key) {
+    SDL2::KeyEvent keyEvent = {key, true, 0, 0, 0};
+
+    if (type == SDL_KEYDOWN)
         keyEvents.push_back(keyEvent);
-    }
     if (type == SDL_KEYUP) {
-        keyEvent = {key, false};
+        keyEvent.isPressed = false;
         keyEvents.push_back(keyEvent);
     }
 }
 
 void SDL2::pollEvent() {
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT)
-            running = false;
-        handleMouseEvent(mouseEvent, event.type,
-            event.button.button, event.button.x, event.button.y);
-        handleKeyEvent(keyEvents, event.type,
-            event.key.keysym.sym);
+        handleMouseButtonEvent(keyEvents, event.type, event.button);
+        handleMouseMotionEvent(keyEvents, event.type, event.motion);
+        handleMouseWheelEvent(keyEvents, event.type, event.wheel);
+        handleKeyEvent(keyEvents, event.type, event.key.keysym.sym);
     }
 }
 
-SDL2::MouseEvent SDL2::getMouseEvent() {
-    return mouseEvent;
-}
-
 SDL2::KeyEvent SDL2::getKeyEvent() {
-    SDL2::KeyEvent keyEvent;
+    SDL2::KeyEvent keyEvent = {-1, false, 0, 0, 0};
 
-    if (keyEvents.empty())
-        return {0, false};
+    if (keyEvents.empty()) return keyEvent;
     keyEvent = keyEvents.back();
     keyEvents.pop_back();
     return keyEvent;

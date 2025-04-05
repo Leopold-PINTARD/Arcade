@@ -8,12 +8,14 @@
 #ifndef WRAPPER_SDL2_SDL2_HPP_
     #define WRAPPER_SDL2_SDL2_HPP_
 
-    #include <SDL2/SDL.h>
-    #include <SDL2/SDL_ttf.h>
-    #include <SDL2/SDL_image.h>
-    #include <SDL2/SDL_mixer.h>
-    #include <vector>
-    #include <string>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
+
+#include <string>
+#include <vector>
+#include <utility>
 
 class SDL2 {
  public:
@@ -25,21 +27,14 @@ class SDL2 {
     void clearWindow(void);
     void displayWindow(void);
 
-    bool isRunning(void);
-
-    struct MouseEvent {
-        int x;
-        int y;
-        bool leftButton;
-        bool rightButton;
-        bool middleButton;
-    };
     struct KeyEvent {
         SDL_Keycode key;
         bool isPressed;
+        int x;
+        int y;
+        float deltaTime;
     };
     void pollEvent(void);
-    MouseEvent getMouseEvent(void);
     KeyEvent getKeyEvent(void);
 
     TTF_Font *loadFont(const std::string &file, int size);
@@ -47,11 +42,9 @@ class SDL2 {
         SDL_Color color, int x, int y);
     void drawSprite(const std::string &file, int x, int y);
 
-    void playMusic(const std::string &file);
-    void stopMusic(void);
-    void pauseMusic(void);
-    void resumeMusic(void);
-    Mix_Chunk *playSound(const std::string &file);
+    void playSound(const std::string &file, const std::string &id, bool loop,
+                   bool unique);
+    void stopSound(const std::string &id, bool unique);
 
     void getSDLError(void);
     void getTTFError(void);
@@ -60,10 +53,8 @@ class SDL2 {
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event event;
-    bool running;
-    MouseEvent mouseEvent;
     std::vector<KeyEvent> keyEvents;
-    Mix_Music *music;
+    std::vector<std::pair<Mix_Chunk *, std::pair<std::string, int>>> sounds;
 };
 
 #endif  // WRAPPER_SDL2_SDL2_HPP_
