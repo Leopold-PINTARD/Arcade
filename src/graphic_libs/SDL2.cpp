@@ -100,6 +100,7 @@ Event libs::graphic::SDL2_DL::getEvent(void) {
                 keyEvent.y});
         return Event(keys[keyEvent.key], Key::KeyStatus::KEY_RELEASED);
     }
+    return Event(Key::KeyCode::NONE, 0);
 }
 
 void libs::graphic::SDL2_DL::handleSound(const Sound &sound) {
