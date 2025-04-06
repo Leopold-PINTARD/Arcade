@@ -38,7 +38,7 @@ class SDL2 {
     KeyEvent getKeyEvent(void);
 
     TTF_Font *loadFont(const std::string &file);
-    SDL_Color SDL2::getColor(std::tuple<int, int, int, int> color);
+    SDL_Color getColor(std::tuple<int, int, int, int> color);
     void drawText(TTF_Font *font, const std::string text, SDL_Color color,
         std::pair<float, float> scale, float rotation, std::pair<int, int> pos);
     void drawSprite(const std::string &file, std::pair<float, float> scale,
