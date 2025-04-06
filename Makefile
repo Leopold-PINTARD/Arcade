@@ -29,6 +29,7 @@ SRC					=	src/log/Log.cpp
 TESTS_SRC			=	tests/dlloadingtests.cpp	\
 
 TEST_LIBS_SRC		=	tests/bar.cpp				\
+						tests/foo.cpp				\
 						tests/nocreate.cpp			\
 
 # Object files

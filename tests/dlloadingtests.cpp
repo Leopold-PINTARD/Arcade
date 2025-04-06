@@ -105,3 +105,31 @@ Test(get_instance_twice, get_instance_twice, .init = redirect_all_stdout) {
         "Bar stop\n"
         "[End] Unloading bar...\n");
 }
+
+Test(switch_lib, switch_lib_then_get_instance, .init = redirect_all_stdout) {
+    {
+        DLLoader<ILib> loader("./tests/bar.so");
+        std::unique_ptr<ILib> &bar = loader.getInstance("create");
+        bar->init();
+        std::cout << bar->getName() << std::endl;
+        bar->stop();
+        loader.switchLib("./tests/foo.so");
+        std::unique_ptr<ILib> &foo = loader.getInstance("create");
+        foo->init();
+        std::cout << foo->getName() << std::endl;
+        foo->stop();
+    }
+    cr_assert_stdout_eq_str(
+        "[Start] Loading bar...\n"
+        "Entrypoint for bar!\n"
+        "Bar init\n"
+        "Bar\n"
+        "Bar stop\n"
+        "[End] Unloading bar...\n"
+        "[Start] Loading foo...\n"
+        "Entrypoint for foo!\n"
+        "Foo init\n"
+        "Foo\n"
+        "Foo stop\n"
+        "[End] Unloading foo...\n");
+}
