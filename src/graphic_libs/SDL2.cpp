@@ -22,3 +22,8 @@ __attribute__((constructor)) void load(void) {
 __attribute__((destructor)) void unload(void) {
     Log::info() << "Unloading SDL2 lib..." << std::endl;
 }
+
+extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
+    Log::info() << "Entrypoint for SDL2 lib" << std::endl;
+    return std::make_unique<libs::graphic::SDL2_DL>();
+}
