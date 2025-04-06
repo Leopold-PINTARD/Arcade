@@ -31,3 +31,6 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
 libs::graphic::SDL2_DL::SDL2_DL() {
     sdl2 = SDL2();
 }
+
+libs::graphic::SDL2_DL::~SDL2_DL() {
+}
