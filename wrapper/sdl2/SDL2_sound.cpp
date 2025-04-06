@@ -43,8 +43,8 @@ void SDL2::stopSound(const std::string &id, bool unique) {
         if (sound.second.first == id && unique) {
             Mix_HaltChannel(sound.second.second);
             break;
+        }
         if (sound.second.first == id)
             Mix_HaltChannel(sound.second.second);
-        }
     }
 }
