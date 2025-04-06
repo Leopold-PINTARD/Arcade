@@ -14,8 +14,8 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 class SDL2 {
  public:
@@ -40,9 +40,10 @@ class SDL2 {
     TTF_Font *loadFont(const std::string &file);
     SDL_Color getColor(std::tuple<int, int, int, int> color);
     void drawText(TTF_Font *font, const std::string text, SDL_Color color,
-        std::pair<float, float> scale, float rotation, std::pair<int, int> pos);
+                  std::pair<float, float> scale, float rotation,
+                  std::pair<int, int> pos);
     void drawSprite(const std::string &file, std::pair<float, float> scale,
-        float rotation, std::pair<int, int> pos);
+                    float rotation, std::pair<int, int> pos);
 
     void playSound(const std::string &file, const std::string &id, bool loop,
                    bool unique);

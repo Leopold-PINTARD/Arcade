@@ -34,30 +34,33 @@ SDL_Color SDL2::getColor(std::tuple<int, int, int, int> color) {
 }
 
 void SDL2::drawText(TTF_Font *font, const std::string text, SDL_Color color,
-    std::pair<float, float> scale, float rotation, std::pair<int, int> pos) {
-    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_Rect rect = {pos.first, pos.second, static_cast<int>(surface->w *
-        scale.first), static_cast<int>(surface->h * scale.second)};
+                    std::pair<float, float> scale, float rotation,
+                    std::pair<int, int> pos) {
+    SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect rect = {pos.first, pos.second,
+                     static_cast<int>(surface->w * scale.first),
+                     static_cast<int>(surface->h * scale.second)};
     SDL_Point center = {rect.w / 2, rect.h / 2};
 
     SDL_RenderCopyEx(renderer, texture, nullptr, &rect, rotation, &center,
-        SDL_FLIP_NONE);
+                     SDL_FLIP_NONE);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
 }
 
 void SDL2::drawSprite(const std::string &file, std::pair<float, float> scale,
-    float rotation, std::pair<int, int> pos) {
+                      float rotation, std::pair<int, int> pos) {
     SDL_Texture *texture = IMG_LoadTexture(renderer, file.c_str());
     std::pair<int, int> textureSize;
 
     SDL_QueryTexture(texture, nullptr, nullptr, &textureSize.first,
-        &textureSize.second);
-    SDL_Rect rect = {pos.first, pos.second, static_cast<int>(textureSize.first *
-        scale.first), static_cast<int>(textureSize.second * scale.second)};
+                     &textureSize.second);
+    SDL_Rect rect = {pos.first, pos.second,
+                     static_cast<int>(textureSize.first * scale.first),
+                     static_cast<int>(textureSize.second * scale.second)};
     SDL_Point center = {rect.w / 2, rect.h / 2};
     SDL_RenderCopyEx(renderer, texture, nullptr, &rect, rotation, &center,
-        SDL_FLIP_NONE);
+                     SDL_FLIP_NONE);
     SDL_DestroyTexture(texture);
 }
