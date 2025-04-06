@@ -36,6 +36,18 @@ class DLLoader {
         if (_instance == nullptr) _instance = create();
         return _instance;
     }
+    // Switches the library to a new one
+    // Throws a DLLoaderException if the previous library cannot be closed or if
+    // the new library cannot be opened
+    void switchLib(std::string path) noexcept(false) {
+        _instance.reset(nullptr);
+        if (dlclose(_libHandle) != 0) {
+            _libHandle = NULL;
+            throw DLLoaderException(dlerror());
+        }
+        _libHandle = dlopen(path.c_str(), RTLD_LAZY);
+        if (!_libHandle) throw DLLoaderException(dlerror());
+    }
     // Closes the shared library
     // Throws a DLLoaderException if the library cannot be closed
     ~DLLoader() noexcept(false) {
