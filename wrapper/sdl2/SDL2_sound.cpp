@@ -12,12 +12,11 @@
 
 #include "./SDL2.hpp"
 
-void SDL2::playSound(const std::string &file, const std::string &id,
-    bool loop, bool unique) {
+void SDL2::playSound(const std::string &file, const std::string &id, bool loop,
+                     bool unique) {
     if (unique) {
         for (auto &sound : sounds) {
-            if (sound.second.first == id)
-                return;
+            if (sound.second.first == id) return;
         }
     }
     Mix_Chunk *sound = Mix_LoadWAV(file.c_str());
@@ -44,7 +43,6 @@ void SDL2::stopSound(const std::string &id, bool unique) {
             Mix_HaltChannel(sound.second.second);
             break;
         }
-        if (sound.second.first == id)
-            Mix_HaltChannel(sound.second.second);
+        if (sound.second.first == id) Mix_HaltChannel(sound.second.second);
     }
 }

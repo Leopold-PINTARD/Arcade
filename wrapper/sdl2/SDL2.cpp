@@ -9,11 +9,7 @@
 
 #include "wrapper/sdl2/SDL2.hpp"
 
-SDL2::SDL2()
-    : window(nullptr),
-      renderer(nullptr),
-      keyEvents({}),
-      sounds({}) {
+SDL2::SDL2() : window(nullptr), renderer(nullptr), keyEvents({}), sounds({}) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         getSDLError();
         exit(84);
@@ -31,8 +27,7 @@ SDL2::SDL2()
 SDL2::~SDL2() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    for (auto &sound : sounds)
-        Mix_FreeChunk(sound.first);
+    for (auto &sound : sounds) Mix_FreeChunk(sound.first);
     Mix_CloseAudio();
     TTF_Quit();
     SDL_Quit();
