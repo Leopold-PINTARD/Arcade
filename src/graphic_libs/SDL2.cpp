@@ -64,6 +64,10 @@ void libs::graphic::SDL2_DL::display(void) {
     sdl2.displayWindow();
 }
 
+void libs::graphic::SDL2_DL::clear(void) {
+    sdl2.clearWindow();
+}
+
 std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_a, Key::KeyCode::KEY_A},
     {SDLK_b, Key::KeyCode::KEY_B},
