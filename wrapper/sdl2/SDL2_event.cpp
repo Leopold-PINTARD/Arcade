@@ -22,15 +22,16 @@ static void handleMouseButtonEvent(std::vector<SDL2::KeyEvent> &keyEvents,
 
 static void handleMouseMotionEvent(std::vector<SDL2::KeyEvent> &keyEvents,
                                    Uint32 type, SDL_MouseMotionEvent motion) {
-    SDL2::KeyEvent KeyEvent = {motion.type, true, motion.x, motion.y, 0};
+    SDL2::KeyEvent KeyEvent = {static_cast<SDL_Keycode>(motion.type), true,
+                               motion.x, motion.y, 0};
 
     if (type == SDL_MOUSEMOTION) keyEvents.push_back(KeyEvent);
 }
 
 static void handleMouseWheelEvent(std::vector<SDL2::KeyEvent> &keyEvents,
                                   Uint32 type, SDL_MouseWheelEvent wheel) {
-    SDL2::KeyEvent KeyEvent = {wheel.type, true, wheel.x, wheel.y,
-                               wheel.preciseY};
+    SDL2::KeyEvent KeyEvent = {static_cast<SDL_Keycode>(wheel.type), true,
+                               wheel.x, wheel.y, 0};
 
     if (type == SDL_MOUSEWHEEL) keyEvents.push_back(KeyEvent);
 }
