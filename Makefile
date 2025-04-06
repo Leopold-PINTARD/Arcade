@@ -23,6 +23,7 @@ SFML_GFX_LIB_SRC	=	src/graphic_libs/SFML.cpp	\
 						src/log/Log.cpp				\
 
 SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp	\
+						src/log/Log.cpp				\
 
 MAIN_SRC			=	src/Main.cpp
 
