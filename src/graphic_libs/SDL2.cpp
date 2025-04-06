@@ -68,6 +68,40 @@ void libs::graphic::SDL2_DL::clear(void) {
     sdl2.clearWindow();
 }
 
+Event libs::graphic::SDL2_DL::getEvent(void) {
+    SDL2::KeyEvent keyEvent;
+
+    sdl2.pollEvent();
+    keyEvent = sdl2.getKeyEvent();
+    if (keyEvent.key == -1)
+        return Event(Key::KeyCode::NONE, 0);
+    if (keyEvent.key == SDL_MOUSEMOTION)
+        return Event(keys[keyEvent.key], Key::MousePos{keyEvent.x, keyEvent.y});
+    if (keyEvent.key == SDL_MOUSEWHEEL)
+        return Event(keys[keyEvent.key], std::pair<Key::MousePos, float>{
+            Key::MousePos{keyEvent.x, keyEvent.y}, keyEvent.deltaTime});
+    if (keyEvent.isPressed == true) {
+        if (keyEvent.key == SDL_BUTTON_LEFT ||
+            keyEvent.key == SDL_BUTTON_MIDDLE ||
+            keyEvent.key == SDL_BUTTON_RIGHT ||
+            keyEvent.key == SDL_BUTTON_X1 ||
+            keyEvent.key == SDL_BUTTON_X2)
+            return Event(keys[keyEvent.key], Key::MousePos{keyEvent.x,
+                keyEvent.y});
+        return Event(keys[keyEvent.key], Key::KeyStatus::KEY_PRESSED);
+    }
+    if (keyEvent.isPressed == false) {
+        if (keyEvent.key == SDL_BUTTON_LEFT ||
+            keyEvent.key == SDL_BUTTON_MIDDLE ||
+            keyEvent.key == SDL_BUTTON_RIGHT ||
+            keyEvent.key == SDL_BUTTON_X1 ||
+            keyEvent.key == SDL_BUTTON_X2)
+            return Event(keys[keyEvent.key], Key::MousePos{keyEvent.x,
+                keyEvent.y});
+        return Event(keys[keyEvent.key], Key::KeyStatus::KEY_RELEASED);
+    }
+}
+
 std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_a, Key::KeyCode::KEY_A},
     {SDLK_b, Key::KeyCode::KEY_B},
