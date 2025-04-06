@@ -7,18 +7,14 @@
 
 #include "wrapper/ncurses/Ncurses.hpp"
 
-Ncurses::Ncurses() {
-    initialize();
-}
+Ncurses::Ncurses() { initialize(); }
 
 Ncurses::Ncurses(int width, int height) {
     initialize();
     resize(width, height);
 }
 
-Ncurses::~Ncurses() {
-    cleanup();
-}
+Ncurses::~Ncurses() { cleanup(); }
 
 void Ncurses::initialize() {
     if (!_initialized) {
@@ -61,6 +57,4 @@ std::int16_t Ncurses::getPairNumber(Color fg, Color bg) const {
     return static_cast<std::int16_t>(fg) + (static_cast<std::int16_t>(bg) * 8);
 }
 
-void Ncurses::setTimeout(int milliseconds) {
-    timeout(milliseconds);
-}
+void Ncurses::setTimeout(int milliseconds) { timeout(milliseconds); }

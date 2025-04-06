@@ -6,7 +6,7 @@
 */
 
 #ifndef WRAPPER_SDL2_SDL2_HPP_
-    #define WRAPPER_SDL2_SDL2_HPP_
+#define WRAPPER_SDL2_SDL2_HPP_
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -22,8 +22,8 @@ class SDL2 {
     SDL2();
     ~SDL2();
 
-    void createWindow(const std::string &title,
-        const std::string &iconPath, int width, int height);
+    void createWindow(const std::string &title, const std::string &iconPath,
+                      int width, int height);
     void clearWindow(void);
     void displayWindow(void);
 

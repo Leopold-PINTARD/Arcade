@@ -6,9 +6,9 @@
 */
 
 #ifndef TESTS_ILIB_HPP_
-    #define TESTS_ILIB_HPP_
+#define TESTS_ILIB_HPP_
 
-    #include <string>
+#include <string>
 
 class ILib {
  public:

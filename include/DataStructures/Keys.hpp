@@ -8,10 +8,7 @@
 #pragma once
 
 namespace Key {
-enum KeyStatus {
-    KEY_PRESSED,
-    KEY_RELEASED
-};
+enum KeyStatus { KEY_PRESSED, KEY_RELEASED };
 struct MousePos {
     int x;
     int y;

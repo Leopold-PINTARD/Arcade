@@ -39,13 +39,9 @@ SDL2::~SDL2() {
 }
 
 void SDL2::getSDLError() {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-        "%s\n",
-        SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s\n", SDL_GetError());
 }
 
 void SDL2::getTTFError() {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-        "%s\n",
-        TTF_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s\n", TTF_GetError());
 }

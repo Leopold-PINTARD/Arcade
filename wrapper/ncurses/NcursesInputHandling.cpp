@@ -10,11 +10,9 @@
 Ncurses::Key Ncurses::getInput() {
     int ch = wgetch(_window);
 
-    if (ch == ERR)
-        return Key::NONE;
+    if (ch == ERR) return Key::NONE;
     auto it = _keyMap.find(ch);
-    if (it != _keyMap.end())
-        return it->second;
+    if (it != _keyMap.end()) return it->second;
     return Key::NONE;
 }
 

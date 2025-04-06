@@ -6,10 +6,11 @@
 */
 
 #ifndef TESTS_BAR_HPP_
-    #define TESTS_BAR_HPP_
+#define TESTS_BAR_HPP_
 
-    #include <string>
-    #include "ILib.hpp"
+#include <string>
+
+#include "ILib.hpp"
 
 class Bar : public ILib {
  public:
@@ -18,6 +19,7 @@ class Bar : public ILib {
     void stop() override;
     const std::string &getName() const override;
     ~Bar() override;
+
  private:
     std::string _name;
 };
