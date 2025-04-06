@@ -97,7 +97,7 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         this->_window->draw(text_sfml);
         return;
     } catch (const std::bad_cast &e) {
-        std::cerr << e.what() << '\n';
+        Log::error() << e.what() << std::endl;
     }
 }
 
