@@ -102,6 +102,15 @@ Event libs::graphic::SDL2_DL::getEvent(void) {
     }
 }
 
+void libs::graphic::SDL2_DL::handleSound(const Sound &sound) {
+    if (sound.state == Sound::State::PLAY) sdl2.playSound(sound.filePath,
+        sound.id, false, sound.unique);
+    if (sound.state == Sound::State::STOP) sdl2.stopSound(sound.id,
+        sound.unique);
+    if (sound.state == Sound::State::LOOP) sdl2.playSound(sound.filePath,
+        sound.id, true, sound.unique);
+}
+
 std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_a, Key::KeyCode::KEY_A},
     {SDLK_b, Key::KeyCode::KEY_B},
