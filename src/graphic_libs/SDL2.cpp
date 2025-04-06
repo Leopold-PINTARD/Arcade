@@ -40,6 +40,26 @@ void libs::graphic::SDL2_DL::createWindow(const Window &window) {
                       window.size.second);
 }
 
+void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
+    try {
+        const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
+        sdl2.drawSprite(sprite.getGUI_Textures()[sprite.getCurrentTexture()],
+                sprite.getScale(), sprite.getRotation(), sprite.getPosition());
+        return;
+    } catch (const std::bad_cast &e) {
+        std::cerr << e.what() << '\n';
+    }
+    try {
+        const Text &text = dynamic_cast<const Text &>(to_draw);
+        sdl2.drawText(sdl2.loadFont(text.getFontPath()), text.getStr(),
+                    sdl2.getColor(text.getGUI_Color()), text.getScale(),
+                    text.getRotation(), text.getPosition());
+        return;
+    } catch (const std::bad_cast &e) {
+        std::cerr << e.what() << '\n';
+    }
+}
+
 std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_a, Key::KeyCode::KEY_A},
     {SDLK_b, Key::KeyCode::KEY_B},
