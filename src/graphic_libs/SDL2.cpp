@@ -27,3 +27,7 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
     Log::info() << "Entrypoint for SDL2 lib" << std::endl;
     return std::make_unique<libs::graphic::SDL2_DL>();
 }
+
+libs::graphic::SDL2_DL::SDL2_DL() {
+    sdl2 = SDL2();
+}
