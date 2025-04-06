@@ -7,7 +7,7 @@
 
 #include <SDL2/SDL_ttf.h>
 
-#include "./SDL2.hpp"
+#include "wrapper/sdl2/SDL2.hpp"
 
 SDL2::SDL2()
     : window(nullptr),
