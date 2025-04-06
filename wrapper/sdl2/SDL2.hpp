@@ -37,10 +37,12 @@ class SDL2 {
     void pollEvent(void);
     KeyEvent getKeyEvent(void);
 
-    TTF_Font *loadFont(const std::string &file, int size);
-    void drawText(TTF_Font *font, const std::string text,
-        SDL_Color color, int x, int y);
-    void drawSprite(const std::string &file, int x, int y);
+    TTF_Font *loadFont(const std::string &file);
+    SDL_Color SDL2::getColor(std::tuple<int, int, int, int> color);
+    void drawText(TTF_Font *font, const std::string text, SDL_Color color,
+        std::pair<float, float> scale, float rotation, std::pair<int, int> pos);
+    void drawSprite(const std::string &file, std::pair<float, float> scale,
+        float rotation, std::pair<int, int> pos);
 
     void playSound(const std::string &file, const std::string &id, bool loop,
                    bool unique);
