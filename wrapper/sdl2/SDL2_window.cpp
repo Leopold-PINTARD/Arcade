@@ -7,6 +7,7 @@
 
 #include <SDL2/SDL_image.h>
 
+#include <iostream>
 #include <string>
 
 #include "./SDL2.hpp"
@@ -28,8 +29,18 @@ void SDL2::createWindow(const std::string &title, const std::string &iconPath,
         getSDLError();
         exit(84);
     }
+    int numDrivers = SDL_GetNumRenderDrivers();
+    for (int i = 0; i < numDrivers; ++i) {
+        SDL_RendererInfo info;
+        SDL_GetRenderDriverInfo(i, &info);
+        std::cout << "Renderer " << i << ": " << info.name << std::endl;
+    }
     renderer = SDL_CreateRenderer(window, -1, 0);
-    if (!renderer || !setWindowIcon(window, iconPath)) {
+    if (!renderer) {
+        getSDLError();
+        exit(84);
+    }
+    if (!setWindowIcon(window, iconPath)) {
         getSDLError();
         exit(84);
     }

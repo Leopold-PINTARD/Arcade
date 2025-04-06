@@ -17,19 +17,19 @@
 #include "src/log/Log.hpp"
 
 __attribute__((constructor)) void load(void) {
-    Log::info() << "Loading SDL2 lib..." << std::endl;
+    std::cout << "Loading SDL2 lib..." << std::endl;
 }
 
 __attribute__((destructor)) void unload(void) {
-    Log::info() << "Unloading SDL2 lib..." << std::endl;
+    std::cout << "Unloading SDL2 lib..." << std::endl;
 }
 
 extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
-    Log::info() << "Entrypoint for SDL2 lib" << std::endl;
+    std::cout << "Entrypoint for SDL2 lib" << std::endl;
     return std::make_unique<libs::graphic::SDL2_DL>();
 }
 
-libs::graphic::SDL2_DL::SDL2_DL() { sdl2 = SDL2(); }
+libs::graphic::SDL2_DL::SDL2_DL() : sdl2() {}
 
 libs::graphic::SDL2_DL::~SDL2_DL() {}
 

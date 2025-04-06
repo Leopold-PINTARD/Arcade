@@ -24,21 +24,27 @@
 #include "DataStructures/Text.hpp"
 
 __attribute__((constructor)) void load(void) {
-    Log::info() << "Loading SFML lib..." << std::endl;
+    std::cout << "Loading SFML lib..." << std::endl;
 }
 
 __attribute__((destructor)) void unload(void) {
-    Log::info() << "Unloading SFML lib..." << std::endl;
+    std::cout << "Unloading SFML lib..." << std::endl;
 }
 
 extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
-    Log::info() << "Entrypoint for SFML lib" << std::endl;
+    std::cout << "Entrypoint for SFML lib" << std::endl;
     return std::make_unique<libs::graphic::SFML>();
 }
 
 libs::graphic::SFML::SFML() {}
 
-libs::graphic::SFML::~SFML() {}
+libs::graphic::SFML::~SFML() {
+    std::cout << "Destroying SFML lib..." << std::endl;
+    if (this->_window != nullptr) {
+        this->_window->close();
+        this->_window.reset();
+    }
+}
 
 void libs::graphic::SFML::createWindow(const Window &window) {
     if (this->_window == nullptr) {
@@ -48,8 +54,10 @@ void libs::graphic::SFML::createWindow(const Window &window) {
                          << std::endl;
             return;
         }
+        std::cout << "Icon loaded" << std::endl;
         this->_window = std::make_unique<sf::RenderWindow>(
             sf::VideoMode(window.size.first, window.size.second), window.title);
+        std::cout << "Window created" << std::endl;
         this->_window->setIcon(icon.getSize().x, icon.getSize().y,
                                icon.getPixelsPtr());
     }
