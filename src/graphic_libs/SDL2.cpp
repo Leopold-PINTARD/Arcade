@@ -35,6 +35,11 @@ libs::graphic::SDL2_DL::SDL2_DL() {
 libs::graphic::SDL2_DL::~SDL2_DL() {
 }
 
+void libs::graphic::SDL2_DL::createWindow(const Window &window) {
+    sdl2.createWindow(window.title, window.iconPath, window.size.first,
+                      window.size.second);
+}
+
 std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_a, Key::KeyCode::KEY_A},
     {SDLK_b, Key::KeyCode::KEY_B},
