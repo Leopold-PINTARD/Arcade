@@ -22,6 +22,9 @@ CC					=	g++
 SFML_GFX_LIB_SRC	=	src/graphic_libs/SFML.cpp	\
 						src/log/Log.cpp				\
 
+SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp	\
+						src/log/Log.cpp				\
+
 MAIN_SRC			=	src/Main.cpp
 
 SRC					=	src/log/Log.cpp
@@ -39,12 +42,15 @@ MAIN_OBJ			=	$(MAIN_SRC:.cpp=.o)
 
 SFML_GFX_LIB_OBJ	=	$(SFML_GFX_LIB_SRC:.cpp=.o)
 
+SDL2_GFX_LIB_OBJ	=	$(SDL2_GFX_LIB_SRC:.cpp=.o)
+
 TEST_LIBS_OBJ		=	$(TEST_LIBS_SRC:.cpp=.so)
 
 # Flags
 INCLUDES			=	-I ./src -I ./ -I ./include
 
 LIB_FLAGS			=	-lsfml-graphics -lsfml-window -lsfml-system	\
+						-lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer	\
 						-ldl										\
 
 CPPFLAGS			+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -O2 -g	\
@@ -74,9 +80,11 @@ core:	$(OBJ) $(MAIN_OBJ)
 
 games:
 
-graphicals: $(SFML_GFX_LIB_OBJ)
+graphicals: $(SFML_GFX_LIB_OBJ) $(SDL2_GFX_LIB_OBJ)
 	@echo "Building SFML graphic library..."
 	$(CC) $(CPPFLAGS) -shared -o ./lib/SFML.so $(SFML_GFX_LIB_OBJ)
+	@echo "Building SDL2 graphic library..."
+	$(CC) $(CPPFLAGS) -shared -o ./lib/SDL2.so $(SDL2_GFX_LIB_OBJ)
 
 run: re
 	@echo "Running $(NAME)..."
@@ -97,7 +105,9 @@ tests_run:	$(TEST_LIBS_OBJ)
 
 clean:
 	@echo "Cleaning up..."
-	rm -f $(OBJ) $(MAIN_OBJ) $(SFML_GFX_LIB_OBJ) $(TEST_LIBS_OBJ)
+	rm -f $(OBJ) $(MAIN_OBJ) $(TEST_LIBS_OBJ)
+	rm -f $(SFML_GFX_LIB_OBJ)
+	rm -f $(SDL2_GFX_LIB_OBJ)
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*
