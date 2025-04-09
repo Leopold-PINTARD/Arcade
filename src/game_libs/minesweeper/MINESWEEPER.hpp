@@ -21,9 +21,9 @@
 static const std::pair<int, int> WINDOW_SIZE =
     std::make_pair(1200, 800);
 
-static const int GRID_SIZE_X = 10;
-static const int GRID_SIZE_Y = 10;
-static const int GRID_MINES = 10;
+static const int GRID_SIZE_X = 16;
+static const int GRID_SIZE_Y = 16;
+static const int GRID_MINES = 40;
 
 static const std::pair<float, float> SCALE =
     std::make_pair(1.0f, 1.0f);
