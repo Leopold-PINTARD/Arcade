@@ -31,7 +31,9 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
 
 libs::graphic::SDL2_DL::SDL2_DL() : sdl2() {}
 
-libs::graphic::SDL2_DL::~SDL2_DL() {}
+libs::graphic::SDL2_DL::~SDL2_DL() {
+    std::cout << "Destroying SDL2 lib..." << std::endl;
+}
 
 void libs::graphic::SDL2_DL::createWindow(const Window &window) {
     sdl2.createWindow(window.title, window.iconPath, window.size.first,
@@ -66,6 +68,7 @@ void libs::graphic::SDL2_DL::clear(void) { sdl2.clearWindow(); }
 Event libs::graphic::SDL2_DL::getEvent(void) {
     SDL2::KeyEvent keyEvent;
 
+    std::cout << "Getting event in sdl lib" << std::endl;
     sdl2.pollEvent();
     keyEvent = sdl2.getKeyEvent();
     if (keyEvent.key == -1) return Event(Key::KeyCode::NONE, 0);

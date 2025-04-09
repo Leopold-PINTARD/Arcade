@@ -117,7 +117,7 @@ clean:
 	rm -f *.gcno
 	rm -f vgcore.*
 	rm -f *.log
-	rm -f ./lib/*.so
+## rm -f ./lib/*.so
 
 fclean: clean
 	@echo "Removing binaries..."

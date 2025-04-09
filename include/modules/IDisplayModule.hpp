@@ -15,6 +15,7 @@
 
 class IDisplayModule {
  public:
+    virtual ~IDisplayModule() = default;
     virtual void createWindow(const Window &window) = 0;
     virtual void draw(const IDrawable &to_draw) = 0;
     virtual void display(void) = 0;

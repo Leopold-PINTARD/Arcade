@@ -19,48 +19,70 @@
 
 static Sprite test() {
     Sprite sprite;
-    sprite.setGUI_Textures({"./assets/sprite.png"});
+    sprite.setGUI_Textures({"/home/epi-jo/tek2/cpp/Arcade/assets/sprite.png"});
     sprite.setPosition(std::make_pair(0, 0));
-    sprite.setScale(std::make_pair(1.0f, 1.0f));
+    sprite.setScale(std::make_pair(100.0f, 100.0f));
     sprite.setRotation(0.0f);
     sprite.setAnimationTime(0.0f);
     sprite.setCurrentTexture(0);
     sprite.setGUI_Color(std::make_tuple(255, 255, 255, 255));
+    sprite.setCLI_Color(
+        std::make_pair(CLI_Color::CLI_WHITE, CLI_Color::CLI_WHITE));
+    sprite.setCLI_Textures({"hello", "world"});
     return sprite;
 }
 
 int main() {
-    DLLoader<IDisplayModule> gfxLoader("./lib/SFML.so");
+    DLLoader<IDisplayModule> gfxLoader(
+        "/home/epi-jo/tek2/cpp/Arcade/lib/arcade_sfml.so");
     // DLLoader<IGameModule> gameLoader("./lib/IGameModule.so");
-    std::unique_ptr<IDisplayModule> &displayModule =
-        gfxLoader.getInstance("getDisplayModule");
+    auto &displayModule = gfxLoader.getInstance("getDisplayModule");
     // std::unique_ptr<IGameModule> &gameModule =
     //     gameLoader.getInstance("getGameModule");
     Sprite sprite = test();
-    std::unique_ptr<Event> currentEvent = nullptr;
+    Event currentEvent(Key::KeyCode::NONE, 0);
 
+    std::cout << "Create window" << std::endl;
     displayModule->createWindow(
-        Window(std::make_pair(1920, 1080), "Arcade", "./assets/icon.png"));
+        Window(std::make_pair(1920, 1080), "Arcade",
+               "/home/epi-jo/tek2/cpp/Arcade/assets/icon.png"));
     while (true) {
         displayModule->clear();
-        currentEvent = std::make_unique<Event>(displayModule->getEvent());
-        while (currentEvent->key != Key::KeyCode::NONE) {
+        currentEvent = displayModule->getEvent();
+        while (currentEvent.key != Key::KeyCode::NONE) {
             // gameModule->event(*currentEvent);
-            if (currentEvent->key == Key::KeyCode::SUPPR) return 0;
-            if (currentEvent->key == Key::KeyCode::KEY_N) {
-                // gameModule->nextLib();
-                std::cout << "Switching to SDL2" << std::endl;
-                gfxLoader.switchLib("./lib/SDL2.so");
+            if (currentEvent.key == Key::KeyCode::SUPPR) return 0;
+            if (currentEvent.key == Key::KeyCode::KEY_N) {
+                std::cout << "Switching to next lib" << std::endl;
+                gfxLoader.switchLib(
+                    "/home/epi-jo/tek2/cpp/Arcade/lib/arcade_sdl2.so");
                 std::cout << "Getting instance" << std::endl;
-                displayModule =
-                    std::move(gfxLoader.getInstance("getDisplayModule"));
+                gfxLoader.getInstance("getDisplayModule");
+                if (displayModule == nullptr) {
+                    std::cout << "Display module is null" << std::endl;
+                    return 0;
+                }
                 std::cout << "Creating window" << std::endl;
-                displayModule->createWindow(Window(
-                    std::make_pair(1920, 1080), "Arcade", "./assets/icon.png"));
+                displayModule->createWindow(
+                    Window(std::make_pair(1920, 1080), "Arcade",
+                           "/home/epi-jo/tek2/cpp/Arcade/assets/icon.png"));
                 std::cout << "Window created" << std::endl;
             }
-            currentEvent.reset(nullptr);
-            currentEvent = std::make_unique<Event>(displayModule->getEvent());
+            std::cout << "Before resetting event" << std::endl;
+            // currentEvent = Event(Key::KeyCode::NONE, Key::MousePos{1, 2});
+            std::cout << "After resetting event" << std::endl;
+            std::cout << currentEvent.key << std::endl;  // N is 14
+            if (currentEvent.value.has_value()) {
+                std::cout << "Event value is not empty" << std::endl;
+                // std::cout << currentEvent.value.type().name() << std::endl;
+            } else {
+                std::cout << "Event value is empty" << std::endl;
+            }
+            std::cout << "Get event" << std::endl;
+            auto tmp = displayModule->getEvent();
+            std::cout << "Get event 2" << std::endl;
+            currentEvent = tmp;
+            std::cout << "Event key: " << currentEvent.key << std::endl;
         }
         // for (Sound sound : gameModule->getSound())
         //     displayModule->handleSound(sound);
@@ -68,6 +90,11 @@ int main() {
         //      gameModule->getDrawables()) {
         //     displayModule->draw(*drawable);
         // }
+        if (displayModule == nullptr) {
+            std::cout << "Display module is null" << std::endl;
+            return 0;
+        }
+        std::cout << "Drawing sprite" << std::endl;
         displayModule->draw(sprite);
         displayModule->display();
     }

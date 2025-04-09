@@ -36,7 +36,7 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
     return std::make_unique<libs::graphic::SFML>();
 }
 
-libs::graphic::SFML::SFML() {}
+libs::graphic::SFML::SFML() : _window(nullptr), _sounds(), _soundBuffers() {}
 
 libs::graphic::SFML::~SFML() {
     std::cout << "Destroying SFML lib..." << std::endl;
@@ -122,8 +122,13 @@ void libs::graphic::SFML::clear(void) {
 Event libs::graphic::SFML::getEvent(void) {
     sf::Event event;
 
+    std::cout << "Getting event in sfml lib" << std::endl;
     if (this->_window == nullptr) return Event(Key::NONE, 0);
-    if (this->_window->pollEvent(event) == false) return Event(Key::NONE, 0);
+    std::cout << "Polling event" << std::endl;
+    if (this->_window->pollEvent(event) == false) {
+        std::cout << "No event" << std::endl;
+        return Event(Key::NONE, 0);
+    }
     if (event.type == sf::Event::Closed)
         return Event(Key::KeyCode::SUPPR, Key::KeyStatus::KEY_PRESSED);
     if (event.type == sf::Event::KeyPressed)
@@ -151,7 +156,11 @@ Event libs::graphic::SFML::getEvent(void) {
                          Key::MousePos{event.mouseWheelScroll.x,
                                        event.mouseWheelScroll.y},
                          event.mouseWheelScroll.delta});
-    return Event(Key::NONE, 0);
+    std::cout << "No event matched" << std::endl;
+    auto temp = Event(Key::KEY_A, 0);
+    std::cout << temp.key << std::endl;
+    std::cout << temp.value.type().name() << std::endl;
+    return temp;
 }
 
 void libs::graphic::SFML::handleSound(const Sound &sound) {
