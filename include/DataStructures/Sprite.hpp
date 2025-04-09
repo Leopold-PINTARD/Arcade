@@ -16,14 +16,33 @@
 
 class Sprite : public IDrawable {
  public:
-    std::vector<std::string> getGUI_Textures(void) const;
-    std::vector<std::string> getCLI_Textures(void) const;
-    float getAnimationTime(void) const;
-    unsigned int getCurrentTexture(void) const;
-    void setGUI_Textures(std::vector<std::string> GUI_Textures);
-    void setCLI_Textures(std::vector<std::string> CLI_Textures);
-    void setAnimationTime(float animationTime);
-    void setCurrentTexture(unsigned int currentTexture);
+    std::vector<std::string> getGUI_Textures(void) const {
+        return GUI_Textures;
+    }
+
+    std::vector<std::string> getCLI_Textures(void) const {
+        return CLI_Textures;
+    }
+
+    float getAnimationTime(void) const { return animationTime; }
+
+    unsigned int getCurrentTexture(void) const { return currentTexture; }
+
+    void setGUI_Textures(std::vector<std::string> GUI_Textures) {
+        this->GUI_Textures = GUI_Textures;
+    }
+
+    void setCLI_Textures(std::vector<std::string> CLI_Textures) {
+        this->CLI_Textures = CLI_Textures;
+    }
+
+    void setAnimationTime(float animationTime) {
+        this->animationTime = animationTime;
+    }
+
+    void setCurrentTexture(unsigned int currentTexture) {
+        this->currentTexture = currentTexture;
+    }
 
     std::pair<float, float> getScale(void) const override { return scale; }
 
