@@ -37,7 +37,6 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
 }
 
 libs::graphic::NCURSES::NCURSES() : ncurses(Ncurses()) {
-    ncurses = Ncurses();
 }
 
 libs::graphic::NCURSES::~NCURSES() {
