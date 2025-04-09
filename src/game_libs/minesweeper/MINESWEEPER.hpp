@@ -19,7 +19,7 @@
 #include "Grid.hpp"
 
 static const std::pair<int, int> WINDOW_SIZE =
-    std::make_pair(1200, 800);
+    std::make_pair(1280, 720);
 
 static const int GRID_SIZE_X = 16;
 static const int GRID_SIZE_Y = 16;
