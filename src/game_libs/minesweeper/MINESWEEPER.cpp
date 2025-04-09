@@ -79,7 +79,7 @@ void MINESWEEPER::initSquare(std::string name, std::string pathImage,
     std::string textCLI, CLI_Color frontColor, CLI_Color backColor) {
     Sprite sprite;
     sprite.setPosition(std::make_pair(0, 0));
-    sprite.setScale(std::make_pair(1, 1));
+    sprite.setScale(std::make_pair(2, 2));
     sprite.setRotation(0);
     sprite.setGUI_Color(std::make_tuple(255, 255, 255, 255));
     sprite.setCLI_Color(std::make_pair(backColor, frontColor));
