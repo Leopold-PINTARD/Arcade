@@ -181,6 +181,32 @@ bool MINESWEEPER::event(const Event &events) {
     return true;
 }
 
+void MINESWEEPER::handleLeftClick(int x, int y) {
+    Grid::Cell cell = _grid.getCell(x, y);
+    if (!cell.isFlagged && !cell.isRevealed) {
+        Grid::CellType cellType = _grid.revealCell(x, y);
+        if (cellType == Grid::MINE) {
+            _gameOver = true;
+            _won = false;
+            _grid.revealAllCells();
+        }
+        if (cellType != Grid::MINE) {
+            _score += 10;
+        }
+    }
+}
+
+void MINESWEEPER::handleRightClick(int x, int y) {
+    Grid::Cell cell = _grid.getCell(x, y);
+    if (!cell.isRevealed) {
+        if (cell.isFlagged) {
+            _grid.unflagCell(x, y);
+        } else {
+            _grid.flagCell(x, y);
+        }
+    }
+}
+
 bool MINESWEEPER::handleMouseEvent(const Event &events) {
     try {
         auto mouseEvent = std::any_cast<std::pair<Key::MousePos,
@@ -190,27 +216,10 @@ bool MINESWEEPER::handleMouseEvent(const Event &events) {
         int gridX = (mouseEvent.first.x - _offsetX) / SIZE_SQUARE;
         int gridY = (mouseEvent.first.y - _offsetY) / SIZE_SQUARE;
         if (gridX >= 0 && gridX < _width && gridY >= 0 && gridY < _height) {
-            Grid::Cell cell = _grid.getCell(gridX, gridY);
             if (events.key == Key::KeyCode::MOUSE_LEFT) {
-                if (!cell.isFlagged && !cell.isRevealed) {
-                    Grid::CellType cellType = _grid.revealCell(gridX, gridY);
-                    if (cellType == Grid::MINE) {
-                        _gameOver = true;
-                        _won = false;
-                        _grid.revealAllCells();
-                    }
-                    if (cellType != Grid::MINE) {
-                        _score += 10;
-                    }
-                }
+                handleLeftClick(gridX, gridY);
             } else if (events.key == Key::KeyCode::MOUSE_RIGHT) {
-                if (!cell.isRevealed) {
-                    if (cell.isFlagged) {
-                        _grid.unflagCell(gridX, gridY);
-                    } else {
-                        _grid.flagCell(gridX, gridY);
-                    }
-                }
+                handleRightClick(gridX, gridY);
             }
         }
     } catch (const std::bad_any_cast &e) {

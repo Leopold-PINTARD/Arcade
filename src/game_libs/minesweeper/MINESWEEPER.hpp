@@ -46,6 +46,8 @@ class MINESWEEPER : public IGameModule {
     void initSquare(std::string, std::string, std::string, CLI_Color,
       CLI_Color);
     bool handleMouseEvent(const Event &events);
+    void handleLeftClick(int x, int y);
+    void handleRightClick(int x, int y);
     Text createText(const std::string &str, int x, int y, CLI_Color frontColor,
         CLI_Color backColor, std::tuple<int, int, int, int> color,
         std::pair<float, float> scale);
