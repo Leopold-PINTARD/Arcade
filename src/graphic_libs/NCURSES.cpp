@@ -116,8 +116,6 @@ Event libs::graphic::NCURSES::getEvent(void) {
         }
         if (mouse_buttons.find(mouseEvent.button) != mouse_buttons.end()) {
             Key::KeyCode buttonCode = mouse_buttons[mouseEvent.button];
-            Key::KeyStatus status = (mouseEvent.type == Ncurses::EventType::
-                BUTTON_PRESS) ? Key::KEY_PRESSED : Key::KEY_RELEASED;
             Key::MousePos pos = {mouseEvent.position.x, mouseEvent.position.y};
             return Event(buttonCode, pos);
         }

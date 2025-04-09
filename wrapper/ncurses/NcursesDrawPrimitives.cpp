@@ -32,9 +32,14 @@ void Ncurses::drawRect(Ncurses::Coordinate xy, int width, int height, char c,
 }
 
 void Ncurses::drawBox(Ncurses::Coordinate xy, int width, int height, Color fg,
-                      Color bg) {
+    Color bg) {
     wattron(_window, COLOR_PAIR(getPairNumber(fg, bg)));
-    wborder(_window, 0, 0, 0, 0, 0, 0, 0, 0);
+    WINDOW* boxWin = subwin(_window, height, width, xy.y, xy.x);
+    if (boxWin != NULL) {
+        box(boxWin, 0, 0);
+        wrefresh(boxWin);
+        delwin(boxWin);
+    }
     wattroff(_window, COLOR_PAIR(getPairNumber(fg, bg)));
 }
 
