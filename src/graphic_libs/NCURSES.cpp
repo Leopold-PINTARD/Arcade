@@ -69,7 +69,7 @@ void libs::graphic::NCURSES::draw(const IDrawable &to_draw) {
     const Sprite *sprite = dynamic_cast<const Sprite *>(&to_draw);
     if (sprite != nullptr) {
         unsigned int currentTexture = sprite->getCurrentTexture();
-        std::vector<char[2]> textures = sprite->getCLI_Textures();
+        std::vector<std::string> textures = sprite->getCLI_Textures();
 
         if (!textures.empty() && currentTexture < textures.size()) {
             Ncurses::Coordinate coord = {position.first, position.second};
