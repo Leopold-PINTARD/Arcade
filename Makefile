@@ -30,6 +30,10 @@ SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp	\
 						wrapper/sdl2/SDL2_window.cpp\
 						src/log/Log.cpp				\
 
+MINESWEEPER_SRC	=	src/game_libs/minesweeper/Grid.cpp	\
+					src/game_libs/minesweeper/MINESWEEPER.cpp	\
+					src/log/Log.cpp				\
+
 MAIN_SRC			=	src/Main.cpp
 
 SRC					=	src/log/Log.cpp
@@ -48,6 +52,8 @@ MAIN_OBJ			=	$(MAIN_SRC:.cpp=.o)
 SFML_GFX_LIB_OBJ	=	$(SFML_GFX_LIB_SRC:.cpp=.o)
 
 SDL2_GFX_LIB_OBJ	=	$(SDL2_GFX_LIB_SRC:.cpp=.o)
+
+MINESWEEPER_OBJ		=	$(MINESWEEPER_SRC:.cpp=.o)
 
 TEST_LIBS_OBJ		=	$(TEST_LIBS_SRC:.cpp=.so)
 
@@ -83,7 +89,9 @@ core:	$(OBJ) $(MAIN_OBJ)
 	@echo "Building arcade..."
 	$(CC) -o arcade $(OBJ) $(MAIN_OBJ)
 
-games:
+games: $(MINESWEEPER_OBJ)
+	@echo "Building Minesweeper..."
+	$(CC) $(CPPFLAGS) -shared -o ./lib/MINESWEEPER.so $(MINESWEEPER_OBJ)
 
 graphicals: $(SFML_GFX_LIB_OBJ) $(SDL2_GFX_LIB_OBJ)
 	@echo "Building SFML graphic library..."
@@ -113,6 +121,7 @@ clean:
 	rm -f $(OBJ) $(MAIN_OBJ) $(TEST_LIBS_OBJ)
 	rm -f $(SFML_GFX_LIB_OBJ)
 	rm -f $(SDL2_GFX_LIB_OBJ)
+	rm -f $(MINESWEEPER_OBJ)
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*

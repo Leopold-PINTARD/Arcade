@@ -56,10 +56,10 @@ class MINESWEEPER : public IGameModule {
     bool _gameRunning;
     bool _gameOver;
     bool _won;
-    int _offsetX;
-    int _offsetY;
     int _width;
     int _height;
+    int _offsetX;
+    int _offsetY;
     int _mines;
     unsigned int _score;
     Grid _grid;

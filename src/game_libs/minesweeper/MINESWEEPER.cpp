@@ -32,10 +32,10 @@ MINESWEEPER::MINESWEEPER() :
     _gameRunning(true),
     _gameOver(false),
     _won(false),
-    _offsetX((WINDOW_SIZE.first - _width * SIZE_SQUARE) / 2),
-    _offsetY((WINDOW_SIZE.second - _height * SIZE_SQUARE) / 2),
     _width(GRID_SIZE_X),
     _height(GRID_SIZE_Y),
+    _offsetX((WINDOW_SIZE.first - _width * SIZE_SQUARE) / 2),
+    _offsetY((WINDOW_SIZE.second - _height * SIZE_SQUARE) / 2),
     _mines(GRID_MINES),
     _score(0),
     _grid(_width, _height, _mines) {
@@ -121,49 +121,43 @@ Text MINESWEEPER::createText(const std::string &str, int x, int y, CLI_Color
 
 const std::vector<std::unique_ptr<IDrawable>> &MINESWEEPER::getDrawables(void) {
     _drawables.clear();
-
     for (int y = 0; y < _height; y++) {
         for (int x = 0; x < _width; x++) {
             Grid::Cell cell = _grid.getCell(x, y);
-            std::unique_ptr<Sprite> cellSprite;
-
+            std::string cellType;
             if (cell.isFlagged) {
-                cellSprite =
-                    std::make_unique<Sprite>(*_drawablesMap["flagged"]);
+                cellType = "flagged";
             } else if (!cell.isRevealed) {
-                cellSprite =
-                    std::make_unique<Sprite>(*_drawablesMap["base"]);
+                cellType = "base";
             } else if (cell.type == Grid::MINE) {
-                cellSprite =
-                    std::make_unique<Sprite>(*_drawablesMap["mine_exploded"]);
+                cellType = "mine_exploded";
             } else if (cell.adjacentMines == 0) {
-                cellSprite =
-                    std::make_unique<Sprite>(*_drawablesMap["revealed"]);
+                cellType = "revealed";
             } else {
-                cellSprite = std::make_unique<Sprite>(*_drawablesMap
-                    [std::to_string(cell.adjacentMines)]);
+                cellType = std::to_string(cell.adjacentMines);
             }
-            cellSprite->setPosition(std::make_pair(_offsetX + x *
-                SIZE_SQUARE, _offsetY + y * SIZE_SQUARE));
-            _drawables.push_back(std::move(cellSprite));
+            auto spriteCopy = std::make_unique<Sprite>();
+            *spriteCopy = *static_cast<Sprite*>(_drawablesMap[cellType].get());
+            spriteCopy->setPosition(std::make_pair(_offsetX + x * SIZE_SQUARE,
+                _offsetY + y * SIZE_SQUARE));
+            _drawables.push_back(std::move(spriteCopy));
         }
     }
     if (_gameOver) {
-        _drawables.push_back
-            (std::make_unique<Text>(createText("Game Over", _offsetX + _width *
-            SIZE_SQUARE / 2 - 50, _offsetY + _height * SIZE_SQUARE / 2,
-            CLI_Color::CLI_RED, CLI_Color::CLI_BLACK,
-            std::make_tuple(255, 0, 0, 255), SCALE)));
-    }
-    if (_won) {
-        _drawables.push_back
-            (std::make_unique<Text>(createText("You Won!", _offsetX + _width *
-            SIZE_SQUARE / 2 - 50, _offsetY + _height * SIZE_SQUARE / 2,
-            CLI_Color::CLI_GREEN, CLI_Color::CLI_BLACK,
-            std::make_tuple(0, 255, 0, 255), SCALE)));
+        std::string message = _won ? "YOU WON!" : "GAME OVER!";
+        auto text = std::make_unique<Text>();
+        text->setStr(message);
+        text->setFontPath("assets/minesweeper/font.ttf");
+        text->setPosition(std::make_pair(_offsetX + (_width * SIZE_SQUARE / 2)
+            - 50, _offsetY + _height * SIZE_SQUARE + 20));
+        text->setGUI_Color(std::make_tuple(255, 255, 255, 255));
+        text->setCLI_Color(std::make_pair(_won ? CLI_Color::CLI_GREEN
+            : CLI_Color::CLI_RED, CLI_Color::CLI_BLACK));
+        _drawables.push_back(std::move(text));
     }
     return _drawables;
 }
+
 const std::vector<Sound> &MINESWEEPER::getSound(void) { return _sounds; }
 
 bool MINESWEEPER::event(const Event &events) {
@@ -195,7 +189,6 @@ bool MINESWEEPER::handleMouseEvent(const Event &events) {
             return true;
         int gridX = (mouseEvent.first.x - _offsetX) / SIZE_SQUARE;
         int gridY = (mouseEvent.first.y - _offsetY) / SIZE_SQUARE;
-
         if (gridX >= 0 && gridX < _width && gridY >= 0 && gridY < _height) {
             Grid::Cell cell = _grid.getCell(gridX, gridY);
             if (events.key == Key::KeyCode::MOUSE_LEFT) {

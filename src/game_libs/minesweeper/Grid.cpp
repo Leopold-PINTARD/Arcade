@@ -8,7 +8,7 @@
 #include <random>
 #include <stdexcept>
 
-#include "minesweeper/Grid.hpp"
+#include "game_libs/minesweeper/Grid.hpp"
 
 Grid::Grid(int width, int height, int mines)
     : width(width), height(height), mines(mines), generated(false) {

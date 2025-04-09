@@ -79,7 +79,6 @@ class Sprite : public IDrawable {
  private:
     std::vector<std::string> GUI_Textures;
     std::vector<std::string> CLI_Textures;
-    std::vector<std::string> CLI_Textures;
     float animationTime;
     unsigned int currentTexture;
     std::pair<float, float> scale;
