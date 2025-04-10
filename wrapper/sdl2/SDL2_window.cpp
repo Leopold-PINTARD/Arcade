@@ -29,12 +29,6 @@ void SDL2::createWindow(const std::string &title, const std::string &iconPath,
         getSDLError();
         exit(84);
     }
-    int numDrivers = SDL_GetNumRenderDrivers();
-    for (int i = 0; i < numDrivers; ++i) {
-        SDL_RendererInfo info;
-        SDL_GetRenderDriverInfo(i, &info);
-        std::cout << "Renderer " << i << ": " << info.name << std::endl;
-    }
     renderer = SDL_CreateRenderer(window, -1, 0);
     if (!renderer) {
         getSDLError();
