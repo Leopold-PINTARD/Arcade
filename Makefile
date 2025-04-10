@@ -98,7 +98,7 @@ run: re
 
 vg: $(NAME)
 	@echo "Running Valgrind..."
-	valgrind $(VALGRIND_FLAGS) ./$(NAME) 4242 tests
+	valgrind $(VALGRIND_FLAGS) ./arcade
 	cat $(VALGRIND_LOG)
 
 tests_run:	$(TEST_LIBS_OBJ)
@@ -113,6 +113,7 @@ clean:
 	rm -f $(OBJ) $(MAIN_OBJ) $(TEST_LIBS_OBJ)
 	rm -f $(SFML_GFX_LIB_OBJ)
 	rm -f $(SDL2_GFX_LIB_OBJ)
+	rm -f ./lib/SFML.so ./lib/SDL2.so
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*
