@@ -12,6 +12,8 @@
 #include <memory>
 #include <utility>
 
+#include "DataStructures/Event.hpp"
+#include "DataStructures/Keys.hpp"
 #include "DataStructures/Sprite.hpp"
 #include "DataStructures/Text.hpp"
 #include "src/log/Log.hpp"

@@ -10,6 +10,8 @@
 
 #include <map>
 
+#include "DataStructures/Event.hpp"
+#include "DataStructures/Keys.hpp"
 #include "modules/IDisplayModule.hpp"
 #include "wrapper/sdl2/SDL2.hpp"
 

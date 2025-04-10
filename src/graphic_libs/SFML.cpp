@@ -20,6 +20,8 @@
 #include <SFML/Window.hpp>
 
 #include "./src/log/Log.hpp"
+#include "DataStructures/Event.hpp"
+#include "DataStructures/Keys.hpp"
 #include "DataStructures/Sprite.hpp"
 #include "DataStructures/Text.hpp"
 
