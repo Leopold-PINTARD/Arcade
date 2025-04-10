@@ -19,34 +19,34 @@
 CC					=	g++
 
 # Sources
-SFML_GFX_LIB_SRC	=	src/graphic_libs/SFML.cpp	\
-						src/log/Log.cpp				\
+SFML_GFX_LIB_SRC	=	src/graphic_libs/SFML.cpp							\
+						src/log/Log.cpp										\
 
-SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp	\
-						wrapper/sdl2/SDL2.cpp		\
-						wrapper/sdl2/SDL2_draw.cpp	\
-						wrapper/sdl2/SDL2_event.cpp	\
-						wrapper/sdl2/SDL2_sound.cpp	\
-						wrapper/sdl2/SDL2_window.cpp\
-						src/log/Log.cpp				\
+SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp							\
+						wrapper/sdl2/SDL2.cpp								\
+						wrapper/sdl2/SDL2_draw.cpp							\
+						wrapper/sdl2/SDL2_event.cpp							\
+						wrapper/sdl2/SDL2_sound.cpp							\
+						wrapper/sdl2/SDL2_window.cpp						\
+						src/log/Log.cpp										\
 
-NCURSES_GFX_LIB_SRC	=	src/graphic_libs/NCURSES.cpp	\
-						src/log/Log.cpp				\
-						wrapper/ncurses/Ncurses.cpp	\
-						wrapper/ncurses/NcursesDrawPrimitives.cpp	\
-						wrapper/ncurses/NcursesInputHandling.cpp	\
-						wrapper/ncurses/NcursesWindowManagement.cpp	\
-						wrapper/ncurses/NcursesMouseHandling.cpp	\
+NCURSES_GFX_LIB_SRC	=	src/graphic_libs/NCURSES.cpp						\
+						src/log/Log.cpp										\
+						wrapper/ncurses/Ncurses.cpp							\
+						wrapper/ncurses/NcursesDrawPrimitives.cpp			\
+						wrapper/ncurses/NcursesInputHandling.cpp			\
+						wrapper/ncurses/NcursesWindowManagement.cpp			\
+						wrapper/ncurses/NcursesMouseHandling.cpp			\
 
 MAIN_SRC			=	src/Main.cpp
 
-SRC					=	src/log/Log.cpp
+SRC					=	src/log/Log.cpp										\
 
-TESTS_SRC			=	tests/dlloadingtests.cpp	\
+TESTS_SRC			=	tests/dlloadingtests.cpp							\
 
-TEST_LIBS_SRC		=	tests/bar.cpp				\
-						tests/foo.cpp				\
-						tests/nocreate.cpp			\
+TEST_LIBS_SRC		=	tests/bar.cpp										\
+						tests/foo.cpp										\
+						tests/nocreate.cpp									\
 
 # Object files
 OBJ					=	$(SRC:.cpp=.o)
