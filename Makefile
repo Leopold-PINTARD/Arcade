@@ -18,6 +18,8 @@
 
 CC					=	g++
 
+NAME				=	arcade
+
 # Sources
 SFML_GFX_LIB_SRC	=	src/graphic_libs/SFML.cpp							\
 						src/log/Log.cpp										\
@@ -97,11 +99,11 @@ games:
 
 graphicals: $(SFML_GFX_LIB_OBJ) $(SDL2_GFX_LIB_OBJ) $(NCURSES_GFX_LIB_OBJ)
 	@echo "Building SFML graphic library..."
-	$(CC) $(CPPFLAGS) -shared -o ./lib/SFML.so $(SFML_GFX_LIB_OBJ)
+	$(CC) $(CPPFLAGS) -shared -o ./lib/arcade_sfml.so $(SFML_GFX_LIB_OBJ)
 	@echo "Building SDL2 graphic library..."
-	$(CC) $(CPPFLAGS) -shared -o ./lib/SDL2.so $(SDL2_GFX_LIB_OBJ)
+	$(CC) $(CPPFLAGS) -shared -o ./lib/arcade_sdl2.so $(SDL2_GFX_LIB_OBJ)
 	@echo "Building NCURSES graphic library..."
-	$(CC) $(CPPFLAGS) -shared -o ./lib/NCURSES.so $(NCURSES_GFX_LIB_OBJ)
+	$(CC) $(CPPFLAGS) -shared -o ./lib/arcade_ncurses.so $(NCURSES_GFX_LIB_OBJ)
 
 run: re
 	@echo "Running $(NAME)..."
@@ -126,7 +128,9 @@ clean:
 	rm -f $(SFML_GFX_LIB_OBJ)
 	rm -f $(SDL2_GFX_LIB_OBJ)
 	rm -f $(NCURSES_GFX_LIB_OBJ)
-	rm -f ./lib/SFML.so ./lib/SDL2.so ./lib/NCURSES.so
+	rm -f ./lib/arcade_sfml.so
+	rm -f ./lib/arcade_sdl2.so
+	rm -f ./lib/arcade_ncurses.so
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*
