@@ -15,6 +15,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "DataStructures/Event.hpp"
+#include "DataStructures/Keys.hpp"
 #include "modules/IDisplayModule.hpp"
 
 namespace libs {

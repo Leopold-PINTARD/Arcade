@@ -19,34 +19,34 @@
 CC					=	g++
 
 # Sources
-SFML_GFX_LIB_SRC	=	src/graphic_libs/SFML.cpp	\
-						src/log/Log.cpp				\
+SFML_GFX_LIB_SRC	=	src/graphic_libs/SFML.cpp							\
+						src/log/Log.cpp										\
 
-SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp	\
-						wrapper/sdl2/SDL2.cpp		\
-						wrapper/sdl2/SDL2_draw.cpp	\
-						wrapper/sdl2/SDL2_event.cpp	\
-						wrapper/sdl2/SDL2_sound.cpp	\
-						wrapper/sdl2/SDL2_window.cpp\
-						src/log/Log.cpp				\
+SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp							\
+						wrapper/sdl2/SDL2.cpp								\
+						wrapper/sdl2/SDL2_draw.cpp							\
+						wrapper/sdl2/SDL2_event.cpp							\
+						wrapper/sdl2/SDL2_sound.cpp							\
+						wrapper/sdl2/SDL2_window.cpp						\
+						src/log/Log.cpp										\
 
-NCURSES_GFX_LIB_SRC	=	src/graphic_libs/NCURSES.cpp	\
-						src/log/Log.cpp				\
-						wrapper/ncurses/Ncurses.cpp	\
-						wrapper/ncurses/NcursesDrawPrimitives.cpp	\
-						wrapper/ncurses/NcursesInputHandling.cpp	\
-						wrapper/ncurses/NcursesWindowManagement.cpp	\
-						wrapper/ncurses/NcursesMouseHandling.cpp	\
+NCURSES_GFX_LIB_SRC	=	src/graphic_libs/NCURSES.cpp						\
+						src/log/Log.cpp										\
+						wrapper/ncurses/Ncurses.cpp							\
+						wrapper/ncurses/NcursesDrawPrimitives.cpp			\
+						wrapper/ncurses/NcursesInputHandling.cpp			\
+						wrapper/ncurses/NcursesWindowManagement.cpp			\
+						wrapper/ncurses/NcursesMouseHandling.cpp			\
 
 MAIN_SRC			=	src/Main.cpp
 
-SRC					=	src/log/Log.cpp
+SRC					=	src/log/Log.cpp										\
 
-TESTS_SRC			=	tests/dlloadingtests.cpp	\
+TESTS_SRC			=	tests/dlloadingtests.cpp							\
 
-TEST_LIBS_SRC		=	tests/bar.cpp				\
-						tests/foo.cpp				\
-						tests/nocreate.cpp			\
+TEST_LIBS_SRC		=	tests/bar.cpp										\
+						tests/foo.cpp										\
+						tests/nocreate.cpp									\
 
 # Object files
 OBJ					=	$(SRC:.cpp=.o)
@@ -68,7 +68,7 @@ LIB_FLAGS			=	-lsfml-graphics -lsfml-window -lsfml-system	\
 						-lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer	\
 						-ldl -lncurses								\
 
-CPPFLAGS			+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -O2 -g	\
+CPPFLAGS			+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -g	\
 $(LIB_FLAGS) -fno-gnu-unique -fPIC
 
 CPPTESTFLAGS		=	--coverage -lcriterion $(CPPFLAGS)
@@ -110,7 +110,7 @@ run: re
 
 vg: $(NAME)
 	@echo "Running Valgrind..."
-	valgrind $(VALGRIND_FLAGS) ./$(NAME) 4242 tests
+	valgrind $(VALGRIND_FLAGS) ./arcade
 	cat $(VALGRIND_LOG)
 
 tests_run:	$(TEST_LIBS_OBJ)
@@ -126,11 +126,12 @@ clean:
 	rm -f $(SFML_GFX_LIB_OBJ)
 	rm -f $(SDL2_GFX_LIB_OBJ)
 	rm -f $(NCURSES_GFX_LIB_OBJ)
+	rm -f ./lib/SFML.so ./lib/SDL2.so ./lib/NCURSES.so
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*
 	rm -f *.log
-	rm -f ./lib/*.so
+## rm -f ./lib/*.so
 
 fclean: clean
 	@echo "Removing binaries..."

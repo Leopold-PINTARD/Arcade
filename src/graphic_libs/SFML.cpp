@@ -20,6 +20,8 @@
 #include <SFML/Window.hpp>
 
 #include "./src/log/Log.hpp"
+#include "DataStructures/Event.hpp"
+#include "DataStructures/Keys.hpp"
 #include "DataStructures/Sprite.hpp"
 #include "DataStructures/Text.hpp"
 
@@ -36,42 +38,60 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
     return std::make_unique<libs::graphic::SFML>();
 }
 
-libs::graphic::SFML::SFML() {}
+libs::graphic::SFML::SFML() : _window(nullptr), _sounds(), _soundBuffers() {}
 
-libs::graphic::SFML::~SFML() {}
+libs::graphic::SFML::~SFML() {
+    if (this->_window != nullptr) {
+        Log::info() << "Closing SFML window..." << std::endl;
+        this->_window->close();
+        this->_window.reset();
+    }
+}
 
 void libs::graphic::SFML::createWindow(const Window &window) {
     if (this->_window == nullptr) {
         sf::Image icon;
+
+        this->_window = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(window.size.first * 80, window.size.second * 80),
+            window.title);
+        Log::info() << "Window created" << std::endl;
         if (icon.loadFromFile(window.iconPath) == false) {
             Log::error() << "Failed to load icon from path: " << window.iconPath
                          << std::endl;
             return;
         }
-        this->_window = std::make_unique<sf::RenderWindow>(
-            sf::VideoMode(window.size.first, window.size.second), window.title);
+        Log::info() << "Icon loaded" << std::endl;
         this->_window->setIcon(icon.getSize().x, icon.getSize().y,
                                icon.getPixelsPtr());
+    } else {
+        Log::info() << "createWindow(): Window already created" << std::endl;
     }
 }
 
 void libs::graphic::SFML::draw(const IDrawable &to_draw) {
     sf::Texture texture;
 
-    if (this->_window == nullptr) return;
+    if (this->_window == nullptr) {
+        Log::info() << "draw(): No window open" << std::endl;
+        return;
+    }
     try {
         const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
         sf::Texture texture;
         sf::Sprite sprite_sfml;
         std::tuple<int, int, int, int> color = sprite.getGUI_Color();
 
-        texture.loadFromFile(
-            sprite.getGUI_Textures()[sprite.getCurrentTexture()]);
+        if (!texture.loadFromFile(
+                sprite.getGUI_Textures()[sprite.getCurrentTexture()]))
+            Log::error() << "Failed to load texture from path: "
+                         << sprite.getGUI_Textures()[sprite.getCurrentTexture()]
+                         << std::endl;
         sprite_sfml.setTexture(texture);
         sprite_sfml.setColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                        std::get<2>(color), std::get<3>(color)));
-        sprite_sfml.setPosition(sprite.getPosition().first * 100,
-                                sprite.getPosition().second * 100);
+        sprite_sfml.setPosition(sprite.getPosition().first * 80,
+                                sprite.getPosition().second * 80);
         sprite_sfml.setScale(sprite.getScale().first, sprite.getScale().second);
         sprite_sfml.setRotation(sprite.getRotation());
         this->_window->draw(sprite_sfml);
@@ -84,11 +104,13 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         std::tuple<int, int, int, int> color = text.getGUI_Color();
         sf::Font font;
 
-        font.loadFromFile(text.getFontPath());
+        if (!font.loadFromFile(text.getFontPath()))
+            Log::error() << "Failed to load font from path: "
+                         << text.getFontPath() << std::endl;
         text_sfml.setString(text.getStr());
         text_sfml.setScale(text.getScale().first, text.getScale().second);
-        text_sfml.setPosition(text.getPosition().first * 100,
-                              text.getPosition().second * 100);
+        text_sfml.setPosition(text.getPosition().first * 80,
+                              text.getPosition().second * 80);
         text_sfml.setFillColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                          std::get<2>(color),
                                          std::get<3>(color)));
@@ -97,57 +119,74 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         this->_window->draw(text_sfml);
         return;
     } catch (const std::bad_cast &e) {
+        Log::error() << "IDrawable is neither a sprite nor a text" << std::endl;
         Log::error() << e.what() << std::endl;
     }
 }
 
 void libs::graphic::SFML::display(void) {
-    if (this->_window == nullptr) return;
+    if (this->_window == nullptr) {
+        Log::info() << "display(): No window open" << std::endl;
+        return;
+    }
     this->_window->display();
 }
 
 void libs::graphic::SFML::clear(void) {
-    if (this->_window == nullptr) return;
+    if (this->_window == nullptr) {
+        Log::info() << "clear(): No window open" << std::endl;
+        return;
+    }
     this->_window->clear();
 }
 
 Event libs::graphic::SFML::getEvent(void) {
     sf::Event event;
 
-    if (this->_window == nullptr) return Event(Key::NONE, 0);
-    if (this->_window->pollEvent(event) == false) return Event(Key::NONE, 0);
+    if (this->_window == nullptr) {
+        Log::info() << "getEvent(): No window open" << std::endl;
+        return Event(Key::NONE, std::any(0));
+    }
+    if (this->_window->pollEvent(event) == false) {
+        return Event(Key::NONE, std::any(0));
+    }
     if (event.type == sf::Event::Closed)
-        return Event(Key::KeyCode::SUPPR, Key::KeyStatus::KEY_PRESSED);
+        return Event(Key::KeyCode::SUPPR,
+                     std::any(Key::KeyStatus::KEY_PRESSED));
     if (event.type == sf::Event::KeyPressed)
-        return Event(this->keys[event.key.code], Key::KeyStatus::KEY_PRESSED);
+        return Event(this->keys[event.key.code],
+                     std::any(Key::KeyStatus::KEY_PRESSED));
     if (event.type == sf::Event::KeyReleased)
-        return Event(this->keys[event.key.code], Key::KeyStatus::KEY_RELEASED);
+        return Event(this->keys[event.key.code],
+                     std::any(Key::KeyStatus::KEY_RELEASED));
     if (event.type == sf::Event::MouseMoved)
-        return Event(Key::KeyCode::MOUSE_MOVE,
-                     Key::MousePos{event.mouseMove.x, event.mouseMove.y});
+        return Event(
+            Key::KeyCode::MOUSE_MOVE,
+            std::any(Key::MousePos{event.mouseMove.x, event.mouseMove.y}));
     if (event.type == sf::Event::MouseButtonPressed)
         return Event(
             mouse_buttons[event.mouseButton.button],
-            std::pair<Key::MousePos, Key::KeyStatus>{
+            std::any(std::pair<Key::MousePos, Key::KeyStatus>{
                 Key::MousePos{event.mouseButton.x, event.mouseButton.y},
-                Key::KeyStatus::KEY_PRESSED});
+                Key::KeyStatus::KEY_PRESSED}));
     if (event.type == sf::Event::MouseButtonReleased)
         return Event(
             mouse_buttons[event.mouseButton.button],
-            std::pair<Key::MousePos, Key::KeyStatus>{
+            std::any(std::pair<Key::MousePos, Key::KeyStatus>{
                 Key::MousePos{event.mouseButton.x, event.mouseButton.y},
-                Key::KeyStatus::KEY_RELEASED});
+                Key::KeyStatus::KEY_RELEASED}));
     if (event.type == sf::Event::MouseWheelScrolled)
         return Event(Key::KeyCode::MOUSE_SCROLL,
-                     std::pair<Key::MousePos, float>{
+                     std::any(std::pair<Key::MousePos, float>{
                          Key::MousePos{event.mouseWheelScroll.x,
                                        event.mouseWheelScroll.y},
-                         event.mouseWheelScroll.delta});
-    return Event(Key::NONE, 0);
+                         event.mouseWheelScroll.delta}));
+    Log::info() << "getEvent(): Event unrecognized" << std::endl;
+    return Event(Key::KeyCode::NONE, std::any(0));
 }
 
 void libs::graphic::SFML::handleSound(const Sound &sound) {
-    if (this->_sounds.find(sound.id) != this->_sounds.end()) {
+    if (this->_sounds.find(sound.id) == this->_sounds.end()) {
         sf::SoundBuffer buffer;
         sf::Sound sound_sfml;
 

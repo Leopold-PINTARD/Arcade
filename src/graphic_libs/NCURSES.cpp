@@ -165,6 +165,7 @@ std::map<Ncurses::Key, Key::KeyCode> libs::graphic::NCURSES::keys = {
     {Ncurses::Key::ENTER, Key::KeyCode::ENTER},
     {Ncurses::Key::ESCAPE, Key::KeyCode::ECHAP},
     {Ncurses::Key::SPACE, Key::KeyCode::SPACE},
+    {Ncurses::Key::SUPPR, Key::KeyCode::SUPPR},
     {Ncurses::Key::BACKSPACE, Key::KeyCode::SUPPR},
     {Ncurses::Key::TAB, Key::KeyCode::TAB},
 

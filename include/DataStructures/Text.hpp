@@ -11,46 +11,44 @@
 #include <utility>
 #include <vector>
 
-#include <DataStructures/IDrawable.hpp>
+#include "IDrawable.hpp"
 
 class Text : public IDrawable {
  public:
+    Text(void)
+        : fontPath(""),
+          str(""),
+          scale({1.0f, 1.0f}),
+          rotation(0.0f),
+          CLI_color({CLI_Color::CLI_WHITE, CLI_Color::CLI_WHITE}),
+          GUI_color({0, 0, 0, 0}),
+          position({0, 0}) {}
+
     std::string getFontPath(void) const { return fontPath; }
-
     std::string getStr(void) const { return str; }
-
     void setFontPath(std::string fontPath) { this->fontPath = fontPath; }
-
     void setStr(std::string str) { this->str = str; }
 
     std::pair<float, float> getScale(void) const override { return scale; }
-
     float getRotation(void) const override { return rotation; }
-
     std::pair<CLI_Color, CLI_Color> getCLI_Color(void) const override {
         return CLI_color;
     }
-
     std::tuple<int, int, int, int> getGUI_Color(void) const override {
         return GUI_color;
     }
-
     std::pair<int, int> getPosition(void) const override { return position; }
 
     void setScale(std::pair<float, float> scale) override {
         this->scale = scale;
     }
-
     void setRotation(float rotation) override { this->rotation = rotation; }
-
     void setCLI_Color(std::pair<CLI_Color, CLI_Color> CLI_Color) override {
         this->CLI_color = CLI_Color;
     }
-
     void setGUI_Color(std::tuple<int, int, int, int> GUI_Color) override {
         this->GUI_color = GUI_Color;
     }
-
     void setPosition(std::pair<int, int> position) override {
         this->position = position;
     }
