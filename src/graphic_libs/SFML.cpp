@@ -58,7 +58,8 @@ void libs::graphic::SFML::createWindow(const Window &window) {
         }
         std::cout << "Icon loaded" << std::endl;
         this->_window = std::make_unique<sf::RenderWindow>(
-            sf::VideoMode(window.size.first, window.size.second), window.title);
+            sf::VideoMode(window.size.first * 80, window.size.second * 80),
+            window.title);
         std::cout << "Window created" << std::endl;
         this->_window->setIcon(icon.getSize().x, icon.getSize().y,
                                icon.getPixelsPtr());
@@ -124,39 +125,43 @@ void libs::graphic::SFML::clear(void) {
 Event libs::graphic::SFML::getEvent(void) {
     sf::Event event;
 
-    if (this->_window == nullptr) return Event(Key::NONE, 0);
+    if (this->_window == nullptr) return Event(Key::NONE, std::any(0));
     if (this->_window->pollEvent(event) == false) {
-        return Event(Key::NONE, 0);
+        return Event(Key::NONE, std::any(0));
     }
     if (event.type == sf::Event::Closed)
-        return Event(Key::KeyCode::SUPPR, Key::KeyStatus::KEY_PRESSED);
+        return Event(Key::KeyCode::SUPPR,
+                     std::any(Key::KeyStatus::KEY_PRESSED));
     if (event.type == sf::Event::KeyPressed)
-        return Event(this->keys[event.key.code], Key::KeyStatus::KEY_PRESSED);
+        return Event(this->keys[event.key.code],
+                     std::any(Key::KeyStatus::KEY_PRESSED));
     if (event.type == sf::Event::KeyReleased)
-        return Event(this->keys[event.key.code], Key::KeyStatus::KEY_RELEASED);
+        return Event(this->keys[event.key.code],
+                     std::any(Key::KeyStatus::KEY_RELEASED));
     if (event.type == sf::Event::MouseMoved)
-        return Event(Key::KeyCode::MOUSE_MOVE,
-                     Key::MousePos{event.mouseMove.x, event.mouseMove.y});
+        return Event(
+            Key::KeyCode::MOUSE_MOVE,
+            std::any(Key::MousePos{event.mouseMove.x, event.mouseMove.y}));
     if (event.type == sf::Event::MouseButtonPressed)
         return Event(
             mouse_buttons[event.mouseButton.button],
-            std::pair<Key::MousePos, Key::KeyStatus>{
+            std::any(std::pair<Key::MousePos, Key::KeyStatus>{
                 Key::MousePos{event.mouseButton.x, event.mouseButton.y},
-                Key::KeyStatus::KEY_PRESSED});
+                Key::KeyStatus::KEY_PRESSED}));
     if (event.type == sf::Event::MouseButtonReleased)
         return Event(
             mouse_buttons[event.mouseButton.button],
-            std::pair<Key::MousePos, Key::KeyStatus>{
+            std::any(std::pair<Key::MousePos, Key::KeyStatus>{
                 Key::MousePos{event.mouseButton.x, event.mouseButton.y},
-                Key::KeyStatus::KEY_RELEASED});
+                Key::KeyStatus::KEY_RELEASED}));
     if (event.type == sf::Event::MouseWheelScrolled)
         return Event(Key::KeyCode::MOUSE_SCROLL,
-                     std::pair<Key::MousePos, float>{
+                     std::any(std::pair<Key::MousePos, float>{
                          Key::MousePos{event.mouseWheelScroll.x,
                                        event.mouseWheelScroll.y},
-                         event.mouseWheelScroll.delta});
+                         event.mouseWheelScroll.delta}));
     std::cout << "No event matched" << std::endl;
-    return Event(Key::KeyCode::NONE, 0);
+    return Event(Key::KeyCode::NONE, std::any(0));
 }
 
 void libs::graphic::SFML::handleSound(const Sound &sound) {
