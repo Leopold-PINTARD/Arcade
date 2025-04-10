@@ -58,7 +58,7 @@ LIB_FLAGS			=	-lsfml-graphics -lsfml-window -lsfml-system	\
 						-lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer	\
 						-ldl										\
 
-CPPFLAGS			+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -O2 -g	\
+CPPFLAGS			+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -g	\
 $(LIB_FLAGS) -fno-gnu-unique -fPIC
 
 CPPTESTFLAGS		=	--coverage -lcriterion $(CPPFLAGS)
