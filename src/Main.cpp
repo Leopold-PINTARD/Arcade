@@ -45,7 +45,7 @@ static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
         if (gfxLoader.getInstance("getDisplayModule") == nullptr) std::exit(0);
         if (displayModule == nullptr) std::exit(0);
         displayModule->createWindow(
-            Window(std::make_pair(1920, 1080), "Arcade",
+            Window(std::make_pair(16, 9), "Arcade",
                    "/home/epi-jo/tek2/cpp/Arcade/assets/icon.png"));
     }
     return true;
@@ -58,8 +58,9 @@ int main() {
     auto &displayModule = gfxLoader.getInstance("getDisplayModule");
     Sprite sprite = test();
 
+    Log::setDebug(true);
     displayModule->createWindow(
-        Window(std::make_pair(1920, 1080), "Arcade",
+        Window(std::make_pair(16, 9), "Arcade",
                "/home/epi-jo/tek2/cpp/Arcade/assets/icon.png"));
     while (true) {
         displayModule->clear();
