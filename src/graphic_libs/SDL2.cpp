@@ -72,6 +72,9 @@ Event libs::graphic::SDL2_DL::getEvent(void) {
     sdl2.pollEvent();
     keyEvent = sdl2.getKeyEvent();
     if (keyEvent.key == -1) return Event(Key::KeyCode::NONE, 0);
+    if (keys.find(keyEvent.key) == keys.end()) {
+        return Event(Key::KeyCode::NONE, std::any(0));
+    }
     if (keyEvent.key == SDL_MOUSEMOTION)
         return Event(keys[keyEvent.key], Key::MousePos{keyEvent.x, keyEvent.y});
     if (keyEvent.key == SDL_MOUSEWHEEL)
