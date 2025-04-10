@@ -126,7 +126,7 @@ clean:
 	rm -f $(SFML_GFX_LIB_OBJ)
 	rm -f $(SDL2_GFX_LIB_OBJ)
 	rm -f $(NCURSES_GFX_LIB_OBJ)
-	rm -f ./lib/SFML.so ./lib/SDL2.so
+	rm -f ./lib/SFML.so ./lib/SDL2.so ./lib/NCURSES.so
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*
