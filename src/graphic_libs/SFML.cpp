@@ -122,11 +122,8 @@ void libs::graphic::SFML::clear(void) {
 Event libs::graphic::SFML::getEvent(void) {
     sf::Event event;
 
-    std::cout << "Getting event in sfml lib" << std::endl;
     if (this->_window == nullptr) return Event(Key::NONE, 0);
-    std::cout << "Polling event" << std::endl;
     if (this->_window->pollEvent(event) == false) {
-        std::cout << "No event" << std::endl;
         return Event(Key::NONE, 0);
     }
     if (event.type == sf::Event::Closed)
@@ -157,10 +154,7 @@ Event libs::graphic::SFML::getEvent(void) {
                                        event.mouseWheelScroll.y},
                          event.mouseWheelScroll.delta});
     std::cout << "No event matched" << std::endl;
-    auto temp = Event(Key::KEY_A, 0);
-    std::cout << temp.key << std::endl;
-    std::cout << temp.value.type().name() << std::endl;
-    return temp;
+    return Event(Key::KeyCode::NONE, 0);
 }
 
 void libs::graphic::SFML::handleSound(const Sound &sound) {
