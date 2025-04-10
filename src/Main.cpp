@@ -20,8 +20,8 @@
 static Sprite test() {
     Sprite sprite;
     sprite.setGUI_Textures({"/home/epi-jo/tek2/cpp/Arcade/assets/sprite.png"});
-    sprite.setPosition(std::make_pair(0, 0));
-    sprite.setScale(std::make_pair(100.0f, 100.0f));
+    sprite.setPosition(std::make_pair(1, 1));
+    sprite.setScale(std::make_pair(1.0f, 1.0f));
     sprite.setRotation(0.0f);
     sprite.setAnimationTime(0.0f);
     sprite.setCurrentTexture(0);
@@ -41,7 +41,7 @@ static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
     if (currentEvent.key == Key::KeyCode::SUPPR) std::exit(0);
     if (currentEvent.key == Key::KeyCode::KEY_N) {
         currentEvent.~Event();
-        gfxLoader.switchLib("/home/epi-jo/tek2/cpp/Arcade/lib/SDL2.so");
+        gfxLoader.switchLib("/home/epi-jo/tek2/cpp/Arcade/lib/NCURSES.so");
         if (gfxLoader.getInstance("getDisplayModule") == nullptr) std::exit(0);
         if (displayModule == nullptr) std::exit(0);
         displayModule->createWindow(
@@ -53,7 +53,7 @@ static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
 
 int main() {
     DLLoader<IDisplayModule> gfxLoader(
-        "/home/epi-jo/tek2/cpp/Arcade/lib/SDL2.so");
+        "/home/epi-jo/tek2/cpp/Arcade/lib/SFML.so");
     // DLLoader<IGameModule> gameLoader("./lib/IGameModule.so");
     auto &displayModule = gfxLoader.getInstance("getDisplayModule");
     Sprite sprite = test();
