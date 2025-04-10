@@ -5,6 +5,7 @@
 ** main
 */
 
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -17,64 +18,50 @@
 #include "./DLLoader.hpp"
 #include "./log/Log.hpp"
 
-static Sprite test() {
-    Sprite sprite;
-    sprite.setGUI_Textures({"/home/epi-jo/tek2/cpp/Arcade/assets/sprite.png"});
-    sprite.setPosition(std::make_pair(1, 1));
-    sprite.setScale(std::make_pair(1.0f, 1.0f));
-    sprite.setRotation(0.0f);
-    sprite.setAnimationTime(0.0f);
-    sprite.setCurrentTexture(0);
-    sprite.setGUI_Color(std::make_tuple(255, 255, 255, 255));
-    sprite.setCLI_Color(
-        std::make_pair(CLI_Color::CLI_WHITE, CLI_Color::CLI_WHITE));
-    sprite.setCLI_Textures({"hello", "world"});
-    return sprite;
-}
-
 static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
-                        DLLoader<IDisplayModule> &gfxLoader) {
+                        DLLoader<IDisplayModule> &gfxLoader,
+                        std::unique_ptr<IGameModule> &gameModule) {
     Event currentEvent = displayModule->getEvent();
 
-    // gameModule->event(*currentEvent);
+    gameModule->event(currentEvent);
     if (currentEvent.key == Key::KeyCode::NONE) return false;
     if (currentEvent.key == Key::KeyCode::SUPPR) std::exit(0);
     if (currentEvent.key == Key::KeyCode::KEY_N) {
         currentEvent.~Event();
-        gfxLoader.switchLib("/home/epi-jo/tek2/cpp/Arcade/lib/NCURSES.so");
+        gfxLoader.switchLib("./lib/arcade_sdl2.so");
         if (gfxLoader.getInstance("getDisplayModule") == nullptr) std::exit(0);
         if (displayModule == nullptr) std::exit(0);
-        displayModule->createWindow(
-            Window(std::make_pair(16, 9), "Arcade",
-                   "/home/epi-jo/tek2/cpp/Arcade/assets/icon.png"));
+        displayModule->createWindow(gameModule->getWindow());
     }
     return true;
 }
 
 int main() {
-    DLLoader<IDisplayModule> gfxLoader(
-        "/home/epi-jo/tek2/cpp/Arcade/lib/SFML.so");
-    // DLLoader<IGameModule> gameLoader("./lib/IGameModule.so");
+    DLLoader<IDisplayModule> gfxLoader("./lib/SFML.so");
+    DLLoader<IGameModule> gameLoader("./lib/arcade_minesweeper.so");
     auto &displayModule = gfxLoader.getInstance("getDisplayModule");
-    Sprite sprite = test();
+    auto &gameModule = gameLoader.getInstance("getGameModule");
     Log logger("ERROR");
+    auto previousTime = std::chrono::high_resolution_clock::now();
+    auto currentTime = std::chrono::high_resolution_clock::now();
 
     Log::setDebug(true);
-    displayModule->createWindow(
-        Window(std::make_pair(16, 9), "Arcade",
-               "/home/epi-jo/tek2/cpp/Arcade/assets/icon.png"));
+    displayModule->createWindow(gameModule->getWindow());
     while (true) {
+        currentTime = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<float> elapsedTime = currentTime - previousTime;
+        previousTime = currentTime;
+
         displayModule->clear();
-        while (handleEvent(displayModule, gfxLoader)) {
+        while (handleEvent(displayModule, gfxLoader, gameModule)) {
         }
-        // for (Sound sound : gameModule->getSound())
-        //     displayModule->handleSound(sound);
-        // for (const std::unique_ptr<IDrawable> &drawable :
-        //      gameModule->getDrawables()) {
-        //     displayModule->draw(*drawable);
-        // }
-        displayModule->draw(sprite);
+        for (Sound sound : gameModule->getSound())
+            displayModule->handleSound(sound);
+        for (const std::unique_ptr<IDrawable> &drawable :
+             gameModule->getDrawables())
+            displayModule->draw(*drawable);
         displayModule->display();
+        gameModule->update(elapsedTime.count());
     }
 
     return 0;
