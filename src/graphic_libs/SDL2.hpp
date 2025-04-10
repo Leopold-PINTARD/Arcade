@@ -20,6 +20,7 @@ namespace graphic {
 
 class SDL2_DL : public IDisplayModule {
  public:
+    static std::map<SDL_Keycode, Key::KeyCode> keys;
     SDL2_DL();
     ~SDL2_DL();
     void createWindow(const Window &window) override;
@@ -28,7 +29,6 @@ class SDL2_DL : public IDisplayModule {
     void clear(void) override;
     Event getEvent(void) override;
     void handleSound(const Sound &sound) override;
-    static std::map<SDL_Keycode, Key::KeyCode> keys;
 
  private:
     SDL2 sdl2;

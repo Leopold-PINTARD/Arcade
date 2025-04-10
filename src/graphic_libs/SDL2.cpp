@@ -18,102 +18,6 @@
 #include "DataStructures/Text.hpp"
 #include "src/log/Log.hpp"
 
-__attribute__((constructor)) void load(void) {
-    std::cout << "Loading SDL2 lib..." << std::endl;
-}
-
-__attribute__((destructor)) void unload(void) {
-    std::cout << "Unloading SDL2 lib..." << std::endl;
-}
-
-extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
-    std::cout << "Entrypoint for SDL2 lib" << std::endl;
-    return std::make_unique<libs::graphic::SDL2_DL>();
-}
-
-libs::graphic::SDL2_DL::SDL2_DL() : sdl2() {}
-
-libs::graphic::SDL2_DL::~SDL2_DL() {
-    std::cout << "Destroying SDL2 lib..." << std::endl;
-}
-
-void libs::graphic::SDL2_DL::createWindow(const Window &window) {
-    sdl2.createWindow(window.title, window.iconPath, window.size.first,
-                      window.size.second);
-}
-
-void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
-    try {
-        const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
-        sdl2.drawSprite(sprite.getGUI_Textures()[sprite.getCurrentTexture()],
-                        sprite.getScale(), sprite.getRotation(),
-                        sprite.getPosition());
-        return;
-    } catch (const std::bad_cast &e) {
-        std::cerr << e.what() << '\n';
-    }
-    try {
-        const Text &text = dynamic_cast<const Text &>(to_draw);
-        sdl2.drawText(sdl2.loadFont(text.getFontPath()), text.getStr(),
-                      sdl2.getColor(text.getGUI_Color()), text.getScale(),
-                      text.getRotation(), text.getPosition());
-        return;
-    } catch (const std::bad_cast &e) {
-        std::cerr << e.what() << '\n';
-    }
-}
-
-void libs::graphic::SDL2_DL::display(void) { sdl2.displayWindow(); }
-
-void libs::graphic::SDL2_DL::clear(void) { sdl2.clearWindow(); }
-
-Event libs::graphic::SDL2_DL::getEvent(void) {
-    SDL2::KeyEvent keyEvent;
-
-    std::cout << "Getting event in sdl lib" << std::endl;
-    sdl2.pollEvent();
-    keyEvent = sdl2.getKeyEvent();
-    if (keyEvent.key == -1) return Event(Key::KeyCode::NONE, 0);
-    if (keys.find(keyEvent.key) == keys.end()) {
-        return Event(Key::KeyCode::NONE, std::any(0));
-    }
-    if (keyEvent.key == SDL_MOUSEMOTION)
-        return Event(keys[keyEvent.key], Key::MousePos{keyEvent.x, keyEvent.y});
-    if (keyEvent.key == SDL_MOUSEWHEEL)
-        return Event(
-            keys[keyEvent.key],
-            std::pair<Key::MousePos, float>{
-                Key::MousePos{keyEvent.x, keyEvent.y}, keyEvent.deltaTime});
-    if (keyEvent.isPressed == true) {
-        if (keyEvent.key == SDL_BUTTON_LEFT ||
-            keyEvent.key == SDL_BUTTON_MIDDLE ||
-            keyEvent.key == SDL_BUTTON_RIGHT || keyEvent.key == SDL_BUTTON_X1 ||
-            keyEvent.key == SDL_BUTTON_X2)
-            return Event(keys[keyEvent.key],
-                         Key::MousePos{keyEvent.x, keyEvent.y});
-        return Event(keys[keyEvent.key], Key::KeyStatus::KEY_PRESSED);
-    }
-    if (keyEvent.isPressed == false) {
-        if (keyEvent.key == SDL_BUTTON_LEFT ||
-            keyEvent.key == SDL_BUTTON_MIDDLE ||
-            keyEvent.key == SDL_BUTTON_RIGHT || keyEvent.key == SDL_BUTTON_X1 ||
-            keyEvent.key == SDL_BUTTON_X2)
-            return Event(keys[keyEvent.key],
-                         Key::MousePos{keyEvent.x, keyEvent.y});
-        return Event(keys[keyEvent.key], Key::KeyStatus::KEY_RELEASED);
-    }
-    return Event(Key::KeyCode::NONE, 0);
-}
-
-void libs::graphic::SDL2_DL::handleSound(const Sound &sound) {
-    if (sound.state == Sound::State::PLAY)
-        sdl2.playSound(sound.filePath, sound.id, false, sound.unique);
-    if (sound.state == Sound::State::STOP)
-        sdl2.stopSound(sound.id, sound.unique);
-    if (sound.state == Sound::State::LOOP)
-        sdl2.playSound(sound.filePath, sound.id, true, sound.unique);
-}
-
 std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_a, Key::KeyCode::KEY_A},
     {SDLK_b, Key::KeyCode::KEY_B},
@@ -185,3 +89,102 @@ std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_RCTRL, Key::KeyCode::R_CONTROL},
     {SDLK_LALT, Key::KeyCode::ALT},
     {SDLK_RALT, Key::KeyCode::ALT}};
+
+__attribute__((constructor)) void load(void) {
+    std::cout << "Loading SDL2 lib..." << std::endl;
+}
+
+__attribute__((destructor)) void unload(void) {
+    std::cout << "Unloading SDL2 lib..." << std::endl;
+}
+
+extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
+    std::cout << "Entrypoint for SDL2 lib" << std::endl;
+    return std::make_unique<libs::graphic::SDL2_DL>();
+}
+
+libs::graphic::SDL2_DL::SDL2_DL() : sdl2() {}
+
+libs::graphic::SDL2_DL::~SDL2_DL() {
+    std::cout << "Destroying SDL2 lib..." << std::endl;
+}
+
+void libs::graphic::SDL2_DL::createWindow(const Window &window) {
+    sdl2.createWindow(window.title, window.iconPath, window.size.first,
+                      window.size.second);
+}
+
+void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
+    try {
+        const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
+        sdl2.drawSprite(sprite.getGUI_Textures()[sprite.getCurrentTexture()],
+                        sprite.getScale(), sprite.getRotation(),
+                        sprite.getPosition());
+        return;
+    } catch (const std::bad_cast &e) {
+        std::cerr << e.what() << '\n';
+    }
+    try {
+        const Text &text = dynamic_cast<const Text &>(to_draw);
+        sdl2.drawText(sdl2.loadFont(text.getFontPath()), text.getStr(),
+                      sdl2.getColor(text.getGUI_Color()), text.getScale(),
+                      text.getRotation(), text.getPosition());
+        return;
+    } catch (const std::bad_cast &e) {
+        std::cerr << e.what() << '\n';
+    }
+}
+
+void libs::graphic::SDL2_DL::display(void) { sdl2.displayWindow(); }
+
+void libs::graphic::SDL2_DL::clear(void) { sdl2.clearWindow(); }
+
+Event libs::graphic::SDL2_DL::getEvent(void) {
+    SDL2::KeyEvent keyEvent;
+
+    sdl2.pollEvent();
+    keyEvent = sdl2.getKeyEvent();
+    if (keyEvent.key == -1) {
+        return Event(Key::KeyCode::NONE, std::any(0));
+    }
+    if (keys.find(keyEvent.key) == keys.end()) {
+        return Event(Key::KeyCode::NONE, std::any(0));
+    }
+    if (keyEvent.key == SDL_MOUSEMOTION)
+        return Event(keys[keyEvent.key],
+                     std::any(Key::MousePos{keyEvent.x, keyEvent.y}));
+    if (keyEvent.key == SDL_MOUSEWHEEL)
+        return Event(
+            keys[keyEvent.key],
+            std::any(std::pair<Key::MousePos, float>{
+                Key::MousePos{keyEvent.x, keyEvent.y}, keyEvent.deltaTime}));
+    if (keyEvent.isPressed == true) {
+        if (keyEvent.key == SDL_BUTTON_LEFT ||
+            keyEvent.key == SDL_BUTTON_MIDDLE ||
+            keyEvent.key == SDL_BUTTON_RIGHT || keyEvent.key == SDL_BUTTON_X1 ||
+            keyEvent.key == SDL_BUTTON_X2)
+            return Event(keys[keyEvent.key],
+                         std::any(Key::MousePos{keyEvent.x, keyEvent.y}));
+        return Event(keys[keyEvent.key], std::any(Key::KeyStatus::KEY_PRESSED));
+    }
+    if (keyEvent.isPressed == false) {
+        if (keyEvent.key == SDL_BUTTON_LEFT ||
+            keyEvent.key == SDL_BUTTON_MIDDLE ||
+            keyEvent.key == SDL_BUTTON_RIGHT || keyEvent.key == SDL_BUTTON_X1 ||
+            keyEvent.key == SDL_BUTTON_X2)
+            return Event(keys[keyEvent.key],
+                         std::any(Key::MousePos{keyEvent.x, keyEvent.y}));
+        return Event(keys[keyEvent.key],
+                     std::any(Key::KeyStatus::KEY_RELEASED));
+    }
+    return Event(Key::KeyCode::NONE, std::any(0));
+}
+
+void libs::graphic::SDL2_DL::handleSound(const Sound &sound) {
+    if (sound.state == Sound::State::PLAY)
+        sdl2.playSound(sound.filePath, sound.id, false, sound.unique);
+    if (sound.state == Sound::State::STOP)
+        sdl2.stopSound(sound.id, sound.unique);
+    if (sound.state == Sound::State::LOOP)
+        sdl2.playSound(sound.filePath, sound.id, true, sound.unique);
+}
