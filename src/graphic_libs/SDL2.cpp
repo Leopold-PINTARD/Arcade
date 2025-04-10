@@ -110,8 +110,8 @@ libs::graphic::SDL2_DL::~SDL2_DL() {
 }
 
 void libs::graphic::SDL2_DL::createWindow(const Window &window) {
-    sdl2.createWindow(window.title, window.iconPath, window.size.first,
-                      window.size.second);
+    sdl2.createWindow(window.title, window.iconPath, window.size.first * 80,
+                      window.size.second * 80);
 }
 
 void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
@@ -119,16 +119,19 @@ void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
         const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
         sdl2.drawSprite(sprite.getGUI_Textures()[sprite.getCurrentTexture()],
                         sprite.getScale(), sprite.getRotation(),
-                        sprite.getPosition());
+                        {sprite.getPosition().first * 80,
+                         sprite.getPosition().second * 80});
         return;
     } catch (const std::bad_cast &e) {
         std::cerr << e.what() << '\n';
     }
     try {
         const Text &text = dynamic_cast<const Text &>(to_draw);
-        sdl2.drawText(sdl2.loadFont(text.getFontPath()), text.getStr(),
-                      sdl2.getColor(text.getGUI_Color()), text.getScale(),
-                      text.getRotation(), text.getPosition());
+        sdl2.drawText(
+            sdl2.loadFont(text.getFontPath()), text.getStr(),
+            sdl2.getColor(text.getGUI_Color()), text.getScale(),
+            text.getRotation(),
+            {text.getPosition().first * 80, text.getPosition().second * 80});
         return;
     } catch (const std::bad_cast &e) {
         std::cerr << e.what() << '\n';

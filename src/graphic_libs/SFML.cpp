@@ -81,8 +81,8 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         sprite_sfml.setTexture(texture);
         sprite_sfml.setColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                        std::get<2>(color), std::get<3>(color)));
-        sprite_sfml.setPosition(sprite.getPosition().first * 100,
-                                sprite.getPosition().second * 100);
+        sprite_sfml.setPosition(sprite.getPosition().first * 80,
+                                sprite.getPosition().second * 80);
         sprite_sfml.setScale(sprite.getScale().first, sprite.getScale().second);
         sprite_sfml.setRotation(sprite.getRotation());
         this->_window->draw(sprite_sfml);
@@ -98,8 +98,8 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         font.loadFromFile(text.getFontPath());
         text_sfml.setString(text.getStr());
         text_sfml.setScale(text.getScale().first, text.getScale().second);
-        text_sfml.setPosition(text.getPosition().first * 100,
-                              text.getPosition().second * 100);
+        text_sfml.setPosition(text.getPosition().first * 80,
+                              text.getPosition().second * 80);
         text_sfml.setFillColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                          std::get<2>(color),
                                          std::get<3>(color)));
