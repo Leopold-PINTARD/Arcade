@@ -57,6 +57,7 @@ int main() {
     // DLLoader<IGameModule> gameLoader("./lib/IGameModule.so");
     auto &displayModule = gfxLoader.getInstance("getDisplayModule");
     Sprite sprite = test();
+    Log logger("ERROR");
 
     Log::setDebug(true);
     displayModule->createWindow(

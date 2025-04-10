@@ -91,23 +91,21 @@ std::map<SDL_Keycode, Key::KeyCode> libs::graphic::SDL2_DL::keys = {
     {SDLK_RALT, Key::KeyCode::ALT}};
 
 __attribute__((constructor)) void load(void) {
-    std::cout << "Loading SDL2 lib..." << std::endl;
+    Log::info() << "Loading SDL2 lib..." << std::endl;
 }
 
 __attribute__((destructor)) void unload(void) {
-    std::cout << "Unloading SDL2 lib..." << std::endl;
+    Log::info() << "Unloading SDL2 lib..." << std::endl;
 }
 
 extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
-    std::cout << "Entrypoint for SDL2 lib" << std::endl;
+    Log::info() << "Entrypoint for SDL2 lib" << std::endl;
     return std::make_unique<libs::graphic::SDL2_DL>();
 }
 
 libs::graphic::SDL2_DL::SDL2_DL() : sdl2() {}
 
-libs::graphic::SDL2_DL::~SDL2_DL() {
-    std::cout << "Destroying SDL2 lib..." << std::endl;
-}
+libs::graphic::SDL2_DL::~SDL2_DL() {}
 
 void libs::graphic::SDL2_DL::createWindow(const Window &window) {
     sdl2.createWindow(window.title, window.iconPath, window.size.first * 80,
