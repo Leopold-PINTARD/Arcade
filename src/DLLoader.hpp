@@ -41,14 +41,11 @@ class DLLoader {
     // Throws a DLLoaderException if the previous library cannot be closed or if
     // the new library cannot be opened
     void switchLib(std::string path) noexcept(false) {
-        std::cerr << "Destroying previous instance" << std::endl;
         _instance.reset(nullptr);
-        std::cerr << "Closing previous library" << std::endl;
         if (dlclose(_libHandle) != 0) {
             _libHandle = NULL;
             throw DLLoaderException(dlerror());
         }
-        std::cerr << "Opening new library" << std::endl;
         _libHandle = dlopen(path.c_str(), RTLD_LAZY);
         if (!_libHandle) throw DLLoaderException(dlerror());
     }
