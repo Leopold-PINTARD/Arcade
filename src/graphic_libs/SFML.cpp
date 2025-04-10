@@ -51,16 +51,17 @@ libs::graphic::SFML::~SFML() {
 void libs::graphic::SFML::createWindow(const Window &window) {
     if (this->_window == nullptr) {
         sf::Image icon;
+
+        this->_window = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(window.size.first * 80, window.size.second * 80),
+            window.title);
+        Log::info() << "Window created" << std::endl;
         if (icon.loadFromFile(window.iconPath) == false) {
             Log::error() << "Failed to load icon from path: " << window.iconPath
                          << std::endl;
             return;
         }
         Log::info() << "Icon loaded" << std::endl;
-        this->_window = std::make_unique<sf::RenderWindow>(
-            sf::VideoMode(window.size.first * 80, window.size.second * 80),
-            window.title);
-        Log::info() << "Window created" << std::endl;
         this->_window->setIcon(icon.getSize().x, icon.getSize().y,
                                icon.getPixelsPtr());
     } else {
