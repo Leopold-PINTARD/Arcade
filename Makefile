@@ -30,6 +30,14 @@ SDL2_GFX_LIB_SRC	=	src/graphic_libs/SDL2.cpp	\
 						wrapper/sdl2/SDL2_window.cpp\
 						src/log/Log.cpp				\
 
+NCURSES_GFX_LIB_SRC	=	src/graphic_libs/NCURSES.cpp	\
+						src/log/Log.cpp				\
+						wrapper/ncurses/Ncurses.cpp	\
+						wrapper/ncurses/NcursesDrawPrimitives.cpp	\
+						wrapper/ncurses/NcursesInputHandling.cpp	\
+						wrapper/ncurses/NcursesWindowManagement.cpp	\
+						wrapper/ncurses/NcursesMouseHandling.cpp	\
+
 MAIN_SRC			=	src/Main.cpp
 
 SRC					=	src/log/Log.cpp
@@ -49,6 +57,8 @@ SFML_GFX_LIB_OBJ	=	$(SFML_GFX_LIB_SRC:.cpp=.o)
 
 SDL2_GFX_LIB_OBJ	=	$(SDL2_GFX_LIB_SRC:.cpp=.o)
 
+NCURSES_GFX_LIB_OBJ	=	$(NCURSES_GFX_LIB_SRC:.cpp=.o)
+
 TEST_LIBS_OBJ		=	$(TEST_LIBS_SRC:.cpp=.so)
 
 # Flags
@@ -56,7 +66,7 @@ INCLUDES			=	-I ./src -I ./ -I ./include
 
 LIB_FLAGS			=	-lsfml-graphics -lsfml-window -lsfml-system	\
 						-lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer	\
-						-ldl										\
+						-ldl -lncurses								\
 
 CPPFLAGS			+=	-std=c++20 -Wall -Wextra -Werror $(INCLUDES) -g	\
 $(LIB_FLAGS) -fno-gnu-unique -fPIC
@@ -85,11 +95,13 @@ core:	$(OBJ) $(MAIN_OBJ)
 
 games:
 
-graphicals: $(SFML_GFX_LIB_OBJ) $(SDL2_GFX_LIB_OBJ)
+graphicals: $(SFML_GFX_LIB_OBJ) $(SDL2_GFX_LIB_OBJ) $(NCURSES_GFX_LIB_OBJ)
 	@echo "Building SFML graphic library..."
 	$(CC) $(CPPFLAGS) -shared -o ./lib/SFML.so $(SFML_GFX_LIB_OBJ)
 	@echo "Building SDL2 graphic library..."
 	$(CC) $(CPPFLAGS) -shared -o ./lib/SDL2.so $(SDL2_GFX_LIB_OBJ)
+	@echo "Building NCURSES graphic library..."
+	$(CC) $(CPPFLAGS) -shared -o ./lib/NCURSES.so $(NCURSES_GFX_LIB_OBJ)
 
 run: re
 	@echo "Running $(NAME)..."
@@ -113,6 +125,7 @@ clean:
 	rm -f $(OBJ) $(MAIN_OBJ) $(TEST_LIBS_OBJ)
 	rm -f $(SFML_GFX_LIB_OBJ)
 	rm -f $(SDL2_GFX_LIB_OBJ)
+	rm -f $(NCURSES_GFX_LIB_OBJ)
 	rm -f ./lib/SFML.so ./lib/SDL2.so
 	rm -f *.gcda
 	rm -f *.gcno
