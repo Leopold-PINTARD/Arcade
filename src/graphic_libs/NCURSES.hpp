@@ -7,9 +7,10 @@
 
 #pragma once
 
-#include <string>
-#include <memory>
 #include <map>
+#include <memory>
+#include <string>
+
 #include "modules/IDisplayModule.hpp"
 #include "wrapper/ncurses/Ncurses.hpp"
 
