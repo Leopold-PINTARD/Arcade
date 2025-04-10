@@ -20,18 +20,26 @@
 
 static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
                         DLLoader<IDisplayModule> &gfxLoader,
-                        std::unique_ptr<IGameModule> &gameModule) {
+                        std::unique_ptr<IGameModule> &gameModule,
+                        DLLoader<IGameModule> &gameLoader) {
     Event currentEvent = displayModule->getEvent();
 
     gameModule->event(currentEvent);
     if (currentEvent.key == Key::KeyCode::NONE) return false;
     if (currentEvent.key == Key::KeyCode::SUPPR) std::exit(0);
-    if (currentEvent.key == Key::KeyCode::KEY_N) {
+    if (currentEvent.key == Key::KeyCode::KEY_1) {
         currentEvent.~Event();
         gfxLoader.switchLib("./lib/arcade_sdl2.so");
         if (gfxLoader.getInstance("getDisplayModule") == nullptr) std::exit(0);
         if (displayModule == nullptr) std::exit(0);
         displayModule->createWindow(gameModule->getWindow());
+    }
+    if (currentEvent.key == Key::KeyCode::KEY_2) {
+        currentEvent.~Event();
+        std::cout << "Switching to pacman" << std::endl;
+        gameLoader.switchLib("./lib/arcade_pacman.so");
+        if (gameLoader.getInstance("getGameModule") == nullptr) std::exit(0);
+        if (gameModule == nullptr) std::exit(0);
     }
     return true;
 }
@@ -53,7 +61,7 @@ int main() {
         previousTime = currentTime;
 
         displayModule->clear();
-        while (handleEvent(displayModule, gfxLoader, gameModule)) {
+        while (handleEvent(displayModule, gfxLoader, gameModule, gameLoader)) {
         }
         for (Sound sound : gameModule->getSound())
             displayModule->handleSound(sound);
