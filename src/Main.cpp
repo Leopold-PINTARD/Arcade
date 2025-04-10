@@ -34,22 +34,28 @@ static Sprite test() {
 
 static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
                         DLLoader<IDisplayModule> &gfxLoader) {
-    Event currentEvent(displayModule->getEvent());
+    Event currentEvent = displayModule->getEvent();
 
     // gameModule->event(*currentEvent);
     if (currentEvent.key == Key::KeyCode::NONE) {
         return false;
     }
     std::cout << "Event: " << currentEvent.key << std::endl;
+    if (currentEvent.key == 14)
+        std::cout << "Typename: " << currentEvent.value.type().name()
+                  << std::endl;
     if (currentEvent.key == Key::KeyCode::SUPPR) std::exit(0);
     if (currentEvent.key == Key::KeyCode::KEY_N) {
         std::cout << "Switching to next lib" << std::endl;
         gfxLoader.switchLib("/home/epi-jo/tek2/cpp/Arcade/lib/SDL2.so");
         std::cout << "Getting instance" << std::endl;
-        gfxLoader.getInstance("getDisplayModule");
+        if (gfxLoader.getInstance("getDisplayModule") == nullptr) {
+            std::cout << "Display module is null" << std::endl;
+            std::exit(0);
+        }
         if (displayModule == nullptr) {
             std::cout << "Display module is null" << std::endl;
-            return 0;
+            std::exit(0);
         }
         std::cout << "Creating window" << std::endl;
         displayModule->createWindow(
@@ -57,12 +63,16 @@ static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
                    "/home/epi-jo/tek2/cpp/Arcade/assets/icon.png"));
         std::cout << "Window created" << std::endl;
     }
+    std::cout << "Event after switch: " << currentEvent.key << std::endl;
+    if (currentEvent.key == 14 && currentEvent.value.has_value())
+        std::cout << "Typename: " << currentEvent.value.type().name()
+                  << std::endl;
     return true;
 }
 
 int main() {
     DLLoader<IDisplayModule> gfxLoader(
-        "/home/epi-jo/tek2/cpp/Arcade/lib/SFML.so");
+        "/home/epi-jo/tek2/cpp/Arcade/lib/SDL2.so");
     // DLLoader<IGameModule> gameLoader("./lib/IGameModule.so");
     auto &displayModule = gfxLoader.getInstance("getDisplayModule");
     // std::unique_ptr<IGameModule> &gameModule =
