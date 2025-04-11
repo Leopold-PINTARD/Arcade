@@ -49,11 +49,16 @@ libs::graphic::SFML::~SFML() {
 }
 
 void libs::graphic::SFML::createWindow(const Window &window) {
+    if (this->_window != nullptr) {
+        this->_window->setSize(
+            sf::Vector2u(window.size.first * 20, window.size.second * 20));
+        return;
+    }
     if (this->_window == nullptr) {
         sf::Image icon;
 
         this->_window = std::make_unique<sf::RenderWindow>(
-            sf::VideoMode(window.size.first * 80, window.size.second * 80),
+            sf::VideoMode(window.size.first * 20, window.size.second * 20),
             window.title);
         Log::info() << "Window created" << std::endl;
         if (icon.loadFromFile(window.iconPath) == false) {
@@ -64,8 +69,6 @@ void libs::graphic::SFML::createWindow(const Window &window) {
         Log::info() << "Icon loaded" << std::endl;
         this->_window->setIcon(icon.getSize().x, icon.getSize().y,
                                icon.getPixelsPtr());
-    } else {
-        Log::info() << "createWindow(): Window already created" << std::endl;
     }
 }
 
@@ -90,8 +93,8 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         sprite_sfml.setTexture(texture);
         sprite_sfml.setColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                        std::get<2>(color), std::get<3>(color)));
-        sprite_sfml.setPosition(sprite.getPosition().first * 80,
-                                sprite.getPosition().second * 80);
+        sprite_sfml.setPosition(sprite.getPosition().first * 20,
+                                sprite.getPosition().second * 20);
         sprite_sfml.setScale(sprite.getScale().first, sprite.getScale().second);
         sprite_sfml.setRotation(sprite.getRotation());
         this->_window->draw(sprite_sfml);
@@ -109,8 +112,8 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
                          << text.getFontPath() << std::endl;
         text_sfml.setString(text.getStr());
         text_sfml.setScale(text.getScale().first, text.getScale().second);
-        text_sfml.setPosition(text.getPosition().first * 80,
-                              text.getPosition().second * 80);
+        text_sfml.setPosition(text.getPosition().first * 20,
+                              text.getPosition().second * 20);
         text_sfml.setFillColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                          std::get<2>(color),
                                          std::get<3>(color)));
@@ -160,26 +163,24 @@ Event libs::graphic::SFML::getEvent(void) {
         return Event(this->keys[event.key.code],
                      std::any(Key::KeyStatus::KEY_RELEASED));
     if (event.type == sf::Event::MouseMoved)
-        return Event(
-            Key::KeyCode::MOUSE_MOVE,
-            std::any(Key::MousePos{event.mouseMove.x, event.mouseMove.y}));
+        return Event(Key::KeyCode::MOUSE_MOVE,
+                     std::any(Key::MousePos{event.mouseMove.x / 20,
+                                            event.mouseMove.y / 20}));
     if (event.type == sf::Event::MouseButtonPressed)
-        return Event(
-            mouse_buttons[event.mouseButton.button],
-            std::any(std::pair<Key::MousePos, Key::KeyStatus>{
-                Key::MousePos{event.mouseButton.x, event.mouseButton.y},
-                Key::KeyStatus::KEY_PRESSED}));
+        return Event(mouse_buttons[event.mouseButton.button],
+                     std::any(Event::MouseStatusClick{
+                         {event.mouseButton.x / 20, event.mouseButton.y / 20},
+                         Event::KeyStatus::KEY_PRESSED}));
     if (event.type == sf::Event::MouseButtonReleased)
-        return Event(
-            mouse_buttons[event.mouseButton.button],
-            std::any(std::pair<Key::MousePos, Key::KeyStatus>{
-                Key::MousePos{event.mouseButton.x, event.mouseButton.y},
-                Key::KeyStatus::KEY_RELEASED}));
+        return Event(mouse_buttons[event.mouseButton.button],
+                     std::any(Event::MouseStatusClick{
+                         {event.mouseButton.x / 20, event.mouseButton.y / 20},
+                         Event::KeyStatus::KEY_RELEASED}));
     if (event.type == sf::Event::MouseWheelScrolled)
         return Event(Key::KeyCode::MOUSE_SCROLL,
-                     std::any(std::pair<Key::MousePos, float>{
-                         Key::MousePos{event.mouseWheelScroll.x,
-                                       event.mouseWheelScroll.y},
+                     std::any(Event::MouseStatusScroll{
+                         Event::MousePos{event.mouseWheelScroll.x / 20,
+                                         event.mouseWheelScroll.y / 20},
                          event.mouseWheelScroll.delta}));
     Log::info() << "getEvent(): Event unrecognized" << std::endl;
     return Event(Key::KeyCode::NONE, std::any(0));

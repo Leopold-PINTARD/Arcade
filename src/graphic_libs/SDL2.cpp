@@ -108,8 +108,8 @@ libs::graphic::SDL2_DL::SDL2_DL() : sdl2() {}
 libs::graphic::SDL2_DL::~SDL2_DL() {}
 
 void libs::graphic::SDL2_DL::createWindow(const Window &window) {
-    sdl2.createWindow(window.title, window.iconPath, window.size.first * 80,
-                      window.size.second * 80);
+    sdl2.createWindow(window.title, window.iconPath, window.size.first * 20,
+                      window.size.second * 20);
 }
 
 void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
@@ -117,8 +117,8 @@ void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
         const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
         sdl2.drawSprite(sprite.getGUI_Textures()[sprite.getCurrentTexture()],
                         sprite.getScale(), sprite.getRotation(),
-                        {sprite.getPosition().first * 80,
-                         sprite.getPosition().second * 80});
+                        {sprite.getPosition().first * 20,
+                         sprite.getPosition().second * 20});
         return;
     } catch (const std::bad_cast &e) {
         std::cerr << e.what() << '\n';
@@ -129,7 +129,7 @@ void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
             sdl2.loadFont(text.getFontPath()), text.getStr(),
             sdl2.getColor(text.getGUI_Color()), text.getScale(),
             text.getRotation(),
-            {text.getPosition().first * 80, text.getPosition().second * 80});
+            {text.getPosition().first * 20, text.getPosition().second * 20});
         return;
     } catch (const std::bad_cast &e) {
         std::cerr << e.what() << '\n';
@@ -155,17 +155,19 @@ Event libs::graphic::SDL2_DL::getEvent(void) {
         return Event(keys[keyEvent.key],
                      std::any(Key::MousePos{keyEvent.x, keyEvent.y}));
     if (keyEvent.key == SDL_MOUSEWHEEL)
-        return Event(
-            keys[keyEvent.key],
-            std::any(std::pair<Key::MousePos, float>{
-                Key::MousePos{keyEvent.x, keyEvent.y}, keyEvent.deltaTime}));
+        return Event(keys[keyEvent.key],
+                     std::any(Event::MouseStatusScroll{
+                         Event::MousePos{keyEvent.x / 20, keyEvent.y / 20},
+                         keyEvent.deltaTime}));
     if (keyEvent.isPressed == true) {
         if (keyEvent.key == SDL_BUTTON_LEFT ||
             keyEvent.key == SDL_BUTTON_MIDDLE ||
             keyEvent.key == SDL_BUTTON_RIGHT || keyEvent.key == SDL_BUTTON_X1 ||
             keyEvent.key == SDL_BUTTON_X2)
             return Event(keys[keyEvent.key],
-                         std::any(Key::MousePos{keyEvent.x, keyEvent.y}));
+                         std::any(Event::MouseStatusClick{
+                             {keyEvent.x / 20, keyEvent.y / 20},
+                             Event::KeyStatus::KEY_PRESSED}));
         return Event(keys[keyEvent.key], std::any(Key::KeyStatus::KEY_PRESSED));
     }
     if (keyEvent.isPressed == false) {
@@ -174,7 +176,9 @@ Event libs::graphic::SDL2_DL::getEvent(void) {
             keyEvent.key == SDL_BUTTON_RIGHT || keyEvent.key == SDL_BUTTON_X1 ||
             keyEvent.key == SDL_BUTTON_X2)
             return Event(keys[keyEvent.key],
-                         std::any(Key::MousePos{keyEvent.x, keyEvent.y}));
+                         std::any(Event::MouseStatusClick{
+                             {keyEvent.x / 20, keyEvent.y / 20},
+                             Event::KeyStatus::KEY_RELEASED}));
         return Event(keys[keyEvent.key],
                      std::any(Key::KeyStatus::KEY_RELEASED));
     }
