@@ -111,7 +111,8 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
             Log::error() << "Failed to load font from path: "
                          << text.getFontPath() << std::endl;
         text_sfml.setString(text.getStr());
-        text_sfml.setScale(text.getScale().first, text.getScale().second);
+        text_sfml.setScale(text.getScale().first * 0.01,
+                           text.getScale().second * 0.01);
         text_sfml.setPosition(text.getPosition().first * 20,
                               text.getPosition().second * 20);
         text_sfml.setFillColor(sf::Color(std::get<0>(color), std::get<1>(color),
@@ -119,6 +120,7 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
                                          std::get<3>(color)));
         text_sfml.setRotation(text.getRotation());
         text_sfml.setFont(font);
+        text_sfml.setCharacterSize(150);
         this->_window->draw(text_sfml);
         return;
     } catch (const std::bad_cast &e) {
