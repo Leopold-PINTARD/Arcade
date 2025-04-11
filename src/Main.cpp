@@ -40,6 +40,7 @@ static bool handleEvent(std::unique_ptr<IDisplayModule> &displayModule,
         gameLoader.switchLib("./lib/arcade_pacman.so");
         if (gameLoader.getInstance("getGameModule") == nullptr) std::exit(0);
         if (gameModule == nullptr) std::exit(0);
+        displayModule->createWindow(gameModule->getWindow());
     }
     return true;
 }
