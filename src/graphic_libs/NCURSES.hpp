@@ -1,28 +1,29 @@
 /*
 ** EPITECH PROJECT, 2025
-** SDL2.hpp
+** Arcade
 ** File description:
-** SDL2.hpp
+** NCURSES
 */
 
-#ifndef SRC_GRAPHIC_LIBS_SDL2_HPP_
-#define SRC_GRAPHIC_LIBS_SDL2_HPP_
+#pragma once
 
 #include <map>
+#include <memory>
+#include <string>
 
-#include "DataStructures/Event.hpp"
-#include "DataStructures/Keys.hpp"
 #include "modules/IDisplayModule.hpp"
-#include "wrapper/sdl2/SDL2.hpp"
+#include "wrapper/ncurses/Ncurses.hpp"
 
 namespace libs {
 namespace graphic {
 
-class SDL2_DL : public IDisplayModule {
+class NCURSES : public IDisplayModule {
  public:
-    static std::map<SDL_Keycode, Key::KeyCode> keys;
-    SDL2_DL();
-    ~SDL2_DL();
+    static std::map<Ncurses::Key, Key::KeyCode> keys;
+    static std::map<Ncurses::Button, Key::KeyCode> mouse_buttons;
+    static std::map<Ncurses::Color, CLI_Color> colors;
+    NCURSES();
+    ~NCURSES();
     void createWindow(const Window &window) override;
     void draw(const IDrawable &to_draw) override;
     void display(void) override;
@@ -30,11 +31,10 @@ class SDL2_DL : public IDisplayModule {
     Event getEvent(void) override;
     void handleSound(const Sound &sound) override;
 
+ protected:
  private:
-    SDL2 sdl2;
+    Ncurses ncurses;
 };
 
 }  // namespace graphic
 }  // namespace libs
-
-#endif  // SRC_GRAPHIC_LIBS_SDL2_HPP_

@@ -35,6 +35,7 @@ void Ncurses::initKeyMap() {
     _keyMap[27] = Key::ESCAPE;
     _keyMap[' '] = Key::SPACE;
     _keyMap[KEY_BACKSPACE] = Key::BACKSPACE;
+    _keyMap[KEY_DC] = Key::SUPPR;
     _keyMap['\t'] = Key::TAB;
     for (int i = 0; i < 26; i++) {
         _keyMap['a' + i] = static_cast<Key>(static_cast<int>(Key::A) + i);

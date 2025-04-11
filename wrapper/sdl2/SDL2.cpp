@@ -7,6 +7,8 @@
 
 #include <SDL2/SDL_ttf.h>
 
+#include <iostream>
+
 #include "wrapper/sdl2/SDL2.hpp"
 
 SDL2::SDL2() : window(nullptr), renderer(nullptr), keyEvents({}), sounds({}) {

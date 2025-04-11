@@ -12,15 +12,26 @@
 #include <utility>
 #include <vector>
 
-#include <DataStructures/IDrawable.hpp>
+#include "IDrawable.hpp"
 
 class Sprite : public IDrawable {
  public:
+    Sprite()
+        : GUI_Textures{},
+          CLI_Textures{},
+          animationTime(0.0f),
+          scale{1.0f, 1.0f},
+          rotation(0.0f),
+          CLI_color{CLI_Color::CLI_WHITE, CLI_Color::CLI_WHITE},
+          GUI_color{255, 255, 255, 255},
+          position{0, 0},
+          currentTexture(0) {}
+
     std::vector<std::string> getGUI_Textures(void) const {
         return GUI_Textures;
     }
 
-    std::vector<std::string> getCLI_Textures(void) const {
+    const std::vector<std::string> &getCLI_Textures() const {
         return CLI_Textures;
     }
 
@@ -29,11 +40,11 @@ class Sprite : public IDrawable {
     unsigned int getCurrentTexture(void) const { return currentTexture; }
 
     void setGUI_Textures(std::vector<std::string> GUI_Textures) {
-        this->GUI_Textures = GUI_Textures;
+        this->GUI_Textures = std::move(GUI_Textures);
     }
 
     void setCLI_Textures(std::vector<std::string> CLI_Textures) {
-        this->CLI_Textures = CLI_Textures;
+        this->CLI_Textures = std::move(CLI_Textures);
     }
 
     void setAnimationTime(float animationTime) {
@@ -59,21 +70,21 @@ class Sprite : public IDrawable {
     std::pair<int, int> getPosition(void) const override { return position; }
 
     void setScale(std::pair<float, float> scale) override {
-        this->scale = scale;
+        this->scale = std::move(scale);
     }
 
     void setRotation(float rotation) override { this->rotation = rotation; }
 
     void setCLI_Color(std::pair<CLI_Color, CLI_Color> CLI_Color) override {
-        this->CLI_color = CLI_Color;
+        this->CLI_color = std::move(CLI_Color);
     }
 
     void setGUI_Color(std::tuple<int, int, int, int> GUI_Color) override {
-        this->GUI_color = GUI_Color;
+        this->GUI_color = std::move(GUI_Color);
     }
 
     void setPosition(std::pair<int, int> position) override {
-        this->position = position;
+        this->position = std::move(position);
     }
 
  private:
@@ -86,4 +97,5 @@ class Sprite : public IDrawable {
     std::pair<CLI_Color, CLI_Color> CLI_color;
     std::tuple<int, int, int, int> GUI_color;
     std::pair<int, int> position;
+    unsigned int currentTexture;
 };

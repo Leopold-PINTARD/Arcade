@@ -53,6 +53,7 @@ class Ncurses {
         SPACE,
         BACKSPACE,
         TAB,
+        SUPPR,
 
         A,
         B,
