@@ -73,6 +73,24 @@ bool Arcade::handleMenuEvent() {
         }
         cycleCurrentGameLib();
     }
+    if (currentEvent.key == Key::KeyCode::TAB) {
+        try {
+            if (std::any_cast<Event::KeyStatus>(currentEvent.value) !=
+                Event::KeyStatus::KEY_PRESSED)
+                return true;
+        } catch (const std::bad_any_cast &e) {
+            return true;
+        }
+        _gameLoader.switchLib(_currentGameLib);
+        if (_gameLoader.getInstance("getGameModule") == nullptr) std::exit(84);
+        if (_gameModule == nullptr) std::exit(84);
+        _gfxLoader.switchLib(_currentGfxLib);
+        if (_gfxLoader.getInstance("getDisplayModule") == nullptr)
+            std::exit(84);
+        if (_displayModule == nullptr) std::exit(84);
+        _displayModule->createWindow(_gameModule->getWindow());
+        _inMenu = false;
+    }
     return true;
 }
 
