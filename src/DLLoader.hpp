@@ -37,6 +37,15 @@ class DLLoader {
         if (_instance == nullptr) _instance = create();
         return _instance;
     }
+    // Returns true or false if the library does not contain the function
+    bool entrypointExists(std::string entrypoint) noexcept {
+        std::unique_ptr<T> (*create)(void) =
+            reinterpret_cast<std::unique_ptr<T> (*)(void)>(
+                dlsym(_libHandle, entrypoint.c_str()));
+
+        if (create == NULL) return false;
+        return true;
+    }
     // Switches the library to a new one
     // Throws a DLLoaderException if the previous library cannot be closed or if
     // the new library cannot be opened
