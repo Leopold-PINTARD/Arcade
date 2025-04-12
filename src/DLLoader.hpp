@@ -29,6 +29,10 @@ class DLLoader {
     // Throws a DLLoaderException if the function creating the instance
     // is not found
     std::unique_ptr<T> &getInstance(std::string entrypoint) noexcept(false) {
+        if (_libHandle == NULL) {
+            _instance = nullptr;
+            return _instance;
+        }
         std::unique_ptr<T> (*create)(void) =
             reinterpret_cast<std::unique_ptr<T> (*)(void)>(
                 dlsym(_libHandle, entrypoint.c_str()));
