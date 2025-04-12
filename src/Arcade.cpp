@@ -18,6 +18,8 @@
 
 #include "./log/Log.hpp"
 
+static Window menuWindow = {{32, 32}, "Arcade", "./assets/icon.png"};
+
 Arcade::Arcade(std::string gfxLib)
     : _previousTime(std::chrono::high_resolution_clock::now()),
       _currentTime(std::chrono::high_resolution_clock::now()),
@@ -39,6 +41,30 @@ void Arcade::cycleCurrentGfxLib() {
         _currentGfxLib = _gfxModules.front();
 }
 
+bool Arcade::eventStatusIs(Event::KeyStatus status, Event currentEvent) {
+    try {
+        if (std::any_cast<Event::KeyStatus>(currentEvent.value) == status)
+            return true;
+        return false;
+    } catch (const std::bad_any_cast &e) {
+        return false;
+    }
+}
+
+void Arcade::switchGfxLib(std::string path, const Window &window) {
+    _gfxLoader.switchLib(path);
+    if (_gfxLoader.getInstance("getDisplayModule") == nullptr) std::exit(84);
+    if (_displayModule == nullptr) std::exit(84);
+    _displayModule->createWindow(window);
+}
+
+void Arcade::switchGameLib(std::string path) {
+    _gameLoader.switchLib(path);
+    if (_gameLoader.getInstance("getGameModule") == nullptr) std::exit(84);
+    if (_displayModule == nullptr) std::exit(84);
+    switchGfxLib(_currentGfxLib, _gameModule->getWindow());
+}
+
 void Arcade::cycleCurrentGameLib() {
     auto it =
         std::find(_gameModules.begin(), _gameModules.end(), _currentGameLib);
@@ -54,42 +80,28 @@ bool Arcade::handleMenuEvent() {
     if (currentEvent.key == Key::KeyCode::NONE) return false;
     if (currentEvent.key == Key::KeyCode::ECHAP) std::exit(0);
     if (currentEvent.key == Key::KeyCode::KEY_1) {
-        try {
-            if (std::any_cast<Event::KeyStatus>(currentEvent.value) !=
-                Event::KeyStatus::KEY_PRESSED)
-                return true;
-        } catch (const std::bad_any_cast &e) {
+        if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
             return true;
-        }
         cycleCurrentGfxLib();
     }
     if (currentEvent.key == Key::KeyCode::KEY_2) {
-        try {
-            if (std::any_cast<Event::KeyStatus>(currentEvent.value) !=
-                Event::KeyStatus::KEY_PRESSED)
-                return true;
-        } catch (const std::bad_any_cast &e) {
+        if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
             return true;
-        }
         cycleCurrentGameLib();
     }
     if (currentEvent.key == Key::KeyCode::TAB) {
-        try {
-            if (std::any_cast<Event::KeyStatus>(currentEvent.value) !=
-                Event::KeyStatus::KEY_PRESSED)
-                return true;
-        } catch (const std::bad_any_cast &e) {
+        if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
             return true;
-        }
-        _gameLoader.switchLib(_currentGameLib);
-        if (_gameLoader.getInstance("getGameModule") == nullptr) std::exit(84);
-        if (_gameModule == nullptr) std::exit(84);
-        _gfxLoader.switchLib(_currentGfxLib);
-        if (_gfxLoader.getInstance("getDisplayModule") == nullptr)
-            std::exit(84);
-        if (_displayModule == nullptr) std::exit(84);
-        _displayModule->createWindow(_gameModule->getWindow());
+        currentEvent.~Event();
+        switchGameLib(_currentGameLib);
         _inMenu = false;
+        return false;
+    }
+    if (currentEvent.key == Key::KeyCode::KEY_3) {
+        if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
+            return true;
+        currentEvent.~Event();
+        switchGfxLib(_currentGfxLib, menuWindow);
     }
     return true;
 }
@@ -101,36 +113,28 @@ bool Arcade::handleGameEvent() {
     if (currentEvent.key == Key::KeyCode::NONE) return false;
     if (currentEvent.key == Key::KeyCode::ECHAP) std::exit(0);
     if (currentEvent.key == Key::KeyCode::KEY_1) {
-        try {
-            if (std::any_cast<Event::KeyStatus>(currentEvent.value) !=
-                Event::KeyStatus::KEY_PRESSED)
-                return true;
-        } catch (const std::bad_any_cast &e) {
+        if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
             return true;
-        }
         currentEvent.~Event();
         cycleCurrentGfxLib();
-        _gfxLoader.switchLib(_currentGfxLib);
-        if (_gfxLoader.getInstance("getDisplayModule") == nullptr)
-            std::exit(84);
-        if (_displayModule == nullptr) std::exit(84);
-        _displayModule->createWindow(_gameModule->getWindow());
+        switchGameLib(_currentGameLib);
     }
     if (currentEvent.key == Key::KeyCode::KEY_2 ||
         currentEvent.key == Key::KeyCode::KEY_3) {
-        try {
-            if (std::any_cast<Event::KeyStatus>(currentEvent.value) !=
-                Event::KeyStatus::KEY_PRESSED)
-                return true;
-        } catch (const std::bad_any_cast &e) {
+        if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
             return true;
-        }
-        currentEvent.~Event();
         if (currentEvent.key == Key::KeyCode::KEY_2) cycleCurrentGameLib();
-        _gameLoader.switchLib(_currentGameLib);
-        if (_gameLoader.getInstance("getGameModule") == nullptr) std::exit(84);
-        if (_gameModule == nullptr) std::exit(84);
-        _displayModule->createWindow(_gameModule->getWindow());
+        currentEvent.~Event();
+        switchGameLib(_currentGameLib);
+    }
+    if (currentEvent.key == Key::KeyCode::TAB) {
+        if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
+            return true;
+        currentEvent.~Event();
+        _gameLoader.unload();
+        switchGfxLib(_currentGfxLib, menuWindow);
+        _inMenu = true;
+        return false;
     }
     return true;
 }
@@ -141,7 +145,7 @@ void Arcade::run() {
     if (!_inMenu)
         _displayModule->createWindow(_gameModule->getWindow());
     else
-        _displayModule->createWindow({{32, 32}, "Arcade", "./assets/icon.png"});
+        _displayModule->createWindow(menuWindow);
     while (true) {
         if (_inMenu)
             menuLoop();
@@ -158,6 +162,7 @@ void Arcade::gameLoop() {
     _displayModule->clear();
     while (handleGameEvent()) {
     }
+    if (_inMenu) return;
     for (const std::unique_ptr<IDrawable> &drawable :
          _gameModule->getDrawables())
         _displayModule->draw(*drawable);

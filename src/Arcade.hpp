@@ -39,6 +39,9 @@ class Arcade {
     void gameLoop();
     void cycleCurrentGfxLib();
     void cycleCurrentGameLib();
+    bool eventStatusIs(Event::KeyStatus status, Event currentEvent);
+    void switchGfxLib(std::string path, const Window &window);
+    void switchGameLib(std::string path);
     std::chrono::_V2::system_clock::time_point _previousTime;
     std::chrono::_V2::system_clock::time_point _currentTime;
     bool _inMenu;
