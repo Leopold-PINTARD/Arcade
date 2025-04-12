@@ -156,14 +156,14 @@ Event libs::graphic::SFML::getEvent(void) {
         return Event(Key::NONE, std::any(0));
     }
     if (event.type == sf::Event::Closed)
-        return Event(Key::KeyCode::SUPPR,
-                     std::any(Key::KeyStatus::KEY_PRESSED));
+        return Event(Key::KeyCode::ECHAP,
+                     std::any(Event::KeyStatus::KEY_PRESSED));
     if (event.type == sf::Event::KeyPressed)
         return Event(this->keys[event.key.code],
-                     std::any(Key::KeyStatus::KEY_PRESSED));
+                     std::any(Event::KeyStatus::KEY_PRESSED));
     if (event.type == sf::Event::KeyReleased)
         return Event(this->keys[event.key.code],
-                     std::any(Key::KeyStatus::KEY_RELEASED));
+                     std::any(Event::KeyStatus::KEY_RELEASED));
     if (event.type == sf::Event::MouseMoved)
         return Event(Key::KeyCode::MOUSE_MOVE,
                      std::any(Key::MousePos{event.mouseMove.x / 20,
