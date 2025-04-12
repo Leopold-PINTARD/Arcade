@@ -18,7 +18,7 @@
 template <typename T>
 class DLLoader {
  public:
-    DLLoader() = delete;
+    DLLoader() : _libHandle(NULL), _instance(nullptr) {}
     // Opens a shared library
     // Throws a DLLoaderException if the library cannot be opened
     explicit DLLoader(std::string path) noexcept(false) {
@@ -51,7 +51,7 @@ class DLLoader {
     // the new library cannot be opened
     void switchLib(std::string path) noexcept(false) {
         _instance.reset(nullptr);
-        if (dlclose(_libHandle) != 0) {
+        if (_libHandle != NULL && dlclose(_libHandle) != 0) {
             _libHandle = NULL;
             throw DLLoaderException(dlerror());
         }
