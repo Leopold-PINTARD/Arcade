@@ -179,3 +179,16 @@ Test(check_entrypoint, entrypoint_exists) {
     cr_assert(loader.entrypointExists("create") == true);
     cr_assert(loader.entrypointExists("doesnotexist") == false);
 }
+
+Test(unload_lib, test_all_functions_after_unloading) {
+    DLLoader<ILib> loader("./tests/bar.so");
+    std::unique_ptr<ILib> &bar = loader.getInstance("create");
+    bar->init();
+    cr_assert(bar->getName() == "Bar");
+    bar->stop();
+    loader.unload();
+    cr_assert(loader.getInstance("create") == nullptr);
+    cr_assert(loader.entrypointExists("create") == false);
+    loader.switchLib("./tests/bar.so");
+    loader.unload();
+}

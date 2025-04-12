@@ -50,6 +50,14 @@ class DLLoader {
         if (create == NULL) return false;
         return true;
     }
+    void unload() noexcept(false) {
+        _instance.reset(nullptr);
+        if (_libHandle != NULL && dlclose(_libHandle) != 0) {
+            _libHandle = NULL;
+            throw DLLoaderException(dlerror());
+        }
+        _libHandle = NULL;
+    }
     // Switches the library to a new one
     // Throws a DLLoaderException if the previous library cannot be closed or if
     // the new library cannot be opened
@@ -66,7 +74,7 @@ class DLLoader {
     // Throws a DLLoaderException if the library cannot be closed
     ~DLLoader() noexcept(false) {
         _instance.reset(nullptr);
-        if (dlclose(_libHandle) != 0) {
+        if (_libHandle != NULL && dlclose(_libHandle) != 0) {
             _libHandle = NULL;
             throw DLLoaderException(dlerror());
         }
