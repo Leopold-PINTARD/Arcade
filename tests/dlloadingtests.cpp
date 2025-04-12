@@ -133,3 +133,9 @@ Test(switch_lib, switch_lib_then_get_instance, .init = redirect_all_stdout) {
         "Foo stop\n"
         "[End] Unloading foo...\n");
 }
+
+Test(check_entrypoint, entrypoint_exists) {
+    DLLoader<ILib> loader("./tests/bar.so");
+    cr_assert(loader.entrypointExists("create") == true);
+    cr_assert(loader.entrypointExists("doesnotexist") == false);
+}
