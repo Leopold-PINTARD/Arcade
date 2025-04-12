@@ -14,7 +14,7 @@
 #include "./SDL2.hpp"
 
 TTF_Font *SDL2::loadFont(const std::string &file) {
-    TTF_Font *font = TTF_OpenFont(file.c_str(), 12);
+    TTF_Font *font = TTF_OpenFont(file.c_str(), 150);
 
     if (!font) {
         font = TTF_OpenFont("./assets/fonts/NotoSans.ttf", 12);
@@ -42,8 +42,8 @@ void SDL2::drawText(TTF_Font *font, const std::string text, SDL_Color color,
     SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), color);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_Rect rect = {pos.first, pos.second,
-                     static_cast<int>(surface->w * scale.first),
-                     static_cast<int>(surface->h * scale.second)};
+                     static_cast<int>(surface->w * scale.first * 0.01),
+                     static_cast<int>(surface->h * scale.second * 0.01)};
     SDL_Point center = {rect.w / 2, rect.h / 2};
 
     SDL_RenderCopyEx(renderer, texture, nullptr, &rect, rotation, &center,
