@@ -44,6 +44,7 @@ MAIN_SRC			=	src/Main.cpp
 
 SRC					=	src/log/Log.cpp										\
 						src/Arcade.cpp										\
+						src/Parser.cpp										\
 
 TESTS_SRC			=	tests/dlloadingtests.cpp							\
 
