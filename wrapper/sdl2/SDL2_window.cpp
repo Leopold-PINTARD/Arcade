@@ -34,10 +34,7 @@ void SDL2::createWindow(const std::string &title, const std::string &iconPath,
         getSDLError();
         exit(84);
     }
-    if (!setWindowIcon(window, iconPath)) {
-        getSDLError();
-        exit(84);
-    }
+    if (!setWindowIcon(window, iconPath)) getSDLError();
 }
 
 void SDL2::clearWindow() {

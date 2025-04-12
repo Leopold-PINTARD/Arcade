@@ -10,6 +10,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <string>
 #include <utility>
 
 #include "DataStructures/Event.hpp"
@@ -115,13 +116,13 @@ void libs::graphic::SDL2_DL::createWindow(const Window &window) {
 void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
     try {
         const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
-        sdl2.drawSprite(sprite.getGUI_Textures()[sprite.getCurrentTexture()],
-                        sprite.getScale(), sprite.getRotation(),
+        std::string path = sprite.getGUI_Textures()[sprite.getCurrentTexture()];
+        if (path.empty()) path = "./assets/placeholder.jpg";
+        sdl2.drawSprite(path, sprite.getScale(), sprite.getRotation(),
                         {sprite.getPosition().first * 20,
                          sprite.getPosition().second * 20});
         return;
     } catch (const std::bad_cast &e) {
-        std::cerr << e.what() << '\n';
     }
     try {
         const Text &text = dynamic_cast<const Text &>(to_draw);
@@ -132,7 +133,7 @@ void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
             {text.getPosition().first * 20, text.getPosition().second * 20});
         return;
     } catch (const std::bad_cast &e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << "Couldn't cast to valid IDrawable" << '\n';
     }
 }
 
@@ -168,7 +169,8 @@ Event libs::graphic::SDL2_DL::getEvent(void) {
                          std::any(Event::MouseStatusClick{
                              {keyEvent.x / 20, keyEvent.y / 20},
                              Event::KeyStatus::KEY_PRESSED}));
-        return Event(keys[keyEvent.key], std::any(Key::KeyStatus::KEY_PRESSED));
+        return Event(keys[keyEvent.key],
+                     std::any(Event::KeyStatus::KEY_PRESSED));
     }
     if (keyEvent.isPressed == false) {
         if (keyEvent.key == SDL_BUTTON_LEFT ||
@@ -180,7 +182,7 @@ Event libs::graphic::SDL2_DL::getEvent(void) {
                              {keyEvent.x / 20, keyEvent.y / 20},
                              Event::KeyStatus::KEY_RELEASED}));
         return Event(keys[keyEvent.key],
-                     std::any(Key::KeyStatus::KEY_RELEASED));
+                     std::any(Event::KeyStatus::KEY_RELEASED));
     }
     return Event(Key::KeyCode::NONE, std::any(0));
 }

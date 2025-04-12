@@ -17,8 +17,11 @@ TTF_Font *SDL2::loadFont(const std::string &file) {
     TTF_Font *font = TTF_OpenFont(file.c_str(), 12);
 
     if (!font) {
-        getSDLError();
-        exit(84);
+        font = TTF_OpenFont("./assets/fonts/NotoSans.ttf", 12);
+        if (!font) {
+            getTTFError();
+            exit(84);
+        }
     }
     return font;
 }

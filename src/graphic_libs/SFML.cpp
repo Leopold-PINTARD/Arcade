@@ -56,13 +56,15 @@ void libs::graphic::SFML::createWindow(const Window &window) {
     }
     if (this->_window == nullptr) {
         sf::Image icon;
+        std::string path = window.iconPath;
 
+        if (path.empty()) path = "./assets/placeholder.jpg";
         this->_window = std::make_unique<sf::RenderWindow>(
             sf::VideoMode(window.size.first * 20, window.size.second * 20),
             window.title);
         Log::info() << "Window created" << std::endl;
-        if (icon.loadFromFile(window.iconPath) == false) {
-            Log::error() << "Failed to load icon from path: " << window.iconPath
+        if (icon.loadFromFile(path) == false) {
+            Log::error() << "Failed to load icon from path: " << path
                          << std::endl;
             return;
         }
@@ -82,11 +84,11 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         sf::Texture texture;
         sf::Sprite sprite_sfml;
         std::tuple<int, int, int, int> color = sprite.getGUI_Color();
+        std::string path = sprite.getGUI_Textures()[sprite.getCurrentTexture()];
 
-        if (!texture.loadFromFile(
-                sprite.getGUI_Textures()[sprite.getCurrentTexture()]))
-            Log::error() << "Failed to load texture from path: "
-                         << sprite.getGUI_Textures()[sprite.getCurrentTexture()]
+        if (path.empty()) path = "./assets/placeholder.jpg";
+        if (!texture.loadFromFile(path))
+            Log::error() << "Failed to load texture from path: " << path
                          << std::endl;
         sprite_sfml.setTexture(texture);
         sprite_sfml.setColor(sf::Color(std::get<0>(color), std::get<1>(color),
