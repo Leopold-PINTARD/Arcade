@@ -21,7 +21,7 @@ class Text : public IDrawable {
           scale({1.0f, 1.0f}),
           rotation(0.0f),
           CLI_color({CLI_Color::CLI_WHITE, CLI_Color::CLI_WHITE}),
-          GUI_color({0, 0, 0, 0}),
+          GUI_color({255, 255, 255, 255}),
           position({0, 0}) {}
 
     std::string getFontPath(void) const { return fontPath; }
