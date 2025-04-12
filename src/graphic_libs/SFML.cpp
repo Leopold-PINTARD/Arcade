@@ -73,8 +73,6 @@ void libs::graphic::SFML::createWindow(const Window &window) {
 }
 
 void libs::graphic::SFML::draw(const IDrawable &to_draw) {
-    sf::Texture texture;
-
     if (this->_window == nullptr) {
         Log::info() << "draw(): No window open" << std::endl;
         return;
