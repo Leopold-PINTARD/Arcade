@@ -164,6 +164,16 @@ Test(load_lib_after_instance, load_lib_after_instance,
         "[End] Unloading foo...\n");
 }
 
+Test(load_lib_after_instance, get_instance) {
+    DLLoader<ILib> loader;
+    std::unique_ptr<ILib> &bar = loader.getInstance("create");
+    cr_assert(bar == nullptr);
+    cr_assert(loader.getInstance("create") == nullptr);
+    loader.switchLib("./tests/bar.so");
+    loader.getInstance("create");
+    cr_assert(bar->getName() == "Bar");
+}
+
 Test(check_entrypoint, entrypoint_exists) {
     DLLoader<ILib> loader("./tests/bar.so");
     cr_assert(loader.entrypointExists("create") == true);
