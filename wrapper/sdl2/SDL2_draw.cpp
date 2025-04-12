@@ -50,6 +50,7 @@ void SDL2::drawText(TTF_Font *font, const std::string text, SDL_Color color,
                      SDL_FLIP_NONE);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
+    TTF_CloseFont(font);
 }
 
 void SDL2::drawSprite(const std::string &file, std::pair<float, float> scale,
