@@ -6,15 +6,24 @@
 */
 
 #include <iostream>
+#include <string>
 
 #include "./Arcade.hpp"
+#include "./Parser.hpp"
 
 int main(int ac, char **av) {
-    (void)ac;
-    (void)av;
+    std::string gfxLib;
+
     try {
-        Arcade arcade("./lib/arcade_sfmlother.so",
-                      "./lib/arcade_minesweeper.so");
+        Parser parse(ac, av);
+
+        gfxLib = parse._args[1];
+    } catch (const Parser::ParserException &e) {
+        std::cerr << e.what() << '\n';
+        return 84;
+    }
+    try {
+        Arcade arcade(gfxLib);
         arcade.run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';

@@ -19,7 +19,7 @@
 
 class Arcade {
  public:
-    Arcade(std::string gfxLib, std::string gameLib) noexcept(false);
+    explicit Arcade(std::string gfxLib) noexcept(false);
     Arcade(const Arcade &other) = delete;
     Arcade(Arcade &&other) = delete;
     Arcade &operator=(const Arcade &other) = delete;

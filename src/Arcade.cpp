@@ -14,9 +14,9 @@
 
 #include "./log/Log.hpp"
 
-Arcade::Arcade(std::string gfxLib, std::string gameLib)
+Arcade::Arcade(std::string gfxLib)
     : _gfxLoader(gfxLib),
-      _gameLoader(gameLib),
+      _gameLoader("./lib/arcade_minesweeper.so"),
       _displayModule(_gfxLoader.getInstance("getDisplayModule")),
       _gameModule(_gameLoader.getInstance("getGameModule")) {}
 
