@@ -5,23 +5,24 @@
 ** NCURSES
 */
 
-#include <string>
-#include <cstdio>
-#include <memory>
-#include <iostream>
-#include <tuple>
-#include <map>
-#include <vector>
-#include <utility>
-
 #include "src/graphic_libs/NCURSES.hpp"
-#include "src/log/Log.hpp"
-#include "include/DataStructures/Keys.hpp"
+
+#include <cstdio>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <utility>
+#include <vector>
+
 #include "include/DataStructures/CLI_Colors.hpp"
 #include "include/DataStructures/Event.hpp"
-#include "include/DataStructures/Window.hpp"
-#include "include/DataStructures/Text.hpp"
+#include "include/DataStructures/Keys.hpp"
 #include "include/DataStructures/Sprite.hpp"
+#include "include/DataStructures/Text.hpp"
+#include "include/DataStructures/Window.hpp"
+#include "src/log/Log.hpp"
 
 __attribute__((constructor)) void load(void) {
     Log::info() << "Loading NCURSES lib..." << std::endl;
@@ -36,11 +37,9 @@ extern "C" std::unique_ptr<IDisplayModule> getDisplayModule(void) {
     return std::make_unique<libs::graphic::NCURSES>();
 }
 
-libs::graphic::NCURSES::NCURSES() : ncurses(Ncurses()) {
-}
+libs::graphic::NCURSES::NCURSES() : ncurses(Ncurses()) {}
 
-libs::graphic::NCURSES::~NCURSES() {
-}
+libs::graphic::NCURSES::~NCURSES() {}
 
 void libs::graphic::NCURSES::createWindow(const Window &window) {
     ncurses.resize(window.size.first, window.size.second);
@@ -76,12 +75,9 @@ void libs::graphic::NCURSES::draw(const IDrawable &to_draw) {
 
             for (int y = 0; y < static_cast<int>(scale.second); y++) {
                 for (int x = 0; x < static_cast<int>(scale.first); x++) {
-                    Ncurses::Coordinate pixelCoord = {
-                        coord.x + x,
-                        coord.y + y
-                    };
+                    Ncurses::Coordinate pixelCoord = {coord.x + x, coord.y + y};
                     ncurses.drawPixel(pixelCoord, textures[currentTexture][0],
-                        fg, bg);
+                                      fg, bg);
                 }
             }
         }
@@ -91,35 +87,34 @@ void libs::graphic::NCURSES::draw(const IDrawable &to_draw) {
     ncurses.drawPixel(coord, 'X', fg, bg);
 }
 
-void libs::graphic::NCURSES::display(void) {
-    ncurses.refresh();
-}
+void libs::graphic::NCURSES::display(void) { ncurses.refresh(); }
 
-void libs::graphic::NCURSES::clear(void) {
-    ncurses.erase();
-}
+void libs::graphic::NCURSES::clear(void) { ncurses.erase(); }
 
 Event libs::graphic::NCURSES::getEvent(void) {
     if (ncurses.isKeyPressed()) {
         Ncurses::Key ncursesKey = ncurses.getInput();
         if (keys.find(ncursesKey) != keys.end()) {
             Key::KeyCode arcadeKey = keys[ncursesKey];
-            return Event(arcadeKey, Key::KEY_PRESSED);
+            return Event(arcadeKey, std::any(Event::KeyStatus::KEY_PRESSED));
         }
     }
     Ncurses::MouseEvent mouseEvent = ncurses.getMouseEvent();
     if (mouseEvent.type != Ncurses::EventType::NONE) {
         if (mouseEvent.type == Ncurses::EventType::BUTTON_MOTION) {
-            Key::MousePos pos = {mouseEvent.position.x, mouseEvent.position.y};
-            return Event(Key::KeyCode::MOUSE_MOVE, pos);
+            Event::MousePos pos = {mouseEvent.position.x,
+                                   mouseEvent.position.y};
+            return Event(Key::KeyCode::MOUSE_MOVE, std::any(pos));
         }
         if (mouse_buttons.find(mouseEvent.button) != mouse_buttons.end()) {
             Key::KeyCode buttonCode = mouse_buttons[mouseEvent.button];
-            Key::MousePos pos = {mouseEvent.position.x, mouseEvent.position.y};
-            return Event(buttonCode, pos);
+            Event::MouseStatusClick status = {mouseEvent.position.x,
+                                              mouseEvent.position.y,
+                                              Event::KeyStatus::KEY_PRESSED};
+            return Event(buttonCode, status);
         }
     }
-    return Event(Key::KeyCode::NONE, Key::KEY_RELEASED);
+    return Event(Key::KeyCode::NONE, std::any(0));
 }
 
 void libs::graphic::NCURSES::handleSound(const Sound &sound) {
@@ -194,13 +189,13 @@ std::map<Ncurses::Key, Key::KeyCode> libs::graphic::NCURSES::keys = {
     {Ncurses::Key::F12, Key::KeyCode::FUNCTION_12},
 };
 
-std::map<Ncurses::Button, Key::KeyCode> libs::graphic::NCURSES::mouse_buttons
-    = {
-    {Ncurses::Button::LEFT, Key::KeyCode::MOUSE_LEFT},
-    {Ncurses::Button::MIDDLE, Key::KeyCode::MOUSE_MIDDLE},
-    {Ncurses::Button::RIGHT, Key::KeyCode::MOUSE_RIGHT},
-    {Ncurses::Button::SCROLL_UP, Key::KeyCode::MOUSE_BUTTON_4},
-    {Ncurses::Button::SCROLL_DOWN, Key::KeyCode::MOUSE_BUTTON_5},
+std::map<Ncurses::Button, Key::KeyCode> libs::graphic::NCURSES::mouse_buttons =
+    {
+        {Ncurses::Button::LEFT, Key::KeyCode::MOUSE_LEFT},
+        {Ncurses::Button::MIDDLE, Key::KeyCode::MOUSE_MIDDLE},
+        {Ncurses::Button::RIGHT, Key::KeyCode::MOUSE_RIGHT},
+        {Ncurses::Button::SCROLL_UP, Key::KeyCode::MOUSE_BUTTON_4},
+        {Ncurses::Button::SCROLL_DOWN, Key::KeyCode::MOUSE_BUTTON_5},
 };
 
 std::map<Ncurses::Color, CLI_Color> libs::graphic::NCURSES::colors = {
