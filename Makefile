@@ -43,6 +43,7 @@ NCURSES_GFX_LIB_SRC	=	src/graphic_libs/NCURSES.cpp						\
 MAIN_SRC			=	src/Main.cpp
 
 SRC					=	src/log/Log.cpp										\
+						src/Arcade.cpp										\
 
 TESTS_SRC			=	tests/dlloadingtests.cpp							\
 
