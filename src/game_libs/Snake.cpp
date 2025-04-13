@@ -41,3 +41,6 @@ libs::game::Snake::Snake() : isRunning(true),
     // initSounds();
     initScores();
 }
+
+libs::game::Snake::~Snake() {
+}
