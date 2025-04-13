@@ -62,3 +62,8 @@ bool libs::game::Snake::update(float deltaTime) {
 const Window &libs::game::Snake::getWindow(void) {
     return window;
 }
+
+const std::vector<std::unique_ptr<IDrawable>>
+    &libs::game::Snake::getDrawables(void) {
+    return drawables;
+}
