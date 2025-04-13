@@ -117,7 +117,7 @@ bool Arcade::handleGameEvent() {
             return true;
         currentEvent.~Event();
         cycleCurrentGfxLib();
-        switchGameLib(_currentGameLib);
+        switchGfxLib(_currentGfxLib, _gameModule->getWindow());
     }
     if (currentEvent.key == Key::KeyCode::KEY_2 ||
         currentEvent.key == Key::KeyCode::KEY_3) {
