@@ -47,17 +47,11 @@ void libs::graphic::NCURSES::createWindow(const Window &window) {
 
 void libs::graphic::NCURSES::draw(const IDrawable &to_draw) {
     std::pair<int, int> position = to_draw.getPosition();
-    std::pair<CLI_Color, CLI_Color> colors = to_draw.getCLI_Color();
-    Ncurses::Color fg = Ncurses::Color::WHITE;
-    Ncurses::Color bg = Ncurses::Color::BLACK;
-    for (const auto &colorPair : this->colors) {
-        if (colorPair.second == colors.first) fg = colorPair.first;
-        if (colorPair.second == colors.second) bg = colorPair.first;
-    }
     const Text *text = dynamic_cast<const Text *>(&to_draw);
     if (text != nullptr) {
         Ncurses::Coordinate coord = {position.first, position.second};
-        ncurses.drawText(coord, text->getStr(), fg, bg);
+        ncurses.drawText(coord, text->getStr(), Ncurses::Color::WHITE,
+                         Ncurses::Color::BLACK);
         return;
     }
     const Sprite *sprite = dynamic_cast<const Sprite *>(&to_draw);
@@ -65,6 +59,10 @@ void libs::graphic::NCURSES::draw(const IDrawable &to_draw) {
         unsigned int currentTexture = sprite->getCurrentTexture();
         std::vector<std::string> textures = sprite->getCLI_Textures();
 
+        if (textures.empty()) {
+            textures.push_back("#");
+            currentTexture = 0;
+        }
         if (!textures.empty() && currentTexture < textures.size()) {
             Ncurses::Coordinate coord = {position.first, position.second};
             std::pair<float, float> scale = sprite->getScale();
@@ -73,14 +71,15 @@ void libs::graphic::NCURSES::draw(const IDrawable &to_draw) {
                 for (int x = 0; x < static_cast<int>(scale.first); x++) {
                     Ncurses::Coordinate pixelCoord = {coord.x + x, coord.y + y};
                     ncurses.drawPixel(pixelCoord, textures[currentTexture][0],
-                                      fg, bg);
+                                      Ncurses::Color::WHITE,
+                                      Ncurses::Color::BLACK);
                 }
             }
         }
         return;
     }
     Ncurses::Coordinate coord = {position.first, position.second};
-    ncurses.drawPixel(coord, 'X', fg, bg);
+    ncurses.drawPixel(coord, 'X', Ncurses::Color::WHITE, Ncurses::Color::BLACK);
 }
 
 void libs::graphic::NCURSES::display(void) { ncurses.refresh(); }
@@ -203,4 +202,5 @@ std::map<Ncurses::Color, CLI_Color> libs::graphic::NCURSES::colors = {
     {Ncurses::Color::MAGENTA, CLI_Color::CLI_MAGENTA},
     {Ncurses::Color::CYAN, CLI_Color::CLI_CYAN},
     {Ncurses::Color::WHITE, CLI_Color::CLI_WHITE},
+    {Ncurses::Color::DEFAULT, CLI_Color::CLI_WHITE},
 };
