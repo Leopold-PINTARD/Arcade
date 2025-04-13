@@ -26,3 +26,8 @@ __attribute__((constructor)) void load(void) {
 __attribute__((destructor)) void unload(void) {
     Log::info() << "Unloading Snake game..." << std::endl;
 }
+
+extern "C" std::unique_ptr<IGameModule> getGameModule(void) {
+    Log::info() << "Entrypoint for Snake game" << std::endl;
+    return std::make_unique<libs::game::Snake>();
+}
