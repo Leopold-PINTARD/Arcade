@@ -67,3 +67,7 @@ const std::vector<std::unique_ptr<IDrawable>>
     &libs::game::Snake::getDrawables(void) {
     return drawables;
 }
+
+const std::vector<Sound> &libs::game::Snake::getSound(void) {
+    return sounds;
+}
