@@ -16,20 +16,22 @@
 
 static Sprite createSprite(const std::string path, const std::string text) {
     Sprite sprite;
+    sprite.setCurrentTexture(0);
     sprite.setGUI_Textures({path});
     sprite.setCLI_Textures({text});
+    sprite.setCLI_Color({CLI_Color::CLI_WHITE, CLI_Color::CLI_BLACK});
     return sprite;
 }
 
 void libs::game::Snake::initDrawablesMap(void) {
     drawablesMap["snake"] = std::make_unique<Sprite>(
-        createSprite("assets/snake/body_horizontal.png", "o "));
+        createSprite("assets/snake/body_horizontal.png", "o"));
     drawablesMap["apple"] = std::make_unique<Sprite>(
-        createSprite("assets/snake/apple.png", "a "));
+        createSprite("assets/snake/apple.png", "a"));
     drawablesMap["light_green"] = std::make_unique<Sprite>(
-        createSprite("assets/snake/light_green.png", "# "));
+        createSprite("assets/snake/light_green.png", "."));
     drawablesMap["dark_green"] = std::make_unique<Sprite>(
-        createSprite("assets/snake/dark_green.png", "# "));
+        createSprite("assets/snake/dark_green.png", ","));
 }
 
 void libs::game::Snake::initDrawables(void) {
