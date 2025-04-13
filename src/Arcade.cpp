@@ -187,6 +187,7 @@ void Arcade::menuLoop() {
     Text infoText;
     infoText.setStr("Graphic Libraries");
     infoText.setGUI_Color({255, 255, 255, 255});
+    infoText.setCLI_Color({CLI_Color::CLI_WHITE, CLI_Color::CLI_BLACK});
     infoText.setPosition({0, 0});
     infoText.setFontPath("./assets/fonts/NotoSans.ttf");
     infoText.setScale({10, 10});
@@ -198,6 +199,7 @@ void Arcade::menuLoop() {
         else
             text.setStr("- " + lib);
         text.setGUI_Color({255, 255, 255, 255});
+        text.setCLI_Color({CLI_Color::CLI_WHITE, CLI_Color::CLI_BLACK});
         text.setPosition({0, i + 1});
         text.setFontPath("./assets/fonts/NotoSans.ttf");
         text.setScale({10, 10});
@@ -214,6 +216,7 @@ void Arcade::menuLoop() {
         else
             text.setStr("- " + lib);
         text.setGUI_Color({255, 255, 255, 255});
+        text.setCLI_Color({CLI_Color::CLI_WHITE, CLI_Color::CLI_BLACK});
         text.setPosition({0, i + 3});
         text.setFontPath("./assets/fonts/NotoSans.ttf");
         text.setScale({10, 10});
