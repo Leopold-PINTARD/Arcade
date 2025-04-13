@@ -30,7 +30,6 @@ class Arcade {
     void run() noexcept(false);
     ~Arcade();
 
- protected:
  private:
     bool handleMenuEvent();
     bool handleGameEvent();
