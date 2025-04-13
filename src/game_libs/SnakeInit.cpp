@@ -67,3 +67,8 @@ void libs::game::Snake::initDrawables(void) {
     apple->setPosition(applePosition);
     drawables.push_back(std::move(apple));
 }
+
+void libs::game::Snake::initSounds(void) {
+    sounds.push_back(Sound("assets/snake/music.wav", Sound::State::LOOP,
+                           "music", false));
+}
