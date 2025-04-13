@@ -50,3 +50,17 @@ bool libs::game::Snake::checkCollision(void) {
         isRunning = false;
     return isRunning;
 }
+
+void libs::game::Snake::updateDrawables(void) {
+    drawables.erase(drawables.begin() + 400, drawables.end());
+    for (const auto &pos : snakePosition) {
+        auto snakePart = std::make_unique<Sprite>();
+        *snakePart = *static_cast<Sprite *>(drawablesMap["snake"].get());
+        snakePart->setPosition(pos);
+        drawables.push_back(std::move(snakePart));
+    }
+    auto apple = std::make_unique<Sprite>();
+    *apple = *static_cast<Sprite *>(drawablesMap["apple"].get());
+    apple->setPosition(applePosition);
+    drawables.push_back(std::move(apple));
+}
