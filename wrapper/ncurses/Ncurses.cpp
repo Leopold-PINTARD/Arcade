@@ -33,7 +33,7 @@ void Ncurses::initialize() {
 
 void Ncurses::cleanup() {
     if (_initialized) {
-        if (_window != NULL && _window != stdscr) {
+        if (_window != NULL) {
             delwin(_window);
             _window = NULL;
         }
