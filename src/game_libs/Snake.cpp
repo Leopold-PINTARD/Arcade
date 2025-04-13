@@ -31,3 +31,13 @@ extern "C" std::unique_ptr<IGameModule> getGameModule(void) {
     Log::info() << "Entrypoint for Snake game" << std::endl;
     return std::make_unique<libs::game::Snake>();
 }
+
+libs::game::Snake::Snake() : isRunning(true),
+    window(std::make_pair(198, 108), "Snake", "assets/snake/icon.png"),
+    drawables(), sounds(), scores(), snakeLength(4), appleCount(0),
+    direction(RIGHT), snakePosition(), applePosition({0, 0}) {
+    initDrawablesMap();
+    initDrawables();
+    // initSounds();
+    initScores();
+}
