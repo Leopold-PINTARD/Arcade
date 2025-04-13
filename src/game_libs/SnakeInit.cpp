@@ -72,3 +72,7 @@ void libs::game::Snake::initSounds(void) {
     sounds.push_back(Sound("assets/snake/music.wav", Sound::State::LOOP,
                            "music", false));
 }
+
+void libs::game::Snake::initScores(void) {
+    scores.push_back(std::make_pair("Player", appleCount));
+}
