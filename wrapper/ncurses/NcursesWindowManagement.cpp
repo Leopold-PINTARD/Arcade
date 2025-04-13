@@ -33,7 +33,8 @@ Ncurses::Coordinate Ncurses::getScreenSize() const {
     int x;
     int y;
 
-    if (_window == NULL) return;
+    if (_window == NULL)
+        return {0, 0};
     getmaxyx(_window, y, x);
     return {x, y};
 }
