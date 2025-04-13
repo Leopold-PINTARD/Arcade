@@ -42,3 +42,4 @@ unit_tests
 .vscode/
 vgcore*
 *.log
+minesweeper_scores.txt
