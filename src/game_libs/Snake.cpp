@@ -91,3 +91,7 @@ bool libs::game::Snake::event(const Event &events) {
     }
     return isRunning;
 }
+
+std::vector<std::pair<std::string, int>> libs::game::Snake::getScores(void) {
+    return scores;
+}
