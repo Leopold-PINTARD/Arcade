@@ -102,6 +102,7 @@ bool Arcade::handleMenuEvent() {
             return true;
         currentEvent.~Event();
         switchGfxLib(_currentGfxLib, menuWindow);
+        return false;
     }
     return true;
 }
@@ -118,6 +119,7 @@ bool Arcade::handleGameEvent() {
         currentEvent.~Event();
         cycleCurrentGfxLib();
         switchGfxLib(_currentGfxLib, _gameModule->getWindow());
+        return false;
     }
     if (currentEvent.key == Key::KeyCode::KEY_2 ||
         currentEvent.key == Key::KeyCode::KEY_3) {
@@ -126,6 +128,7 @@ bool Arcade::handleGameEvent() {
         if (currentEvent.key == Key::KeyCode::KEY_2) cycleCurrentGameLib();
         currentEvent.~Event();
         switchGameLib(_currentGameLib);
+        return false;
     }
     if (currentEvent.key == Key::KeyCode::TAB) {
         if (!eventStatusIs(Event::KeyStatus::KEY_PRESSED, currentEvent))
