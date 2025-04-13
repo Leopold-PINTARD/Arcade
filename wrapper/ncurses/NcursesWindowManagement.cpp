@@ -8,21 +8,32 @@
 #include "wrapper/ncurses/Ncurses.hpp"
 
 void Ncurses::resize(int width, int height) {
+    if (_window == NULL) return;
     wresize(_window, height, width);
     wclear(_window);
     wrefresh(_window);
 }
 
-void Ncurses::clear() { wclear(_window); }
+void Ncurses::clear() {
+    if (_window == NULL) return;
+    wclear(_window);
+}
 
-void Ncurses::erase() { werase(_window); }
+void Ncurses::erase() {
+    if (_window == NULL) return;
+    werase(_window);
+}
 
-void Ncurses::refresh() { wrefresh(_window); }
+void Ncurses::refresh() {
+    if (_window == NULL) return;
+    wrefresh(_window);
+}
 
 Ncurses::Coordinate Ncurses::getScreenSize() const {
     int x;
     int y;
 
+    if (_window == NULL) return;
     getmaxyx(_window, y, x);
     return {x, y};
 }
