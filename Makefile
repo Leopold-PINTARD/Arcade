@@ -40,6 +40,11 @@ NCURSES_GFX_LIB_SRC	=	src/graphic_libs/NCURSES.cpp						\
 						wrapper/ncurses/NcursesWindowManagement.cpp			\
 						wrapper/ncurses/NcursesMouseHandling.cpp			\
 
+SNAKE_GAME_SRC		=	src/game_libs/Snake.cpp								\
+						src/game_libs/SnakeInit.cpp							\
+						src/game_libs/SnakeMove.cpp							\
+						src/log/Log.cpp										\
+
 MAIN_SRC			=	src/Main.cpp
 
 SRC					=	src/log/Log.cpp										\
@@ -62,6 +67,8 @@ SFML_GFX_LIB_OBJ	=	$(SFML_GFX_LIB_SRC:.cpp=.o)
 SDL2_GFX_LIB_OBJ	=	$(SDL2_GFX_LIB_SRC:.cpp=.o)
 
 NCURSES_GFX_LIB_OBJ	=	$(NCURSES_GFX_LIB_SRC:.cpp=.o)
+
+SNAKE_GAME_OBJ		=	$(SNAKE_GAME_SRC:.cpp=.o)
 
 TEST_LIBS_OBJ		=	$(TEST_LIBS_SRC:.cpp=.so)
 
@@ -97,7 +104,9 @@ core:	$(OBJ) $(MAIN_OBJ)
 	@echo "Building arcade..."
 	$(CC) -o arcade $(OBJ) $(MAIN_OBJ)
 
-games:
+games: $(SNAKE_GAME_OBJ)
+	@echo "Building snake game library..."
+	$(CC) $(CPPFLAGS) -shared -o ./lib/arcade_snake.so $(SNAKE_GAME_OBJ)
 
 graphicals: $(SFML_GFX_LIB_OBJ) $(SDL2_GFX_LIB_OBJ) $(NCURSES_GFX_LIB_OBJ)
 	@echo "Building SFML graphic library..."
@@ -130,9 +139,11 @@ clean:
 	rm -f $(SFML_GFX_LIB_OBJ)
 	rm -f $(SDL2_GFX_LIB_OBJ)
 	rm -f $(NCURSES_GFX_LIB_OBJ)
+	rm -f $(SNAKE_GAME_OBJ)
 	rm -f ./lib/arcade_sfml.so
 	rm -f ./lib/arcade_sdl2.so
 	rm -f ./lib/arcade_ncurses.so
+	rm -f ./lib/arcade_snake.so
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f vgcore.*
