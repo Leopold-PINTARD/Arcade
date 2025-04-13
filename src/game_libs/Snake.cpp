@@ -71,3 +71,23 @@ const std::vector<std::unique_ptr<IDrawable>>
 const std::vector<Sound> &libs::game::Snake::getSound(void) {
     return sounds;
 }
+
+bool libs::game::Snake::event(const Event &events) {
+    if (events.key == Key::KeyCode::LEFT) {
+        if (direction != RIGHT)
+            direction = LEFT;
+    }
+    if (events.key == Key::KeyCode::RIGHT) {
+        if (direction != LEFT)
+            direction = RIGHT;
+    }
+    if (events.key == Key::KeyCode::UP) {
+        if (direction != DOWN)
+            direction = UP;
+    }
+    if (events.key == Key::KeyCode::DOWN) {
+        if (direction != UP)
+            direction = DOWN;
+    }
+    return isRunning;
+}
