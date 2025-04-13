@@ -93,9 +93,11 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         sprite_sfml.setTexture(texture);
         sprite_sfml.setColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                        std::get<2>(color), std::get<3>(color)));
-        sprite_sfml.setPosition(sprite.getPosition().first * 20,
-                                sprite.getPosition().second * 20);
         sprite_sfml.setScale(sprite.getScale().first, sprite.getScale().second);
+        sprite_sfml.setOrigin(texture.getSize().x / 2.0f,
+                              texture.getSize().y / 2.0f);
+        sprite_sfml.setPosition(sprite.getPosition().first * 20 + 10,
+                                sprite.getPosition().second * 20 + 10);
         sprite_sfml.setRotation(sprite.getRotation());
         this->_window->draw(sprite_sfml);
         return;
