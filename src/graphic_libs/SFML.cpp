@@ -84,8 +84,9 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         sf::Texture texture;
         sf::Sprite sprite_sfml;
         std::tuple<int, int, int, int> color = sprite.getGUI_Color();
-        std::string path = sprite.getGUI_Textures()[sprite.getCurrentTexture()];
-
+        std::string path = "./assets/placeholder.jpg";
+        if (sprite.getGUI_Textures().empty() == false)
+            path = sprite.getGUI_Textures()[sprite.getCurrentTexture()];
         if (path.empty()) path = "./assets/placeholder.jpg";
         if (!texture.loadFromFile(path))
             Log::error() << "Failed to load texture from path: " << path
@@ -120,9 +121,9 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         text_sfml.setFillColor(sf::Color(std::get<0>(color), std::get<1>(color),
                                          std::get<2>(color),
                                          std::get<3>(color)));
-        text_sfml.setRotation(text.getRotation());
         text_sfml.setFont(font);
         text_sfml.setCharacterSize(150);
+        text_sfml.setRotation(text.getRotation());
         this->_window->draw(text_sfml);
         return;
     } catch (const std::bad_cast &e) {

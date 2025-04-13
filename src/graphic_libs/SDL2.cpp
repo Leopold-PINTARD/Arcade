@@ -116,7 +116,9 @@ void libs::graphic::SDL2_DL::createWindow(const Window &window) {
 void libs::graphic::SDL2_DL::draw(const IDrawable &to_draw) {
     try {
         const Sprite &sprite = dynamic_cast<const Sprite &>(to_draw);
-        std::string path = sprite.getGUI_Textures()[sprite.getCurrentTexture()];
+        std::string path = "./assets/placeholder.jpg";
+        if (sprite.getGUI_Textures().empty() == false)
+            path = sprite.getGUI_Textures()[sprite.getCurrentTexture()];
         if (path.empty()) path = "./assets/placeholder.jpg";
         sdl2.drawSprite(path, sprite.getScale(), sprite.getRotation(),
                         {sprite.getPosition().first * 20,
