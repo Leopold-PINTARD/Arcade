@@ -33,9 +33,9 @@ void Ncurses::initialize() {
 
 void Ncurses::cleanup() {
     if (_initialized) {
-        if (_window != nullptr && _window != stdscr) {
+        if (_window != NULL && _window != stdscr) {
             delwin(_window);
-            _window = nullptr;
+            _window = NULL;
         }
         endwin();
         _initialized = false;
