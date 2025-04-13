@@ -44,3 +44,17 @@ libs::game::Snake::Snake() : isRunning(true),
 
 libs::game::Snake::~Snake() {
 }
+
+bool libs::game::Snake::update(float deltaTime) {
+    static float time = 0;
+
+    time += deltaTime;
+    if (time >= 1.0f) {
+        time = 0;
+        moveSnake();
+        if (checkCollision() == false)
+            return isRunning;
+        updateDrawables();
+    }
+    return isRunning;
+}
