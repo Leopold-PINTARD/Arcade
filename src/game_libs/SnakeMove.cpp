@@ -37,3 +37,16 @@ void libs::game::Snake::moveSnake(void) {
     }
     snakePosition.insert(snakePosition.begin(), newHead);
 }
+
+bool libs::game::Snake::checkCollision(void) {
+    for (size_t i = 1; i < snakePosition.size(); ++i) {
+        if (snakePosition[i] == snakePosition.front()) {
+            isRunning = false;
+            return isRunning;
+        }
+    }
+    if (snakePosition.front().first < 0 || snakePosition.front().first >= 20 ||
+        snakePosition.front().second < 0 || snakePosition.front().second >= 20)
+        isRunning = false;
+    return isRunning;
+}
