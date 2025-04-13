@@ -109,10 +109,11 @@ void libs::graphic::SFML::draw(const IDrawable &to_draw) {
         sf::Text text_sfml;
         std::tuple<int, int, int, int> color = text.getGUI_Color();
         sf::Font font;
-
-        if (!font.loadFromFile(text.getFontPath()))
-            Log::error() << "Failed to load font from path: "
-                         << text.getFontPath() << std::endl;
+        std::string path = text.getFontPath();
+        if (path.empty()) path = "./assets/fonts/NotoSans.ttf";
+        if (!font.loadFromFile(path))
+            Log::error() << "Failed to load font from path: " << path
+                         << std::endl;
         text_sfml.setString(text.getStr());
         text_sfml.setScale(text.getScale().first * 0.01,
                            text.getScale().second * 0.01);
