@@ -58,3 +58,7 @@ bool libs::game::Snake::update(float deltaTime) {
     }
     return isRunning;
 }
+
+const Window &libs::game::Snake::getWindow(void) {
+    return window;
+}
