@@ -22,3 +22,7 @@
 __attribute__((constructor)) void load(void) {
     Log::info() << "Loading Snake game..." << std::endl;
 }
+
+__attribute__((destructor)) void unload(void) {
+    Log::info() << "Unloading Snake game..." << std::endl;
+}
