@@ -51,12 +51,8 @@ void libs::graphic::NCURSES::draw(const IDrawable &to_draw) {
     Ncurses::Color fg = Ncurses::Color::WHITE;
     Ncurses::Color bg = Ncurses::Color::BLACK;
     for (const auto &colorPair : this->colors) {
-        if (colorPair.second == colors.first) {
-            fg = colorPair.first;
-        }
-        if (colorPair.second == colors.second) {
-            bg = colorPair.first;
-        }
+        if (colorPair.second == colors.first) fg = colorPair.first;
+        if (colorPair.second == colors.second) bg = colorPair.first;
     }
     const Text *text = dynamic_cast<const Text *>(&to_draw);
     if (text != nullptr) {
@@ -189,8 +185,8 @@ std::map<Ncurses::Key, Key::KeyCode> libs::graphic::NCURSES::keys = {
     {Ncurses::Key::F12, Key::KeyCode::FUNCTION_12},
 };
 
-std::map<Ncurses::Button, Key::KeyCode>
-    libs::graphic::NCURSES::mouse_buttons = {
+std::map<Ncurses::Button, Key::KeyCode> libs::graphic::NCURSES::mouse_buttons =
+    {
         {Ncurses::Button::LEFT, Key::KeyCode::MOUSE_LEFT},
         {Ncurses::Button::MIDDLE, Key::KeyCode::MOUSE_MIDDLE},
         {Ncurses::Button::RIGHT, Key::KeyCode::MOUSE_RIGHT},
