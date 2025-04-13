@@ -5,6 +5,8 @@
 ** NcursesInputHandling
 */
 
+#include <iostream>
+
 #include "./Ncurses.hpp"
 
 Ncurses::Key Ncurses::getInput() {
@@ -19,11 +21,12 @@ Ncurses::Key Ncurses::getInput() {
 bool Ncurses::isKeyPressed() {
     int ch = wgetch(_window);
 
-    if (ch != ERR) {
-        ungetch(ch);
-        return true;
+    if (ch == ERR) return false;
+    if (ungetch(ch) == ERR) {
+        std::cerr << "Error ungetting character" << std::endl;
+        return false;
     }
-    return false;
+    return true;
 }
 
 void Ncurses::initKeyMap() {

@@ -7,6 +7,8 @@
 
 #include "wrapper/ncurses/Ncurses.hpp"
 
+#include <iostream>
+
 Ncurses::Ncurses() { initialize(); }
 
 Ncurses::Ncurses(int width, int height) {
@@ -19,13 +21,35 @@ Ncurses::~Ncurses() { cleanup(); }
 void Ncurses::initialize() {
     if (!_initialized) {
         _window = initscr();
+        if (_window == NULL) {
+            std::cerr << "Error initializing NCurses" << std::endl;
+            exit(84);
+        }
         _initialized = true;
-        noecho();
-        cbreak();
-        keypad(_window, TRUE);
-        curs_set(0);
-        start_color();
-        nodelay(_window, TRUE);
+        if (noecho() == ERR) {
+            std::cerr << "Error setting noecho" << std::endl;
+            exit(84);
+        }
+        if (curs_set(0) == ERR) {
+            std::cerr << "Error setting cursor visibility" << std::endl;
+            exit(84);
+        }
+        if (cbreak() == ERR) {
+            std::cerr << "Error setting cbreak mode" << std::endl;
+            exit(84);
+        }
+        if (keypad(_window, TRUE) == ERR) {
+            std::cerr << "Error enabling keypad" << std::endl;
+            exit(84);
+        }
+        if (start_color() == ERR) {
+            std::cerr << "Error starting color mode" << std::endl;
+            exit(84);
+        }
+        if (nodelay(_window, TRUE) == ERR) {
+            std::cerr << "Error setting nodelay mode" << std::endl;
+            exit(84);
+        }
         initColors();
         initKeyMap();
     }
@@ -33,11 +57,17 @@ void Ncurses::initialize() {
 
 void Ncurses::cleanup() {
     if (_initialized) {
-        if (_window != NULL) {
-            delwin(_window);
+        if (_window != NULL && _window != stdscr) {
+            if (delwin(_window)) {
+                std::cerr << "Error deleting NCurses window" << std::endl;
+                exit(84);
+            }
             _window = NULL;
         }
-        endwin();
+        if (endwin() == ERR) {
+            std::cerr << "Error ending NCurses mode" << std::endl;
+            exit(84);
+        }
         _initialized = false;
     }
 }

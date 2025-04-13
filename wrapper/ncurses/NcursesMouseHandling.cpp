@@ -7,6 +7,8 @@
 
 #include "wrapper/ncurses/Ncurses.hpp"
 
+#include <cstdio>
+
 void Ncurses::enableMouse(bool enable) {
     if (enable) {
         mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
@@ -19,7 +21,7 @@ void Ncurses::enableMouse(bool enable) {
     }
 }
 
-void determineButton(Ncurses::MouseEvent& event, MEVENT& mevent) {
+void determineButton(Ncurses::MouseEvent &event, MEVENT &mevent) {
     if (mevent.bstate & BUTTON1_PRESSED)
         event.button = Ncurses::Button::LEFT;
     else if (mevent.bstate & BUTTON2_PRESSED)

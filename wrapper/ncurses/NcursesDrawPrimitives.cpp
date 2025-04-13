@@ -5,6 +5,7 @@
 ** NcursesDrawPrimitives
 */
 
+#include <iostream>
 #include <string>
 
 #include "wrapper/ncurses/Ncurses.hpp"
@@ -39,18 +40,27 @@ void Ncurses::drawBox(Ncurses::Coordinate xy, int width, int height, Color fg,
     WINDOW* boxWin = subwin(_window, height, width, xy.y, xy.x);
     if (boxWin == NULL) {
         wattroff(_window, COLOR_PAIR(getPairNumber(fg, bg)));
-        return;
     }
-    box(boxWin, 0, 0);
-    wrefresh(boxWin);
-    delwin(boxWin);
+    if (box(boxWin, 0, 0) == ERR) {
+        std::cerr << "Error creating subwindow" << std::endl;
+    }
+    if (wrefresh(boxWin) == ERR) {
+        std::cerr << "Error refreshing subwindow" << std::endl;
+    }
+    if (delwin(boxWin) == ERR) {
+        std::cerr << "Error deleting subwindow" << std::endl;
+    }
     wattroff(_window, COLOR_PAIR(getPairNumber(fg, bg)));
 }
 
 void Ncurses::drawLine(Ncurses::Coordinate xy1, Ncurses::Coordinate xy2, char c,
                        Color fg, Color bg) {
     wattron(_window, COLOR_PAIR(getPairNumber(fg, bg)));
-    wmove(_window, xy1.y, xy1.x);
-    wvline(_window, c, xy2.y - xy1.y);
+    if (wmove(_window, xy1.y, xy1.x) == ERR) {
+        std::cerr << "Error moving to start position" << std::endl;
+    }
+    if (wvline(_window, c, xy2.x - xy1.x) == ERR) {
+        std::cerr << "Error drawing line" << std::endl;
+    }
     wattroff(_window, COLOR_PAIR(getPairNumber(fg, bg)));
 }
